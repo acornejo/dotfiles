@@ -1,0 +1,56 @@
+#!/bin/bash
+
+function usage() {
+    echo "\
+zpg (ZipPG) 1.0
+
+syntax: zpg <-e|--encrypt> <output.zpg> <inputfile1> <inputfile2> <inputdir1> ...
+        zpg <-d|--decrypt> <input.zpg>
+        zpg <-h|--help>
+
+
+Copyright (C) 2010 Alex Cornejo.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+"
+}
+
+function error() {
+    echo "Error: $1"
+    echo
+}
+
+case $1 in
+    -e|--encrypt)
+        if [ -n "$2" ]; then
+            OUTPUT="$2"
+            echo "Writing output to $OUTPUT"
+            shift 2
+            if [ -e "$1" ]; then
+                tar chvf - $* | gpg -c > $OUTPUT
+            else
+                error "Could not read $1, please specify input files/directories."
+                usage
+            fi
+        else
+            error "No output file specified."
+            usage
+        fi
+        ;;
+    -d|--decrypt)
+        if [ -n "$2" -a -f "$2" ]; then
+            gpg -d "$2" |  tar xv
+        else
+            error "Unable to read input file $2."
+            usage
+        fi
+        ;;
+    -h|--help)
+        usage
+        ;;
+    *)
+        error "Please specify either --encrypt or --decrypt."
+        usage
+        ;;
+esac

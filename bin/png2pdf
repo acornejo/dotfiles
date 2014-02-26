@@ -1,0 +1,99 @@
+#!/bin/bash
+#Copyright (C) 2006 Richard G. Heck, Jr.
+
+#This program is free software; you can redistribute it and/or
+#modify it under the terms of the GNU General Public License
+#as published by the Free Software Foundation; either version 2
+#of the License, or (at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+#Change log
+#Version 0.1: First public release
+
+CVT=`which convert 2>/dev/null`;
+if [ -z "$CVT" ]; then 
+  echo "This script uses the convert utility from the ImageMagick package. It does not appear to be in your path.";
+  exit 1;
+fi
+
+PROG=`basename $0`;
+
+function printUsage {
+cat <<EOF
+USAGE: $PROG [-cdhkrRv] [-bt THRESHOLD] [-C OPTIONS] [-o OUTFILE] PAGES
+$PROG takes a set of images---say, scans of pages---and creates a PDF
+from them.
+Options:
+-b: Sets threshold (in %) for blacklevel increase
+-c: Reduce pages to 16 colors
+-C: Other options to pass to convert (e.g., "-black-threshold 20%")
+-d: Don't do anything, just say what we'd do
+-h: Print this message
+-k: Keep intermediate files
+-o: Output file (defaults to pdf-PROCID.pdf)
+-r: Rotate pages 90 degrees
+-R: Rotate pages 270 degrees
+-v: Be verbose
+-w: Sets threshold (in %) for whitelevel increase
+EOF
+}
+
+#Option processing
+OPTIONS="";
+KEEPFILES="";
+VERBOSE="";
+DEBUG="";
+OUTFILE="pdf-$$.pdf";
+GLOB="*.png";
+while getopts ":b:cC:dko:rRvw:" opt; do
+  case $opt in
+    b )   OPTIONS="$OPTIONS -black-threshold ${OPTARG}%";;
+    c )   OPTIONS="$OPTIONS -colors 16";;
+    C )   OPTIONS="$OPTIONS $OPTARG";;
+    d )   DEBUG="echo ";;
+    k )   KEEPFILES="TRUE";;
+    o )   OUTFILE=$OPTARG;;
+    r )		OPTIONS="$OPTIONS -rotate 90";;
+    R )		OPTIONS="$OPTIONS -rotate 270";;
+    v )   VERBOSE="TRUE";;
+    w )   OPTIONS="$OPTIONS -white-threshold ${OPTARG}%";;
+    \? )  printUsage; exit 1;;
+  esac
+done
+
+shift $(($OPTIND - 1));
+
+if [ -z $1 ]; then printUsage; exit 0; fi
+PAGES=$@;
+
+#Check if any conversion was requested
+if [ -n "$OPTIONS" ]; then
+  if [ -n "$VERBOSE" ]; then echo "Converting images..."; fi
+  NEWPAGES=""; #keeps track of newly created pages
+  prefix=/tmp/$$-converted-;
+  for img in $PAGES; do 
+    newimg="$prefix$img.png";
+    if [ -n "$VERBOSE" ]; then echo "Converting $img..."; fi
+    $DEBUG convert $OPTIONS $img $newimg;
+    NEWPAGES="$NEWPAGES $newimg";
+  done
+  PAGES=$NEWPAGES;
+fi
+
+if [ -n "$VERBOSE" ]; then echo "Creating pdf..."; fi
+$DEBUG convert $PAGES $OUTFILE;
+
+if [ -n "$OPTIONS" -a -z "$KEEPFILES" ]; then 
+  if [ -n "$VERBOSE" ]; then echo "Deleting intermediate pages..."; fi
+  $DEBUG rm $NEWPAGES; 
+else
+  if [ -n "$VERBOSE" ]; then echo "Not deleting intermediate pages."; fi
+fi

@@ -1,0 +1,50 @@
+#!/bin/bash
+function convert()
+{
+    INPUT=$1
+    INPUT_NOEXT=`echo "$1" | sed -e "s/\(.*\)\..*$/\1/"`
+    OUTPUT=$INPUT_NOEXT.mp4
+    if [ "$INPUT" -nt "$OUTPUT" ]; then
+        if [ -f "$OUTPUT" ]; then
+            rm -f $OUTPUT
+        fi
+            echo $OPTIONS
+        echo -n "Converting $INPUT to $OUTPUT... "
+        ffmpeg -i $INPUT -f mp4 -acodec libfaac -ab 128kb -vcodec mpeg4 -b 1200kb -mbd 2 -flags +4mv -s 320x180 $OUTPUT
+# 	    ffmpeg -i $INPUT -f mp4 -vcodec xvid -vtag mp4v -acodec aac -ac 2 -b 1024 -ab 128 -s 480x360 $OUTPUT
+# 	    ffmpeg -i $INPUT -f mp4 -vcodec mpeg4 -acodec mp2 -maxrate 2500 -b 1800 -qmin 3 -qmax 5 -bufsize 4096 -g 300 -ar 44100 -ab 128 -s 512x384 -aspect 4:3 $OUTPUT
+# flv	    ffmpeg -i $INPUT -f mp4 -vcodec mpeg4 -s 512x384 -acodec mp3 -ar 22050 -ac 1 -aspect 4:3 $OUTPUT
+#            ffmpeg -i $INPUT -f mp4 -vcodec mpeg4 -maxrate 1000 -b 700  -qmin 3 -qmax 5 -bufsize 4096 -g 300 -acodec aac -ab 96 -s 320x240 -aspect 4:3 $OPTIONS $OUTPUT
+        echo "done."
+    else
+        echo "File $OUTPUT is up to date."
+    fi
+}
+
+NAUTILUS_PWD=`echo $NAUTILUS_SCRIPT_CURRENT_URI | sed 's/file\:\/\///'`
+if [ -n "$NAUTILUS_PWD" ]; then
+    echo "changing to $NAUTILUS_PWD"
+    cd "$NAUTILUS_PWD"
+fi
+OPTIONS=""
+FILES=""
+HAVE_OPTS="no"
+for opts in $*; do
+    if [ "$HAVE_OPTS" == "no" ]; then
+        if [ "$opts" = "--" ]; then
+            HAVE_OPTS="yes"
+        else
+            FILES="$FILES $opts"
+        fi
+    else
+        OPTIONS="$OPTIONS $opts"
+    fi
+done
+
+for file in $FILES; do
+    if [ -f "$file" ]; then
+        convert "$file"
+    else
+        echo "File $file does not exist"
+    fi
+done

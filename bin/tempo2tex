@@ -1,0 +1,24 @@
+#!/bin/bash
+
+TEMPO="./tempo/bin/tempo.sh"
+INPUT=$1
+OUTPUT=$(basename $INPUT .tioa).tex
+
+$TEMPO $INPUT
+
+if [ $? -eq 0 ]; then
+    $TEMPO -plugin=tempo2tex -texOutput=/tmp $INPUT | grep tempoListRootConst > $OUTPUT
+
+    FIXES[${#FIXES[*]}]='\\tempoMixCBrace{}{}{}#\\varnothing'
+    FIXES[${#FIXES[*]}]='|-#\\vdash'
+    FIXES[${#FIXES[*]}]='\\tempoType{\\id{Real}}#\\ensuremath{\\mathbb{R}}'
+    FIXES[${#FIXES[*]}]='\\tempoType{\\id{Nat}}#\\ensuremath{\\mathbb{N}}'
+    FIXES[${#FIXES[*]}]='delta\\_LU#\\ensuremath{\\delta_{LU}}'
+    FIXES[${#FIXES[*]}]='delta\\_LD#\\ensuremath{\\delta_{LD}}'
+    FIXES[${#FIXES[*]}]='F\\_rcv#\\ensuremath{F_{rcv}^+}'
+    FIXES[${#FIXES[*]}]='F\\_ack#\\ensuremath{F_{ack}^+}'
+
+    for fix in "${FIXES[@]}"; do
+        sed -e "s#$fix#g" -i $OUTPUT
+    done
+fi

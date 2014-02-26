@@ -1,0 +1,8 @@
+#!/bin/bash
+for f in "$1"; do
+    echo $f
+    lc=`echo $f  | tr '[A-Z]' '[a-z]'`
+    if [ $lc != $f ]; then
+        mv -i $f $lc
+    fi
+done

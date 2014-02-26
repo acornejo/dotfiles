@@ -1,0 +1,148 @@
+#!/bin/bash
+
+function usage()
+{
+    echo "Usage: `basename $0` mode={static|dhcp|scan} iface={eth0|eth1|...} [essid=accesspoint]"
+    echo "      mode=static     ip=host_ip_address"
+    echo "                      netmask=host_netmask"
+    echo "                      gateway=gateway"
+    echo "                      dns=dns_server1,dns_server2,..."
+    exit 1;
+}
+
+function parse_opts()
+{
+    while [ "$1" ]; do
+        NAME=$(echo $1 | sed -e "s/\(.*\)=\(.*\)/\1/")
+        VALUE=$(echo $1 | sed -e "s/\(.*\)=\(.*\)/\2/")
+        case $NAME in 
+            mode)
+            case $VALUE in
+                dhcp|scan|static)
+                MODE=$VALUE
+                ;;
+                *)
+                echo "* Invalid mode $VALUE"
+                usage
+                ;;
+            esac
+            ;;
+            iface)
+            if [ -z "`ifconfig -s -a | grep -v Iface | cut -f1 -d\  | sed -e "s/^$VALUE$/found/" | grep found`" ]; then
+                echo "* Invalid interface \"$VALUE\""
+                usage
+            else
+                IFACE=$VALUE
+            fi
+            ;;
+            ip)
+            IP=$VALUE
+            ;;
+            gateway)
+            GATEWAY=$VALUE
+            ;;
+            dns)
+            DNS_LIST=$(echo $VALUE | sed -e "s/,/ /")
+            ;;
+            netmask)
+            NETMASK=$VALUE
+            ;;
+            essid)
+            ESSID=$VALUE
+            ;;
+            *)
+            echo "* Invalid parameter $1"
+            usage
+            ;;
+        esac
+        shift 1
+    done
+
+    if [ -z "$MODE" ]; then
+        echo "* No mode specified"
+        usage
+    elif [ -z "$IFACE" ]; then
+        echo "* No interface specified"
+        usage
+    fi
+}
+
+parse_opts $*
+sudo echo -n ""
+
+if [ -z "`ifconfig -s | grep $IFACE`" ]; then
+    echo -n "  Bringing up interface \"$IFACE\"... "
+    sudo ifconfig $IFACE up 2>&1 > /dev/null
+    echo "done."
+else
+    echo "  Interface \"$IFACE\" is already up."
+fi
+if [ -n "`iwconfig 2>&1 | grep $IFACE | grep -v "no wireless"`" ]; then
+    echo    "  Detected wireless extensions."
+    echo -n "  Scanning for accesspoints... "
+    ESSID_LIST=`sudo iwlist $IFACE scanning | grep ESSID | cut -d\" -f2`
+    echo "done."
+    if [ $MODE != "scan" ]; then
+        if [ -z "$ESSID" ]; then
+            for eid in $ESSID_LIST; do
+                echo "    - $eid"
+                if [ -z "$ESSID" ]; then
+                    ESSID=$eid
+                fi
+            done
+        fi
+        if [ -n "$ESSID" ]; then
+            echo -n "  Connecting to \"$ESSID\"... "
+            sudo iwconfig $IFACE essid $ESSID 2>&1 > /dev/null
+            echo "done."
+        else
+            echo "* No accespoints found/specified"
+            usage
+        fi
+    fi
+else
+    echo "  No wireless extensions found."
+fi
+case $MODE in
+    dhcp)
+    echo "  Running DHCP"
+    echo "  =========================================================="
+    sudo dhclient $IFACE 2>&1 | grep --line-buffered "DHCP\|bound" | grep --line-buffered -v "www" | xargs -L1 -iX echo "    X"
+    echo "  =========================================================="
+    ;;
+    static)
+    echo "  Configuring statically"
+    echo "  =========================================================="
+    if [ -n "$IP" -a -n "$NETMASK" ]; then
+        echo "    IP      $IP"
+        echo "    Netmask $NETMASK"
+        sudo ifconfig $IFACE $IP netmask $NETMASK
+    fi
+    if [ -n "$GATEWAY" ]; then
+        echo "    Gateway $GATEWAY"
+        sudo route add default gw $GATEWAY
+    fi
+    if [ -n "$DNS_LIST" ]; then
+        sudo rm -f /etc/resolv.conf
+        sudo touch /etc/resolv.conf
+        DNSN=1
+        for DNS in $DNS_LIST; do
+            echo "    DNS$DNSN    $DNS"
+            sudo bash -c "echo nameserver $DNS >> /etc/resolv.conf"
+            DNSN=$(($DNSN+1))
+        done
+    fi
+    echo "  =========================================================="
+    ;;
+    scan)
+    while [ true ]; do
+        clear
+        echo "  Scanning for accespoints"
+        echo "  =========================================================="
+        for eid in $ESSID_LIST; do
+            echo "    - $eid"
+        done
+        ESSID_LIST=`sudo iwlist $IFACE scanning | grep ESSID | cut -d\" -f2`
+    done
+    ;;
+esac

@@ -1,0 +1,63 @@
+#!/bin/bash
+if [ $# -lt 2 ]; then
+    echo "Usage $0: images video [format]"
+    echo
+    echo "   images  Should be a printf-like expression, i.e. image%d.png"
+    echo "    video  Any filename, i.e. vid.mpeg"
+    echo "    format One of flv, mp4, mpeg or avi."
+    echo "           If no format specified will try to guess from extension."
+    exit 0
+fi
+input=$1
+shift
+output=$1
+shift
+format=$1
+if [ -z "$format" ]; then
+    format=$(basename $output)
+    format=${format#*.}
+else
+    shift
+fi
+
+case $format in
+    flv)
+        ffmpeg -i "$input" -sameq -f flv $* $output
+    ;;
+    mp4)
+        # ffmpeg -i "$input" -sameq $* $output
+        # -filter:v scale=640:360,setsar=1/1
+        ffmpeg -i "$input" \
+            -filter:v setsar=1/1 -pix_fmt yuv420p \
+            -c:v libx264 -preset:v slow -profile:v baseline -x264opts level=3.0:ref=1 -b:v 1000k -r:v 25/1 -force_fps -movflags +faststart \
+            -c:a libfaac -b:a 80k -pass 1 \
+            -y ${output}
+        ffmpeg -i "$input" \
+            -filter:v setsar=1/1 -pix_fmt yuv420p \
+            -c:v libx264 -preset:v slow -profile:v baseline -x264opts level=3.0:ref=1 -b:v 1000k -r:v 25/1 -force_fps -movflags +faststart \
+            -c:a libfaac -b:a 80k -pass 2 \
+            -y ${output}
+    ;;
+    mpeg|mpg)
+        ffmpeg -i "$input" -f mpeg -vcodec mpeg1video -sameq $* $output
+    ;;
+    avi)
+        ffmpeg -i "$input" -sameq $* $output
+    #    mencoder "mf://$input"  -mf fps=25:type=jpg -ovc lavc -ffourcc XVID -nosound -o "$output"
+    ;;
+    webm)
+        ffmpeg -i "$input" \
+            -filter:v setsar=1/1 -pix_fmt yuv420p \
+            -vpre libvpx-720p -b:v 750k -r:v 25/1 -force_fps \
+            -c:a libvorbis -b:a 80k -pass 1 \
+            -y ${output}
+        ffmpeg -i "$input" \
+            -filter:v setsar=1/1 -pix_fmt yuv420p \
+            -vpre libvpx-720p -b:v 750k -r:v 25/1 -force_fps \
+            -c:a libvorbis -b:a 80k -pass 2 \
+            -y ${output}
+    ;;
+    *)
+    echo "Invalid format ${format}"
+    exit 1
+esac

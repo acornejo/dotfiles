@@ -1,0 +1,168 @@
+%% Macros by Alex Cornejo. Last modified Oct 2012
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{alexmacros}[2008/02/21 1.0]
+\RequirePackage{ifthen}
+
+\newboolean{alexmacros@cref}\setboolean{alexmacros@cref}{true}
+\DeclareOption{nocref}{\setboolean{alexmacros@cref}{false}}
+\newboolean{alexmacros@thms}\setboolean{alexmacros@thms}{true}
+\DeclareOption{nothms}{\setboolean{alexmacros@thms}{false}}
+
+\ProcessOptions
+
+\ifthenelse{\boolean{alexmacros@cref}}
+{
+\RequirePackage{aliascnt}
+\RequirePackage{cleveref}
+
+% Cleverref instructions
+\crefname{thm}{theorem}{theorems}
+\crefname{lem}{lemma}{lemmas}
+\crefname{cor}{corollary}{corollaries}
+\crefname{conj}{conjecture}{conjectures}
+\crefname{obs}{observation}{observations}
+\crefname{asrt}{assertion}{assertions}
+\crefname{defn}{definition}{definitions}
+\crefname{prop}{proposition}{propositions}
+\crefname{fact}{fact}{facts}
+\crefname{claim}{claim}{claims}
+\crefname{equation}{equation}{equations}
+\crefname{figure}{figure}{figures}
+\crefname{subfigure}{figure}{figures}
+}{}
+
+\ifthenelse{\boolean{alexmacros@thms}}
+{
+\RequirePackage{amsmath,amsthm,amssymb}
+% AMS math environments
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}%[section]
+\ifthenelse{\boolean{alexmacros@cref}}{
+\newaliascnt{prop}{thm}
+\newtheorem{prop}[prop]{Proposition}
+\aliascntresetthe{prop}
+\newaliascnt{lem}{thm}
+\newtheorem{lem}[lem]{Lemma}
+\aliascntresetthe{lem}}
+{
+\newtheorem{prop}{Proposition}
+\newtheorem{lem}{Lemma}
+}
+\newtheorem{cor}{Corollary}
+\newtheorem{conj}{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{asrt}{Assertion}
+\newtheorem{obs}{Observation}
+\newtheorem{defn}{Definition}
+%\newtheorem{fact}{Fact}
+\newtheorem{claim}{Claim}
+\newtheorem{cmt}{Comment}
+
+\newtheoremstyle{namedthm}
+  {3pt}
+  {3pt}
+  {\itshape}
+  {}
+  {}
+  {}
+  {.5em}
+  {\textbf{\thmnote{#3.}}}
+\theoremstyle{namedthm}
+\newtheorem{namedthm}{Named Theorem}
+\newtheoremstyle{namedlem}
+  {3pt}
+  {3pt}
+  {\itshape}
+  {}
+  {}
+  {}
+  {.5em}
+  {\textbf{\thmnote{#3.}}}
+\theoremstyle{namedlem}
+\newtheorem{namedlem}{Named Lemma}
+\theoremstyle{plain}
+}{}
+
+% st, nd, rd, th superscripts
+\def\first{{\raise.8ex\hbox{\tiny st}~}}
+\def\second{{\raise.8ex\hbox{\tiny nd}~}}
+\def\third{{\raise.8ex\hbox{\tiny rd}~}}
+\def\fourth{{\raise.8ex\hbox{\tiny th}~}}
+\def\ith{{\raise.8ex\hbox{\tiny th}~}}
+\def\QED{{\ \rule{0.5em}{0.5em}}}
+\newcommand{\ie}{\textit{i.e.}~}
+\newcommand{\eg}{\textit{e.g.}~}
+\newcommand{\st}{\mbox{ s.t. }}
+\newcommand{\bigO}{\mathcal{O}}
+
+% Mathematical shortcuts
+\DeclareMathOperator*{\argmax}{\mathrm{argmax}}
+\DeclareMathOperator*{\argmin}{\mathrm{argmin}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\tuple}[1]{\left\langle #1 \right\rangle}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\dist}[2]{\norm{#1 - #2}}
+\newcommand{\paren}[1]{\left( #1 \right)}
+\newcommand{\cond}{\;\middle\vert\;}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\E}[1]{{\mathbb{E}}\left[#1\right]}
+\newcommand{\Var}[1]{\mathbb{V}\mbox{ar}\left[#1\right]}
+\newcommand{\PR}[2][]{\Pr_{#1}\left[#2\right]}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\va}[2]{{#2}_1,\ldots,{#2}_{#1}}
+\newcommand{\To}{\Rightarrow}
+\newcommand{\imod}[1]{\allowbreak\mkern10mu({\operator@font mod}\,\,#1)}
+\newcommand{\Nat}{\ensuremath{\mathbb{N}}}
+\newcommand{\Real}{\ensuremath{\mathbb{R}}}
+
+% Dirac Notation
+\newcommand{\ket}[1]{\left| #1 \right>} % for Dirac bras
+\newcommand{\bra}[1]{\left< #1 \right|} % for Dirac kets
+\newcommand{\braket}[2]{\left< #1 \vphantom{#2} \right|\left. #2 \vphantom{#1} \right>}
+\newcommand{\braXket}[3]{\bra{#1}\!#2\!\ket{#3}}
+\newcommand{\ketbra}[2]{\ket{#1}\!\bra{#2}}
+
+% Formatting shortcuts
+\providecommand{\case}[1]{\vskip\parskip\textsc{#1}\hskip 0.5cm}
+\newcommand{\expfmt}[2]{{#1\mathord\times10^{#2}}}
+\newcommand{\kw}[1]{\textsc{#1}}
+\newcommand{\prog}[1]{\texttt{#1}}
+
+% Matrices shortcuts
+\newcommand{\bmtx}[2]{\left[ \begin{array}{#1}#2\end{array}\right]}
+\newcommand{\pmtx}[2]{\left( \begin{array}{#1}#2\end{array}\right)}
+
+% Command to hide block
+\newcommand{\hide}[1]{}
+
+\ifthenelse{\isundefined{\example}}{
+\newcounter{example}[section]
+\newenvironment{example}{
+\addtocounter{example}{1}
+\begin{quote}
+  \textsc{Example \thesection.\arabic{example}:}
+}{%
+\end{quote}
+}
+}{}
+
+\newcounter{remark}[section]
+\newenvironment{remark}{
+\addtocounter{remark}{1}
+\begin{quote}
+  \textsc{Remark \thesection.\arabic{remark}:}
+}{%
+\end{quote}
+}
+
+% Two column environment meant for graphics and text
+\newenvironment{twocolumns}[1][0.5\linewidth]{%
+\def\ominiwidth{#1}
+\begin{minipage}[c]{\ominiwidth}
+}{%
+\end{minipage}
+}
+\newcommand{\nextcolumn}{\end{minipage}\hskip 0.5cm \newdimen\miniwidth \miniwidth=\linewidth \advance \miniwidth by -\ominiwidth \advance \miniwidth by -0.5cm \begin{minipage}[c]{\miniwidth}}

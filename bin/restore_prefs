@@ -1,0 +1,56 @@
+#!/bin/bash
+
+script_dir() {
+    local cdir=$(cd $(dirname $0) && pwd)
+    while [ -n "$(readlink $cdir)" ]; do
+        cdir=$(readlink $cdir)
+    done
+    echo $(dirname $cdir)
+}
+
+run_hook() {
+    if [ -e "$1" ]; then
+        (. $1)
+    fi
+}
+
+link_file() {
+    if [ ! -e "$1" ]; then
+        return
+    fi
+
+    if [ -d "$1" ]; then
+        if [ -e "$1/.linkdir" ]; then
+            if [ -e "$2" ]; then
+                rm -fr "$2"
+            fi
+            ln -sf "$1" "$2"
+            return
+        fi
+        if [ ! -d "$2" ]; then
+            mkdir -p $2
+        fi
+        local list=$4
+        if [ -z "$list" ]; then
+            list=$(ls -1 $1)
+        fi
+        run_hook "$1/.hook-pre"
+        for f in $list; do
+            link_file "$1/$f" "$2/$3$f"
+        done
+        run_hook "$1/.hook-post"
+    else
+        if [ -e "$2" ]; then
+            rm -f $2
+        fi
+        ln -sf $1 $2
+    fi
+}
+
+UNAME=$(uname)
+HOSTNAME=$(hostname -s)
+
+BASE_DIR=$(script_dir)
+link_file "$BASE_DIR" "$HOME" "." "$(ls -1 $BASE_DIR | grep -v '^host-\|^uname-')"
+link_file "$BASE_DIR/host-${HOSTNAME}" "$HOME" "."
+link_file "$BASE_DIR/uname-${UNAME}" "$HOME" "."

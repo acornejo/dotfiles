@@ -1,0 +1,248 @@
+% LaTex Style file for the CSAIL Student Workshop
+%
+%   Created as:  ml2k.sty (LaTeX style file for ICML-2000)
+%   by P. Langley (12/23/99)
+%
+% Blatantly ripped off by Terran Lane for use with the Student Oxygen
+% Workshop (4/24/2001).  DIRECT ALL QUESTIONS ABOUT THIS VERSION TO
+% terran@ai.mit.edu.
+%
+% Blatantly ripped off for use with the CSAIL Student Workshop (5/26/2005).
+% 
+% In the penultimate rip off...for the CSAIL 2008 workshop.
+%
+% And we keep up the tradition for CSAIL Student Workshop 2008
+%
+% This file contains the LaTeX formatting parameters for a two-column 
+% conference proceedings that is 8.5 inches wide by 11 inches high.  
+%
+% USAGE:
+% Mostly, this style works as a standard adjunct to the ``article''
+% class in LaTeX 2e.  You can _almost_ plug it in and go.  _But_ to
+% format the title right, you should do something like the following:
+%
+% ============================================================
+% \documentclass[10pt]{article}
+% \usepackage{times}
+% \usepackage{csw2008}
+% \usepackage{cswapa}   % If you're using BibTeX
+%
+% \begin{document}
+% \cswtitleblock{
+% \cswtitle{An Uninspired Generic Article Title Goes Here}
+% \cswauthor{First Author}{first_author_email@somewhere.edu}
+% \cswauthor{Second Author}{second_author_email@somewhere.edu}
+% \cswaddress{Address of First and Second Authors, no newlines
+% included}
+% \cswauthor{Third Author}{third_author_email@nowhere.com}
+% \cswaddress{Address of Third Author, still no newlines}
+% }
+%
+% \begin{abstract} <etc...>
+% ============================================================
+%
+% Note that, unlike standard LaTeX article classes, the title block
+% declarations appear _after_ the \begin{document} and that there's no
+% \maketitle command.  (This is actually a fairly nasty way to do
+% this, but LaTeX doesn't really handle two column mode nicely and I
+% didn't feel like mucking with it _all_ that long.  If you'd like to
+% munge it up more nicely, please let me know what you come up with.
+% -- TDL)
+%
+% Also, don't forget to issue \bibliographystyle{cswapa} if you're
+% using BibTeX.
+%
+% Once again, please direct questions/issues with this style file to
+% terran@ai.mit.edu.  Please direct all flames to /dev/null.  Thank
+% you for your attention.  You may now return to your regularly
+% scheduled lives.
+
+
+% Physical page layout 
+\evensidemargin -0.23in  
+\oddsidemargin -0.23in 
+\setlength\textheight{9.0in}
+\setlength\textwidth{6.75in} 
+\setlength\columnsep{0.25in}
+\setlength\headheight{0pt}
+\setlength\headsep{0pt} 
+\addtolength{\topmargin}{-0.4in}
+% Note: A few Latex versions need the next line instead of the former.
+% \addtolength{\topmargin}{0.3in}
+% \setlength\footheight{0pt}
+\setlength\footskip{0pt} 
+\pagestyle{empty} 
+\flushbottom \twocolumn
+\sloppy
+ 
+\def\addcontentsline#1#2#3{}
+ 
+% Commands for formatting paper title, author names, and addresses. 
+\long\def\cswtitle#1{{\center\baselineskip 18pt
+                       \toptitlebar{\Large\bf #1}\bottomtitlebar}}
+\def\toptitlebar{\hrule height1pt \vskip .25in} 
+\def\bottomtitlebar{\vskip .22in \hrule height1pt \vskip .3in} 
+\def\cswauthor#1#2{\par {\bf #1} \hfill {\sc #2}}
+\long\def\cswaddress#1{\par\vskip 0.03in #1 \vskip 0.10in}
+\newcommand{\cswtitleblock}[1]{\twocolumn[#1 \vskip 0.3in]}
+
+% Redefinition of the abstract environment. 
+\renewenvironment{abstract}
+   {\centerline{\large\bf Abstract}
+    \vspace{-0.12in}\begin{quote}}
+   {\par\end{quote}\vskip 0.12in}
+
+% numbered section headings with different treatment of numbers
+
+\def\@startsiction#1#2#3#4#5#6{\if@noskipsec \leavevmode \fi
+   \par \@tempskipa #4\relax
+   \@afterindenttrue
+% Altered the following line to indent a section's first paragraph. 
+%  \ifdim \@tempskipa <\z@ \@tempskipa -\@tempskipa \@afterindentfalse\fi
+   \ifdim \@tempskipa <\z@ \@tempskipa -\@tempskipa \fi
+   \if@nobreak \everypar{}\else
+     \addpenalty{\@secpenalty}\addvspace{\@tempskipa}\fi \@ifstar
+     {\@ssect{#3}{#4}{#5}{#6}}{\@dblarg{\@sict{#1}{#2}{#3}{#4}{#5}{#6}}}}
+
+\def\@sict#1#2#3#4#5#6[#7]#8{\ifnum #2>\c@secnumdepth
+     \def\@svsec{}\else 
+     \refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname}\fi
+     \@tempskipa #5\relax
+      \ifdim \@tempskipa>\z@
+        \begingroup #6\relax
+          \@hangfrom{\hskip #3\relax\@svsec.~}{\interlinepenalty \@M #8\par}
+        \endgroup
+       \csname #1mark\endcsname{#7}\addcontentsline
+         {toc}{#1}{\ifnum #2>\c@secnumdepth \else
+                      \protect\numberline{\csname the#1\endcsname}\fi
+                    #7}\else
+        \def\@svsechd{#6\hskip #3\@svsec #8\csname #1mark\endcsname
+                      {#7}\addcontentsline
+                           {toc}{#1}{\ifnum #2>\c@secnumdepth \else
+                             \protect\numberline{\csname the#1\endcsname}\fi
+                       #7}}\fi
+     \@xsect{#5}}
+
+\def\@sect#1#2#3#4#5#6[#7]#8{\ifnum #2>\c@secnumdepth
+     \def\@svsec{}\else 
+     \refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname\hskip 0.4em }\fi
+     \@tempskipa #5\relax
+      \ifdim \@tempskipa>\z@ 
+        \begingroup #6\relax
+          \@hangfrom{\hskip #3\relax\@svsec}{\interlinepenalty \@M #8\par}
+        \endgroup
+       \csname #1mark\endcsname{#7}\addcontentsline
+         {toc}{#1}{\ifnum #2>\c@secnumdepth \else
+                      \protect\numberline{\csname the#1\endcsname}\fi
+                    #7}\else
+        \def\@svsechd{#6\hskip #3\@svsec #8\csname #1mark\endcsname
+                      {#7}\addcontentsline
+                           {toc}{#1}{\ifnum #2>\c@secnumdepth \else
+                             \protect\numberline{\csname the#1\endcsname}\fi
+                       #7}}\fi
+     \@xsect{#5}}
+
+% section headings with less space above and below them
+
+\def\thesection {\arabic{section}}
+\def\thesubsection {\thesection.\arabic{subsection}}
+\def\section{\@startsiction{section}{1}{\z@}{-0.12in}{0.02in}
+             {\large\bf\raggedright}}
+\def\subsection{\@startsection{subsection}{2}{\z@}{-0.10in}{0.01in}
+                {\normalsize\bf\raggedright}}
+\def\subsubsection{\@startsection{subsubsection}{3}{\z@}{-0.08in}{0.01in}
+                {\normalsize\sc\raggedright}}
+\def\paragraph{\@startsection{paragraph}{4}{\z@}{1.5ex plus
+  0.5ex minus .2ex}{-1em}{\normalsize\bf}}
+\def\subparagraph{\@startsection{subparagraph}{5}{\z@}{1.5ex plus
+  0.5ex minus .2ex}{-1em}{\normalsize\bf}}
+ 
+% Footnotes 
+\footnotesep 6.65pt % 
+\skip\footins 9pt 
+\def\footnoterule{\kern-3pt \hrule width 0.8in \kern 2.6pt } 
+\setcounter{footnote}{0} 
+ 
+% Lists and paragraphs 
+\parindent 0pt 
+\topsep 4pt plus 1pt minus 2pt 
+\partopsep 1pt plus 0.5pt minus 0.5pt 
+\itemsep 2pt plus 1pt minus 0.5pt 
+\parsep 2pt plus 1pt minus 0.5pt 
+\parskip 6pt
+ 
+\leftmargin 2em \leftmargini\leftmargin \leftmarginii 2em 
+\leftmarginiii 1.5em \leftmarginiv 1.0em \leftmarginv .5em  
+\leftmarginvi .5em 
+\labelwidth\leftmargini\advance\labelwidth-\labelsep \labelsep 5pt 
+ 
+\def\@listi{\leftmargin\leftmargini} 
+\def\@listii{\leftmargin\leftmarginii 
+   \labelwidth\leftmarginii\advance\labelwidth-\labelsep 
+   \topsep 2pt plus 1pt minus 0.5pt 
+   \parsep 1pt plus 0.5pt minus 0.5pt 
+   \itemsep \parsep} 
+\def\@listiii{\leftmargin\leftmarginiii 
+    \labelwidth\leftmarginiii\advance\labelwidth-\labelsep 
+    \topsep 1pt plus 0.5pt minus 0.5pt  
+    \parsep \z@ \partopsep 0.5pt plus 0pt minus 0.5pt 
+    \itemsep \topsep} 
+\def\@listiv{\leftmargin\leftmarginiv 
+     \labelwidth\leftmarginiv\advance\labelwidth-\labelsep} 
+\def\@listv{\leftmargin\leftmarginv 
+     \labelwidth\leftmarginv\advance\labelwidth-\labelsep} 
+\def\@listvi{\leftmargin\leftmarginvi 
+     \labelwidth\leftmarginvi\advance\labelwidth-\labelsep} 
+ 
+\abovedisplayskip 7pt plus2pt minus5pt% 
+\belowdisplayskip \abovedisplayskip 
+\abovedisplayshortskip  0pt plus3pt%    
+\belowdisplayshortskip  4pt plus3pt minus3pt% 
+ 
+% Less leading in most fonts (due to the narrow columns) 
+% The choices were between 1-pt and 1.5-pt leading 
+\def\@normalsize{\@setsize\normalsize{11pt}\xpt\@xpt} 
+\def\small{\@setsize\small{10pt}\ixpt\@ixpt} 
+\def\footnotesize{\@setsize\footnotesize{10pt}\ixpt\@ixpt} 
+\def\scriptsize{\@setsize\scriptsize{8pt}\viipt\@viipt} 
+\def\tiny{\@setsize\tiny{7pt}\vipt\@vipt} 
+\def\large{\@setsize\large{14pt}\xiipt\@xiipt} 
+\def\Large{\@setsize\Large{16pt}\xivpt\@xivpt} 
+\def\LARGE{\@setsize\LARGE{20pt}\xviipt\@xviipt} 
+\def\huge{\@setsize\huge{23pt}\xxpt\@xxpt} 
+\def\Huge{\@setsize\Huge{28pt}\xxvpt\@xxvpt} 
+
+% Revised formatting for figure captions and table titles. 
+\newsavebox\captionbox\newdimen\captionboxwid
+
+\long\def\@makecaption#1#2{
+ \vskip 10pt 
+        \baselineskip 11pt
+        \setbox\@tempboxa\hbox{#1. #2}
+        \ifdim \wd\@tempboxa >\hsize
+        \sbox{\captionbox}{\small\sl #1.~}
+        \captionboxwid=\wd\captionbox
+        \usebox\captionbox {\footnotesize #2}
+%        \usebox\captionbox {\small #2}
+        \else 
+          \centerline{{\small\sl #1.} {\small #2}} 
+        \fi}
+
+\def\fnum@figure{Figure \thefigure}
+\def\fnum@table{Table \thetable}
+
+% Strut macros for skipping spaces above and below text in tables. 
+\def\abovestrut#1{\rule[0in]{0in}{#1}\ignorespaces}
+\def\belowstrut#1{\rule[-#1]{0in}{#1}\ignorespaces}
+
+\def\abovespace{\abovestrut{0.20in}}
+\def\aroundspace{\abovestrut{0.20in}\belowstrut{0.10in}}
+\def\belowspace{\belowstrut{0.10in}}
+
+% Various personal itemization commands. 
+\def\texitem#1{\par\noindent\hangindent 12pt
+               \hbox to 12pt {\hss #1 ~}\ignorespaces}
+\def\cswitem{\texitem{$\bullet$}}
+
+% To comment out multiple lines of text.
+\long\def\comment#1{}

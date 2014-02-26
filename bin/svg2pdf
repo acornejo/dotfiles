@@ -1,0 +1,30 @@
+#!/bin/bash
+
+function convert()
+{
+    INPUT=$1
+    OUTPUT=`echo "$1" | sed -e "s/\(.*\)\..*$/\1.pdf/"`
+    if [ "$INPUT" -nt "$OUTPUT" ]; then
+        echo -n "Converting $INPUT to $OUTPUT... "
+        inkscape -A "$OUTPUT" "$INPUT" >& /dev/null
+        echo "done."
+    else
+        echo "File $OUTPUT is up to date"
+    fi
+}
+
+NAUTILUS_PWD=`echo $NAUTILUS_SCRIPT_CURRENT_URI | sed 's/file\:\/\///'`
+if [ -n "$NAUTILUS_PWD" ]; then
+    echo "changing to $NAUTILUS_PWD"
+    cd "$NAUTILUS_PWD"
+fi
+
+while [ $# -gt 0 ]; do
+    file=$1
+    if [ -f "$file" ]; then
+        convert "$file"
+    else
+        echo "File $file does not exist"
+    fi
+    shift
+done

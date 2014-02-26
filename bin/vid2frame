@@ -1,0 +1,28 @@
+#!/bin/bash
+#!/bin/bash
+
+function convert()
+{
+    INPUT=$1
+    INPUT_NOEXT=`echo "$1" | sed -e "s/\(.*\)\..*$/\1/"`
+    OUTPUT=$INPUT_NOEXT.png
+    if [ "$INPUT" -nt "$OUTPUT" ]; then
+        if [ -f "$OUTPUT" ]; then
+            rm -f $OUTPUT
+        fi
+            echo $OPTIONS
+        echo -n "Converting $INPUT to $OUTPUT... "
+        ffmpeg -i $INPUT -vcodec png -ss 00:00:00 -vframes 1 -f image2 $OUTPUT
+        echo "done."
+    else
+        echo "File $OUTPUT is up to date."
+    fi
+}
+
+for file in $*; do
+    if [ -f "$file" ]; then
+        convert "$file"
+    else
+        echo "File $file does not exist"
+    fi
+done

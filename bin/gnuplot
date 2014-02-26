@@ -1,0 +1,14 @@
+#!/bin/bash
+gnuplot=""
+if [ -e /usr/bin/gnuplot ]; then
+    gnuplot="/usr/bin/gnuplot"
+else
+    echo "Gnuplot not installed."
+    exit 1
+fi
+rlwrap=`which rlwrap`
+if [ -n $rlwrap ]; then
+    exec $rlwrap -a -c $gnuplot $*
+else
+    exec $gnuplot $*
+fi

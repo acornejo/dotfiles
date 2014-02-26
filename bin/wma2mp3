@@ -1,0 +1,14 @@
+#!/bin/bash
+for i in *.wma
+do
+    if [ -f "$i" ]; then
+        temp="/tmp/`basename $0`-$RANDOM"
+        dest=`echo "$i" | sed -e 's/wma$/mp3/'`
+        mkfifo "$temp"
+        mplayer -quiet -vo null -vc null -af volume=0,resample=44100:0:1 -ao pcm:waveheader:file="$temp" "$i" &
+        lame -V4 -h -b 128 --vbr-new "$temp" "$dest"
+        rm -f "$temp"
+    else
+        echo "$i is not a file"
+    fi
+done

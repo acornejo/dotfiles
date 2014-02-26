@@ -1,0 +1,70 @@
+#!/bin/bash
+
+onexit() {
+    echo "Skip package install"
+    exit 1
+}
+
+install_brew() {
+    if ! hash brew 2>/dev/null; then
+        ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+    fi
+}
+
+install_cask() {
+    install_brew
+    brew tap phinze/cask
+    brew install brew-cask
+}
+
+trap onexit 1 2 3 15 ERR
+
+echo "Install basic packages? [tmux, autojump, vim, git, ack, curl, wget]"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            if [ "$UNAME" == "Darwin" ]; then
+                install_cask
+                brew install autojump tmux ack reattach-to-user-namespace htop wget bash bash-completion
+                brew cask install macvim
+                sudo ln -sf /usr/local/bin/{tmux, reattach-to-user-namespace} /usr/bin
+            else
+                sudo apt-get install autojump tmux ack-grep vim htop git curl wget bash bash-completion
+            fi
+            break;;
+        No ) break;;
+    esac
+done
+
+echo "Install extra packages? [latex, chrome, dropbox, email notifier, gimp, vlc]"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            if [ "$UNAME" == "Darwin" ]; then
+                install_cask
+                brew cask install google-chrome google-notifier google-hangouts dropbox gimp vlc slate zotero basictex
+            else
+                apt-get install google-chrome
+            fi
+            break;;
+        No )
+            break;;
+    esac
+done
+
+if [ -e "$HOME/.vimbundle.vim" ]; then
+    echo "Install vim plugins (requires git and vim)?"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes )
+                VUNDLE_GIT="https://github.com/gmarik/vundle.git"
+                VUNDLE_DIR="$HOME/.vim/bundle/vundle"
+                if [ ! -e "$VUNDLE_DIR" ]; then
+                    git clone $VUNDLE_GIT $VUNDLE_DIR
+                fi
+                vim -u "$HOME/.vimbundle.vim" +BundleInstall! +BundleClean +qall;
+                break;;
+            No ) break;;
+        esac
+    done
+fi

@@ -1,0 +1,33 @@
+#!/bin/bash
+if [ ! $UID -eq 0 ]; then
+    echo "Sudoing..."
+    exec sudo "$0" $1 $2 $3 $4 $5 $6 $7 $8
+fi
+
+IFACE=ra0
+
+case $1 in
+    on)
+        ifconfig $IFACE up
+        iwconfig $IFACE key off
+        iwconfig $IFACE essid dumpname
+        iwconfig $IFACE essid off
+        ifconfig $IFACE down
+        sleep 6
+        ifconfig $IFACE hw ether 00:0B:DE:AD:BE:EF
+        ifconfig $IFACE up
+        ;;
+    off)
+        ifconfig $IFACE up
+        iwconfig $IFACE key off
+        iwconfig $IFACE essid dumpname
+        iwconfig $IFACE essid off
+        ifconfig $IFACE down
+        sleep 6
+        ifconfig $IFACE hw ether 00:13:02:B8:3F:F4
+        ifconfig $IFACE up
+        ;;
+    *)
+    echo "Invalid command $1, usage $0 [on|off]"
+esac
+

@@ -1,0 +1,30 @@
+! Spanish bindings:
+! AltGr+a = á
+! AltGr+e = é
+! AltGr+i = í
+! AltGr+o = ó
+! AltGr+u = ú
+! AltGr+y = ü
+! AltGr+n = ñ
+! AltGr+q = ¿
+! AltGr+w = ¡
+
+! keysym Alt_L = Mode_switch
+! keycode 108 = Alt_L
+! add Mod1 = Alt_L
+
+keycode  24 = q Q questiondown
+keycode  25 = w W exclamdown
+keycode  26 = e E eacute Eacute
+keycode  29 = y Y udiaeresis Udiaeresis
+keycode  30 = u U uacute Uacute
+keycode  31 = i I iacute Iacute
+keycode  32 = o O oacute Oacute
+keycode  38 = a A aacute Aacute
+keycode  57 = n N ntilde Ntilde
+
+add Mod4 = Select
+
+! Convert Caps_Lock to Mod4
+remove Lock = Caps_Lock
+add Mod4 = Caps_Lock

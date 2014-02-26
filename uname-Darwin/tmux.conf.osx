@@ -1,0 +1,7 @@
+set -g default-command "reattach-to-user-namespace $SHELL"
+
+source-file ~/.tmux.conf
+
+# For os x clipboard
+bind-key -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+bind-key -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"

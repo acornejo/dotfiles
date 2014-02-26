@@ -1,0 +1,66 @@
+#!/bin/bash
+
+NAME=""
+COMP="bzip2"
+
+usage()
+{
+    echo "Usage: $0 file_name archive_dir startup_script [name] [--gzip|--bzip2]"
+    echo "    --gzip             : Use gzip for compression"
+    echo "    --bzip2            : Use bzip2 for compression"
+    echo "    --help             : Display this help message"
+    echo
+    echo " Default is: $COMP"
+    exit 1
+}
+
+
+if [ -n "$1" ]; then
+    if [ "$1" == "--help" ]; then
+        usage
+    fi
+    OUTPUT=$1
+    if [ -n "$2" ]; then
+        INPUT=$2
+        if [ -n "$3" ]; then
+            SCRIPT=$3
+            if [ -n "$4" ]; then
+                NAME=$4
+                shift
+            fi
+            if [ -n "$4" ]; then
+                if [ "$4" == "--gzip" ]; then
+                    COMP="gzip"
+                elif [ "$4" == "--bzip2" ]; then
+                    COMP="bzip2"
+                fi
+            fi
+        else
+            echo "Error: Failed to specify setup command"
+            usage
+        fi
+    else
+        echo "Error: Failed to specify input file/directory"
+        usage
+    fi
+else
+    echo "Error: Did not specify output archive."
+    usage
+fi
+
+SIZE=`tar cf >( $COMP -c | wc -c ) "$INPUT"`
+
+cat > "$OUTPUT" << EEEEOOOOFFFF
+#!/bin/bash
+TMPDIR="/tmp/myself".\$RANDOM.\`date +%Y%m%d%H%M%S\`
+echo "Creating temporary directory..."
+mkdir "\$TMPDIR"
+echo "Uncompressing archive..."
+cat "\$0" | tail -c $SIZE | $COMP -cd | ( cd "\$TMPDIR"; tar xf - 2>&1 > /dev/null)
+echo "Running $NAME..."
+( cd "\$TMPDIR"; "$SCRIPT" )
+echo "Cleaning up..."
+rm -fR "\$TMPDIR"
+exit \$?
+EEEEOOOOFFFF
+tar cf >( $COMP -c >> "$OUTPUT" ) "$INPUT"

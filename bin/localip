@@ -1,0 +1,2 @@
+#!/bin/bash
+ip -f inet addr show | tail -n1 | awk '{print $2;}' | cut -f1 -d/

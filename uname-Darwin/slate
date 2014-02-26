@@ -1,0 +1,24 @@
+# set config options
+
+config defaultToCurrentScreen true
+config resizePercentOf screenSize
+
+# alias (to create alias variables)
+
+alias full move screenOriginX;screenOriginY screenSizeX;screenSizeY
+alias lefthalf move screenOriginX;screenOriginY screenSizeX/2;screenSizeY
+alias righthalf move screenOriginX+screenSizeX/2;screenOriginY screenSizeX/2;screenSizeY
+alias center move screenOriginX+screenSizeX/4;screenOriginY+screenSizeY/4 screenSizeX/2;screenSizeY/2
+alias terminal focus 'Terminal'
+alias browser focus 'Google Chrome'
+
+# key bindings for window movement
+
+bind up:cmd,ctrl ${full}
+bind down:cmd,ctrl ${center}
+bind left:cmd,ctrl ${lefthalf}
+bind right:cmd,ctrl ${righthalf}
+
+# key bindings for window focus/launch
+bind t:alt ${terminal}
+bind g:alt ${browser}

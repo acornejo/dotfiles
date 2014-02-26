@@ -1,0 +1,99 @@
+e=e(1)
+pi=4*a(1)
+define sin(x) { return s(x); }
+define cos(x) { return c(x); }
+define tan(x) { return s(x)/c(x); }
+define atan(x) { return a(x); }
+define asin(x) { return 2*a(x/(1+sqrt(1-x*x))); }
+define acos(x) { return 2*a(sqrt(1-x*x)/(1+x)); }
+define log(x) { return l(x); }
+define exp(x) { return e(x); }
+
+define fact (n) {
+  if (n < 0) {
+    print "invalid argument to factorial!\n";
+    halt;
+  }
+  res = 1;
+  for (; n > 1; n--) {
+    res *= n;
+  }
+  return res;
+}
+
+define sign(x) {
+    if (x == 0) {
+        return(0);
+    } else if (x < 0) {
+        return(-1);
+    } else if (x > 0) {
+        return(1);
+    }
+}
+
+define abs(x) {
+    if (x < 0) {
+        return(-x);
+    } else {
+        return(x);
+    }
+}
+
+define atan2(y, x) {
+    auto fi;
+
+    if (y == 0) {
+        if (x > 0) {
+            return(0);
+        } else if (x == 0) {
+            print "Invalid argument to atan2\n";
+            halt;
+        } else if (x < 0) {
+            return(pi);
+        }
+    }
+
+    fi = a(abs(y/x));
+
+    if (x > 0) {
+        return(fi * sign(y));
+    } else if (x == 0) {
+        return(pi * sign(y) / 2);
+    } else if (x < 0) {
+        return((pi - fi) * sign(y));
+    }
+}
+
+define min(x,y) {
+    if (x < y) return (x);
+    return (y);
+}
+
+/* take integer part */
+define int(x) {
+    auto old_scale;
+    old_scale = scale;
+    scale = 0;
+    ret = x/1;
+    scale = old_scale;
+    return ret
+}
+
+/* round to nearest integer */
+define round(x) {
+    if (x<0) x-=.5 else x+=.5;
+    return int(x);
+}
+
+/* smallest integer >= arg */
+define ceil(x) {
+    auto intx;
+    intx=int(x);
+    if (intx<x) intx+=1;
+    return intx;
+}
+
+/* largest integer <= arg */
+define floor(x) {
+    return -ceil(-x);
+}

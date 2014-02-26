@@ -1,0 +1,2 @@
+#!/bin/bash
+awk '{s=0; for(i=1; i<=NF; i++){s+=$i}; s/=NF; print s}'

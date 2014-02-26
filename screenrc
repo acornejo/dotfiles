@@ -1,0 +1,60 @@
+# For proper colors in xterm
+attrcolor b ".I"
+defbce "on"
+# Custom termcap fixes
+#   Co#256 Use 256 colors
+#   AB=background color
+#   AF=foreground color
+#   ti@:te@ Fix scrolling
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm:ti@:te@'
+term "xterm"
+
+# For utf8
+defutf8 on
+
+# Define larger scrollback
+defscrollback 4096
+
+# For status line
+hardstatus on
+hardstatus alwayslastline
+hardstatus string '%{= dd}%-w%{=r dd}%n %t%{= dd}%+w'
+
+# screen detaches when connection is lost
+autodetach on
+altscreen on
+
+# no anoying bell
+vbell on
+vbell_msg "[beep]"
+
+# no startup messages
+msgminwait 0
+msgwait 0
+startup_message off
+
+# set screen titles
+shelltitle "$ | bash"
+
+# start at 1 instead of 0
+bind c screen 1
+bind 0 select 10
+# screen -t calc 6 calc
+# screen -t mutt 7 mutt
+# screen -t finch 8 finch
+# screen -t vimpd 9 vimpd
+# screen -t top 10 top
+screen 1
+maxwin 10
+
+# disable C-a s, which freezes screen
+bind s
+
+#multiuser
+multiuser on
+
+# Use Ctrl-a to send commands to screen
+escape ^Aa
+
+# make ctrl-d exit and detach
+#bindkey -t "^d" exit\n

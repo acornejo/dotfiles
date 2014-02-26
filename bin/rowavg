@@ -1,0 +1,4 @@
+#!/bin/bash
+awk '{for(i=1; i<=NF; i++){s[i]+=$i}} END {for(i=1; i<=NF; i++){printf s[i]/NR "\t"} printf "\n"}' $*
+
+

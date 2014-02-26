@@ -1,0 +1,34 @@
+#!/bin/bash
+
+DIR=`dirname $0`
+FILE=$DIR"/help_topics.txt"
+
+if [ -n "$1" ]; then
+    TOPICS=`cat $FILE |  egrep -B1 "^[=]+$" | egrep -v "^[=]+$" | grep -v "\--" | grep -i "$1" | tr '\n' '#'`
+    TOPIC=""
+    IFS=#
+    for item in $TOPICS; do
+        if [ `echo $item | tr [:upper:] [:lower:]` = `echo $1 | tr [:upper:] [:lower:]` ]; then
+            TOPIC=$item
+            break
+        fi
+    done
+    IFS=' '
+    if [ -z "$TOPIC" ]; then
+        TOPIC=`echo $TOPICS | cut -f1 -d#`
+    fi
+    if [ -n "$TOPIC" ]; then
+        if [ "${TOPICS}" != "${TOPIC}#" ]; then
+            REMAINING=`echo $TOPICS | tr '#' ' '`
+            echo "Alternatives: $REMAINING"
+            echo
+        fi
+        cat $FILE | egrep -A100 "^$TOPIC$" | grep -m2 -B100 -A0 "=="
+    else
+        echo "Error: Topic matching $1 not found!"
+    fi
+else
+    echo "Help Topics"
+    echo "==========="
+    cat $FILE | egrep -B1 "^[=]+$" | egrep -v "^[=]+$" | grep -v "\--"
+fi

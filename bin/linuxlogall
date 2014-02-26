@@ -1,0 +1,13 @@
+#!/bin/bash
+files="/var/log/dmesg /var/log/kern.log /var/log/daemon.log /var/log/debug /var/log/syslog"
+output="logs"
+
+echo "logging output."
+mkdir -p $output
+for file in $files; do
+    ofile=$(basename $file)
+    tail -f $file > $output/$ofile &
+done
+
+echo "going to deamon mode (to ensure write-to-disk)"
+while true; do sync; sleep 15; done

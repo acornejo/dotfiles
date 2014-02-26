@@ -1,0 +1,272 @@
+#!/bin/bash
+# Bash script to CSAIL'ize any debian-based machine.
+
+# Copyright (C) 2009 Alex Cornejo
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+# use openafs instead for older version
+PAMAFS="afs"
+
+function query()
+{
+    echo -n "$1: [y,n] "
+    RES=""
+    while [ "$RES" != "n" -a "$RES" != "y" ]; do
+        read -s -n 1 RES
+    done
+    if [ "$RES" != "n" ]; then
+        echo "yes"
+        RES="yes"
+    else
+        echo "no"
+        RES=""
+    fi
+}
+
+function getusers()
+{
+    USERS="$1"
+    while true; do
+        echo -n "Enter a username (blank to stop): "
+        read NAME
+        if [ -n "$NAME" ]; then
+            USERS="$USERS $NAME"
+            USERS=$(echo $USERS | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+        else
+            query "User list is: $USERS"
+            if [ -n "$RES" ]; then
+                break
+            else
+                USERS="$1"
+                query "Try again?"
+                if [ -z "$RES" ]; then
+                    break
+                fi
+            fi
+        fi
+    done
+}
+
+if [ ! $UID -eq 0 ]; then
+    query "Need to run this script as root, should I attempt to sudo for you?"
+    if [ -n "$RES" ]; then
+        echo ""
+        exec sudo "$0" $*
+    else
+        exit 1
+    fi
+fi
+
+echo "CSAILize any debian-based machine"
+echo "Copyright (C) 2009 Alex Cornejo, released under GPLv2 or later."
+echo ""
+
+if [ ! -d /etc/pam.d.nocsail ]; then
+    echo "Backing up current PAM config"
+    cp -a /etc/pam.d /etc/pam.d.nocsail
+else
+    query "Restore old  PAM config? (non csail)"
+    if [ -n "$RES" ]; then
+        rm -fR /etc/pam.d
+        cp -a /etc/pam.d.nocsail /etc/pam.d
+    fi
+fi
+if [ ! -f /etc/passwd.nocsail ]; then
+    echo "Backing up password files"
+    cp /etc/passwd /etc/passwd.nocsail
+    cp /etc/group /etc/group.nocsail
+else
+    query "Restore old password files? (non csail)"
+    if  [ -n "$RES" ]; then
+        cp /etc/passwd.nocsail /etc/passwd
+        cp /etc/group.nocsail /etc/group
+    fi
+fi
+
+query "Build and install OpenAFS kernel module"
+if [ -n "$RES" ]; then
+    HASDKMS=$(apt-cache search openafs-modules-dkms)
+    if [ -n "$HASDKMS" ]; then
+        apt-get install openafs-modules-dkms
+    else
+        apt-get install module-assistant
+        m-a prepare openafs-modules
+        m-a a-i openafs-modules
+    fi
+fi
+
+query "Install Kerberos and OpenAFS client"
+if [ -n "$RES" ]; then
+    apt-get install krb5-user openafs-client openafs-krb5 
+fi
+
+query "Install Kerberos and OpenAFS modules for PAM"
+if [ -n "$RES" ]; then
+    apt-get install libpam-krb5 libpam-${PAMAFS}-session
+fi
+
+query "Configure PAM to use Kerberos and OpenAFS"
+if [ -n "$RES" ]; then
+    pushd /etc/pam.d
+    cat << EOF > common-account
+account sufficient pam_krb5.so
+account required   pam_unix.so
+EOF
+    cat << EOF > common-auth
+auth sufficient pam_krb5.so
+auth required   pam_unix.so use_first_pass
+EOF
+    cat << EOF > common-session
+session required pam_unix.so
+session optional pam_krb5.so
+session optional pam_${PAMAFS}_session.so
+EOF
+    popd
+fi
+
+query "Configure OpenAFS for CSAIL"
+if [ -n "$RES" ]; then
+    pushd /etc/openafs
+    cat << EOF > afs.conf.client
+AFS_CLIENT=true
+AFS_AFSDB=true
+AFS_CRYPT=true
+AFS_DYNROOT=true
+AFS_FAKESTAT=true
+EOF
+    cat << EOF > CellAlias
+csail.mit.edu  csail
+athena.mit.edu athena
+dev.mit.edu    dev
+net.mit.edu    net
+ops.mit.edu    ops
+sipb.mit.edu   sipb
+EOF
+    cat << EOF > SuidCells
+athena.mit.edu
+dev.mit.edu
+net.mit.edu
+ops.mit.edu
+sipb.mit.edu
+EOF
+    echo csail.mit.edu > ThisCell
+    # Maybe get CellServDB, not sure if needed
+    # it is @ /afs/csail/common/etc/CellServDB
+    popd
+fi
+
+query "Configure Kerberos for CSAIL"
+if [ -n "$RES" ]; then
+    # Look into /afs/csail.mit.edu/system/i386_linux24/local/sbin/mkpasswd
+    # for hints on smarter way to do this. I am too lazy to do it the right way,
+    # and this hack works for me.
+    echo -n "Enter your csail username: "
+    read NAME
+    scp $NAME@login.csail.mit.edu:"/etc/krb5.conf /etc/passwd /etc/group" /tmp
+    mv /tmp/krb5.conf /etc
+    query "Allow access to all CSAIL users (not recommended)"
+    if [ -n "$RES" ]; then
+        cat /etc/passwd | grep -v "*csail*" > /tmp/passwd-new
+        cat /etc/group  | grep -v "*csail*" > /tmp/group-new
+        cat /tmp/passwd | grep "*csail*" | iconv -f ISO_8859-1 -t ASCII//TRANSLIT >> /tmp/passwd-new
+        cat /tmp/group  | grep "*csail*" >> /tmp/group-new
+        mv /tmp/passwd-new /etc/passwd
+        mv /tmp/group-new /etc/group
+        rm /tmp/passwd
+        rm /tmp/group
+    else
+        echo "Specify which CSAIL users that can access the system."
+        getusers $NAME
+        if [ -n "$USERS" ]; then
+            EXCLUDE=$(echo $USERS | tr ' ' '|' )
+            cat /etc/passwd | grep -v "*csail*" | egrep -v $EXCLUDE > /tmp/passwd-new
+            cat /etc/group | grep -v "*csail*" | egrep -v $EXCLUDE > /tmp/group-new
+            for user in $USERS; do
+                cat /tmp/passwd | grep "*csail*" | iconv -f ISO_8859-1 -t ASCII//TRANSLIT | grep ${user} >> /tmp/passwd-new
+                cat /tmp/group | grep "*csail" | grep ${user} >> /tmp/group-new
+            done
+            mv /tmp/passwd-new /etc/passwd
+            mv /tmp/group-new /etc/group
+            rm /tmp/passwd
+            rm /tmp/group
+        else
+            echo "Warning: Did not add any csail users."
+        fi
+    fi
+fi
+
+query "Configure CUPS for CSAIL"
+if [ -n "$RES" ]; then
+    cat << EOF > /etc/cups/client.conf
+ServerName cups.csail.mit.edu
+Encryption IfRequested
+EOF
+fi
+
+if [ -w "/etc/ssh/ssh_config" ]; then
+    query "Configure SSH to forward credentials inside CSAIL and local domain (risky)"
+    if [ -n "$RES" ]; then
+        sed -e "s/^[^#]\(.+\)$/# \1/g" -i /etc/ssh/ssh_config
+        cat << EOF >> /etc/ssh/ssh_config
+
+Host *.csail.mit.edu
+  GSSAPIAuthentication yes
+  GSSAPIDelegateCredentials yes
+  ForwardX11 yes
+
+Host *.*
+  GSSAPIAuthentication no
+  GSSAPIDelegateCredentials no
+  ForwardX11 no
+
+Host *
+  GSSAPIAuthentication yes
+  GSSAPIDelegateCredentials yes
+  ForwardX11 yes
+EOF
+    fi
+fi
+
+if [ -w "/etc/ssh/sshd_config" ]; then
+    query "Configure SSH server to admit externally validated kerberos (requires keytab)"
+    if [ -n "$RES" ]; then
+        cat << EOF >> /etc/ssh/sshd_config
+UsePrivilegeSeparation yes
+GSSAPIAuthentication yes
+GSSAPIKeyExchange yes
+EOF
+    fi
+    query "Restrict incoming SSH connections to a (user defined) set of users"
+    if  [ -n "$RES" ]; then
+        getusers
+        if [ -n "$USERS" ]; then
+            echo "AllowUsers $USERS" >> /etc/ssh/sshd_config
+        fi
+    fi
+fi
+
+query "Force reload of openafs and ssh (will close ssh connections)"
+if [ -n "$RES" ]; then
+    if [ -x "/etc/init.d/ssh" ]; then
+        /etc/init.d/ssh restart
+    fi
+    depmod -a; /etc/init.d/openafs-client force-reload
+fi
+
+echo ""
+echo "**************** INSTALLATION COMPLETED **********************"
+echo "*** You may need to restart for all changes to take effect ***"
+echo "**************************************************************"

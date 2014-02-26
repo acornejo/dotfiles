@@ -1,0 +1,40 @@
+#!/bin/bash
+
+parsetree()
+{
+    treehash=$1
+    shift
+
+    treetype=$(git cat-file -t $treehash)
+    if [ "$treetype" != "tree" ]; then
+        echo "Object $treehash is not a tree, it is a $treetype"
+    else
+        git ls-tree $treehash | while read mode type hash name; do
+            case $type in
+                blob)
+                    git cat-file blob $hash > "$name"
+                    ;;
+                tree)
+                    mkdir "$name"
+                    pushd "$name"
+                    parse_tree $hash
+                    popd "$name"
+                    ;;
+                *)
+                    echo "Object $hash is of unkown type $type"
+                    ;;
+            esac
+        done
+    fi
+}
+
+treename=$2
+if [ "$treename" = "" ]; then
+    treename="temp"
+fi
+
+echo "Recovering tree $1 to $treename"
+mkdir -p "$treename"
+pushd "$treename"
+parsetree $1
+popd "$treename"

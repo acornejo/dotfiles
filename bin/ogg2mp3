@@ -1,0 +1,33 @@
+#!/bin/bash
+function convert()
+{
+    INPUT=$1
+    INPUT_NOEXT=`echo "$1" | sed -e "s/\(.*\)\..*$/\1/"`
+    OUTPUT=$INPUT_NOEXT.mp3
+    if [ "$INPUT" -nt "$OUTPUT" ]; then
+        if [ -f "$OUTPUT" ]; then
+            rm -f $OUTPUT
+        fi
+        echo -n "Converting $INPUT to $OUTPUT... "
+        gst-launch-0.10 filesrc location="$INPUT" ! oggdemux ! vorbisdec ! audioconvert ! lame name=enc vbr=0 bitrate=192 ! id3mux name=tag v2-tag=true v1-tag=true ! filesink location="$OUTPUT"
+        echo "done."
+    else
+        echo "File $OUTPUT is up to date."
+    fi
+}
+
+NAUTILUS_PWD=`echo $NAUTILUS_SCRIPT_CURRENT_URI | sed 's/file\:\/\///'`
+if [ -n "$NAUTILUS_PWD" ]; then
+    echo "changing to $NAUTILUS_PWD"
+    cd "$NAUTILUS_PWD"
+fi
+
+while [ $# -gt 0 ]; do
+    file=$1
+    if [ -f "$file" ]; then
+        convert "$file"
+    else
+        echo "File $file does not exist"
+    fi
+    shift
+done

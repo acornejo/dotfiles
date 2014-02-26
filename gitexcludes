@@ -1,0 +1,14 @@
+*.swp
+*.aux
+*.log
+*.bbl
+*.blg
+*.pyc
+*.out
+*.nav
+*.snm
+*.toc
+.__afs*
+.svn
+*.*~
+.DS_Store

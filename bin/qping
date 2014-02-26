@@ -1,0 +1,7 @@
+#!/bin/bash
+num=`ping -w1 -n -c1 $1 | tail -n2 | head -n1 | awk '{print $4}'`
+if [ "$num" = "0" ]; then
+    echo "dead"
+else
+    echo "alive"
+fi

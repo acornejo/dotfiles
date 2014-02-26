@@ -1,0 +1,18 @@
+#!/bin/bash
+if [ "$#" -ge "4" ]; then
+    if [ -e "$1" ]; then
+        INPUT="$1"
+        OUTPUT="$2"
+        FIRST="$3"
+        LAST="$4"
+        if [ "$LAST" -ge "$FIRST" ]; then
+            gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -dSAFER  -dFirstPage=${FIRST} -dLastPage=${LAST} -sOutputFile=${OUTPUT} ${INPUT}
+        else
+            echo "Error: Last page $LAST should be greater or equal than first page $FIRST."
+        fi
+    else
+        echo "Error: PDF file $1 does not exist."
+    fi
+else
+    echo "Usage: pdfpages {pdffile} {outfile} {firstpage} {lastpage}"
+fi

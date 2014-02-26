@@ -1,0 +1,13 @@
+#!/bin/bash
+
+KEY="$1"
+
+if [ -n "$1" ]; then
+    while [[ ${#KEY} -lt 64 ]]; do
+        KEY=${KEY}${KEY}
+    done
+    KEY=${KEY:0:64}
+    echo -n $KEY | md5sum | cut -f1 -d\ 
+else
+    echo "Usage: $0 passphrase"
+fi

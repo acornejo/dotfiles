@@ -1,0 +1,160 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{thesis}
+
+\usepackage{graphicx,color,amsmath,amsfonts,amssymb}
+\usepackage[spanish,boxed,shortend,lined]{algorithm2e}
+
+\evensidemargin 0in
+\oddsidemargin 1.5cm
+\textheight 22.75cm
+\textwidth 15cm
+\footskip 1.0cm                 
+\topmargin -1.0in
+\headheight 1.8cm                       
+\headsep 0.7cm
+
+%% For more than one figure por page
+\renewcommand{\topfraction}{1.00}
+\renewcommand{\bottomfraction}{1.00}
+\renewcommand{\textfraction}{0.00}
+\newcommand{\wrap}[2]{\begin{#1}#2\end{#1}}
+
+\newbox\@titleadvisor
+\newbox\@nameadvisor
+
+\def\degree#1{\setbox0\hbox{#1}\gdef\@degree{#1}}
+\def\degreedate#1{\gdef\@degreedate{#1}}
+\def\department#1{\gdef\@department{#1}}
+\def\university#1{\gdef\@university{#1}}
+\def\library#1{\gdef\@library{#1}}
+\def\universityaddress#1{\gdef\@universityaddress{#1}}
+\def\advisor{\@ifnextchar[{\@advisor}{\@advisor[Advisor]}}
+\def\@advisor[#1]#2{\setbox\@nameadvisor\vbox{\unvbox\@nameadvisor
+    \vskip \baselineskip\par\centerline{{\em #1:} #2 }}}
+
+    \def\maketitle{
+        \clearpage
+            \phantomsection
+            \addcontentsline{toc}{chapter}{Portada}
+        \thispagestyle{empty}
+        \setcounter{page}{0}
+        \begin{center}
+        \vskip 25mm
+            \textbf{\large\uppercase\expandafter{\@university}}
+        \vskip 15mm
+            \includegraphics[height=40mm]{figures/itam-gray}
+        \vskip 20mm
+            \textsc{\huge\uppercase{\@title}}\par
+            \vskip 10mm
+            \textsc{\Large\textbf{T \ \ \ E \ \ \ S \ \ \ I \ \ \ S}}\par
+            \vskip 7mm
+            \textsc{\large PARA OBTENER EL TÍTULO DE}\par
+            \vskip 5mm
+            \textsc{\textbf{\uppercase\expandafter{\@degree}}}\par
+            \vskip 5mm
+            \textsc{P \ \ \ R \ \ \ E \ \ \ S \ \ \ E \ \ \ N \ \ \ T \ \ \ A}\par
+            \vskip 5mm
+            \textsc{\textbf{\uppercase\expandafter{\@author}}}\par
+            \vfill
+            \textrm{\@universityaddress \hfill \@degreedate}
+        \end{center}
+        \newpage
+    }
+
+\def\makeprintrights
+{
+    \clearpage
+        \thispagestyle{empty}
+    \setcounter{page}{0}
+    \vskip 120mm
+    {
+        \renewcommand{\baselinestretch}{2.0}
+        \small\normalsize
+            ``Con fundamento en los artículos 21 y 27 de la Ley Federal del
+            Derecho de Autor y como titular de los derechos moral y
+            patrimonial de la obra titulada \\
+
+            \textsc{``\underline{\@title}''}, \\
+
+            otorgo de manera gratuita y permanente al \@university\ y a la
+            Biblioteca \@library, autorización para que fijen la
+            obra en cualquier medio, incluido el electrónico, y la divulguen
+            entre sus usuarios, profesores, estudiantes o terceras personas
+            sin que pueda percibir por tal divulgación una
+            contraprestación''\\
+
+            \renewcommand{\baselinestretch}{1.0}
+    }
+    \vskip 20mm
+    \begin{center}
+        \begin{tabular}{p{50mm}}
+    \begin{center}
+    FECHA
+        \end{center}
+    \\ \\ \\
+        \hline\\
+        \begin{center}
+    FIRMA
+        \end{center}
+    \\ \\ \\
+        \hline\\
+        \end{tabular}
+    \end{center}
+    \newpage
+}
+
+\def\makethanks#1{
+    \clearpage
+        \thispagestyle{empty}
+    \setcounter{page}{0}
+    \include{#1}
+    \newpage
+}
+
+\def\makebib{
+    \bibliographystyle{unsrt}
+    \clearpage
+        \phantomsection
+        \addcontentsline{toc}{chapter}{\bibname}
+    \bibliography{refs}
+}
+
+\def\makecopyright{
+    \thispagestyle{empty}
+    \null\vfill
+        \begin{center}
+    \large
+        \copyright\ Copyright\ de \@author\ \@degreeyear\\
+        Todos los derechos reservados.
+        %		\copyright\ Copyright\ by \@author\ \@degreeyear\\
+        %		All Rights Reserved
+        \end{center}
+    \vfill\newpage
+}
+
+\def\makelists{
+    \clearpage
+        \phantomsection
+        \addcontentsline{toc}{chapter}{\contentsname}
+    \pagestyle{plain}
+    \pagenumbering{roman}
+    \newpage
+        %   \addcontentsline{toc}{chapter}{\protect\numberline{}{\contentsname}}
+    \tableofcontents
+        \pagebreak
+        %	\addcontentsline{toc}{chapter}{\protect\numberline{}{\listtablename}}
+    \listoftables
+        \pagebreak
+        %	\addcontentsline{toc}{chapter}{\protect\numberline{}{\listfigurename}}
+    \listoffigures
+        \pagebreak
+        %	\addcontentsline{toc}{chapter}{\protect\numberline{}{\listalgorithmcfname}}
+    \listofalgorithms
+        \pagebreak
+        \pagenumbering{arabic}
+}
+
+\def\thesis{
+    \setcounter{page}{1}
+    \pagenumbering{arabic}
+}

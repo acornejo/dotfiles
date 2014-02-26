@@ -1,0 +1,40 @@
+#!/bin/bash
+
+function convert()
+{
+    INPUT=$1
+    INPUT_NOEXT=`echo "$1" | sed -e "s/\(.*\)\..*$/\1/"`
+    OUTPUT_DVI=$INPUT_NOEXT.dvi
+    OUTPUT_PS=$INPUT_NOEXT.ps
+    OUTPUT_EPS=$INPUT_NOEXT.eps
+    OUTPUT=$INPUT_NOEXT.pdf
+    OLDPATH=`pwd`
+    if [ "$INPUT" -nt "$OUTPUT" ]; then
+        echo -n "Converting $INPUT to $OUTPUT... "
+            latex -interaction=batchmode "$INPUT"
+            dvips -o "$OUTPUT_PS" "$OUTPUT_DVI"
+            ps2eps -f "$OUTPUT_PS"
+            epstopdf "$OUTPUT_EPS" -o="$OUTPUT"
+            rm -f "$OUTPUT_DVI" "$OUTPUT_PS" "$OUTPUT_EPS" "$INPUT_NOEXT.log" "$INPUT_NOEXT.aux"
+        echo "done."
+    else
+        echo "File $OUTPUT is up to date."
+    fi
+        
+}
+
+NAUTILUS_PWD=`echo $NAUTILUS_SCRIPT_CURRENT_URI | sed 's/file\:\/\///'`
+if [ -n "$NAUTILUS_PWD" ]; then
+    echo "changing to $NAUTILUS_PWD"
+    cd "$NAUTILUS_PWD"
+fi
+
+while [ $# -gt 0 ]; do
+    file=$1
+    if [ -f "$file" ]; then
+        convert "$file"
+    else
+        echo "File $file does not exist"
+    fi
+    shift
+done

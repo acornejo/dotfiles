@@ -1,0 +1,242 @@
+!! drop in Solarized colorscheme for Xresources/Xdefaults
+
+!!SOLARIZED HEX     16/8 TERMCOL  XTERM/HEX   L*A*B      RGB         HSB
+!!--------- ------- ---- -------  ----------- ---------- ----------- -----------
+!!base03    #002b36  8/4 brblack  234 #1c1c1c 15 -12 -12   0  43  54 193 100  21
+!!base02    #073642  0/4 black    235 #262626 20 -12 -12   7  54  66 192  90  26
+!!base01    #586e75 10/7 brgreen  240 #585858 45 -07 -07  88 110 117 194  25  46
+!!base00    #657b83 11/7 bryellow 241 #626262 50 -07 -07 101 123 131 195  23  51
+!!base0     #839496 12/6 brblue   244 #808080 60 -06 -03 131 148 150 186  13  59
+!!base1     #93a1a1 14/4 brcyan   245 #8a8a8a 65 -05 -02 147 161 161 180   9  63
+!!base2     #eee8d5  7/7 white    254 #e4e4e4 92 -00  10 238 232 213  44  11  93
+!!base3     #fdf6e3 15/7 brwhite  230 #ffffd7 97  00  10 253 246 227  44  10  99
+!!yellow    #b58900  3/3 yellow   136 #af8700 60  10  65 181 137   0  45 100  71
+!!orange    #cb4b16  9/3 brred    166 #d75f00 50  50  55 203  75  22  18  89  80
+!!red       #dc322f  1/1 red      160 #d70000 50  65  45 220  50  47   1  79  86
+!!magenta   #d33682  5/5 magenta  125 #af005f 50  65 -05 211  54 130 331  74  83
+!!violet    #6c71c4 13/5 brmagenta 61 #5f5faf 50  15 -45 108 113 196 237  45  77
+!!blue      #268bd2  4/4 blue      33 #0087ff 55 -10 -45  38 139 210 205  82  82
+!!cyan      #2aa198  6/6 cyan      37 #00afaf 60 -35 -05  42 161 152 175  74  63
+!!green     #859900  2/2 green     64 #5f8700 60 -20  65 133 153   0  68 100  60
+
+! #define S_base03        #002b36
+! #define S_base02        #073642
+! #define S_base01        #586e75
+! #define S_base00        #657b83
+! #define S_base0         #839496
+! #define S_base1         #93a1a1
+! #define S_base2         #eee8d5
+! #define S_base3         #fdf6e3
+! #define S_yellow        #b58900
+! #define S_orange        #cb4b16
+! #define S_red           #dc322f
+! #define S_magenta       #d33682
+! #define S_violet        #6c71c4
+! #define S_blue          #268bd2
+! #define S_cyan          #2aa198
+! #define S_green         #859900
+! 
+! *background:            S_base03
+! *foreground:            S_base00
+! *fading:                40
+! *fadeColor:             S_base03
+! *cursorColor:           S_base1
+! *pointerColorBackground:S_base01
+! *pointerColorForeground:S_base1
+! 
+! !! black dark/light
+! *color0:                S_base02
+! *color8:                S_base03
+! 
+! !! red dark/light
+! *color1:                S_red
+! *color9:                S_orange
+! 
+! !! green dark/light
+! *color2:                S_green
+! *color10:               S_base01
+! 
+! !! yellow dark/light
+! *color3:                S_yellow
+! *color11:               S_base00
+! 
+! !! blue dark/light
+! *color4:                S_blue
+! *color12:               S_base0
+! 
+! !! magenta dark/light
+! *color5:                S_magenta
+! *color13:               S_violet
+! 
+! !! cyan dark/light
+! *color6:                S_cyan
+! *color14:               S_base1
+! 
+! !! white dark/light
+! *color7:                S_base2
+! *color15:               S_base3
+
+! ******* X Font ********
+Xft.dpi: 96.0
+Xft.hinting: 1
+Xft.autohinting: 1
+Xft.hintstyle: full
+Xft.antialias: 1
+Xft.rgba: rgb
+
+! ****** X Term *********
+XTerm*cursorColor: firebrick
+!XTerm*loginShell: true
+XTerm*jumpScroll: true
+XTerm*limitResize: 0
+XTerm*faceName: monospace
+XTerm*faceSize: 10
+XTerm*geometry: 120x40
+XTerm*VT100.Translations: #override \
+Ctrl <Key>V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Ctrl <Key>X: select-set(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+
+! ******* URXVT *********
+!urxvt.font: xft:Bitstream Vera Sans Mono-9.5
+urxvt*font: xft:monospace-10
+urxvt.termName: rxvt-unicode
+urxvt.urllauncher: firefox
+urxvt*scrollBar: false
+urxvt*fullCursor: true
+! urxvt*transparent: true
+! urxvt*depth: 32
+
+! ****** Acroread ********
+Acroread.ShowMenuBar: false
+Acroread.ShowLeftToolBar: false
+
+! ****** Emacs *********
+Emacs.fontBackend: xft
+!Emacs.font: monospace-10
+
+! ***** XScreensaver ***
+xscreensaver.timeout:15
+xscreensaver.lock:true
+xscreensaver.lockTimeout:5
+xscreensaver.splash:False
+xscreensaver.dpmsEnabled:True
+xscreensaver.dpmsStandby:9
+xscreensaver.dpmsSuspend:9
+xscreensaver.dpmsOff:10
+xscreensaver.grabDesktopImages: False
+xscreensaver.grabVideoFrames: False
+! blank or one
+xscreensaver.mode: blank
+!xscreensaver.selected: 206
+
+
+! ! ******* Light color theme ******
+! ! White
+! *background:  #ffffff
+! ! Black
+! *foreground:  #000000
+! ! Black
+! *color0:      #000000
+! *color8:      #404040
+! ! Red
+! *color1:      #CD0000
+! *color9:      #FF0000
+! ! Green
+! *color2:      #00CD00
+! *color10:     #00FF00
+! ! Yellow
+! *color3:      #CDCB00
+! *color11:     #FFFF00
+! ! Blue
+! *color4:      #0000CD
+! *color12:     #0000FF
+! ! Purple
+! *color5:      #CD00CD
+! *color13:     #FF00FF
+! ! Cyan
+! *color6:      #00CDCD
+! *color14:     #00FFFF
+! ! White
+! *color7:      #CDCDCD
+! *color15:     #FFFFFF
+
+! ******* Dark color theme ******
+! ! Light gray
+! *background:  #333333
+! ! White
+! *foreground:  #ffffff
+! ! Black
+! *color0:      #5A5A5A
+! *color8:      #3e3e3e
+! ! Red
+! *color1:      #FF4747
+! *color9:      #FF6767
+! ! Green
+! *color2:      #AFC81C
+! *color10:     #bFC81C
+! ! Yellow
+! *color3:      #FDD338
+! *color11:     #F4D461
+! ! Blue
+! *color4:      #619AF4
+! *color12:     #5496FF
+! ! Purple
+! *color5:      #5F5A90
+! *color13:     #826AB1
+! ! Cyan
+! *color6:      #47E0FF
+! *color14:     #2ED9FB
+! ! White
+! *color7:      #FFFFFF
+! *color15:     #DEDEDE
+
+! **** Emacs color theme ***
+Emacs.background: white
+Emacs.foreground: black
+Emacs.cursorColor: black
+Emacs.pointerColor: white
+Emacs.bold.attributeBold: on
+Emacs.bold-italic.attributeItalic: on
+Emacs.bold-italic.attributeBold: on
+Emacs.italic.attributeItalic: on
+Emacs.font-lock-builtin-face.attributeBold: on
+Emacs.font-lock-builtin-face.attributeForeground: #A73232
+Emacs.font-lock-comment-face.attributeForeground: #8722c9
+Emacs.font-lock-constant-face.attributeBold: on
+Emacs.font-lock-constant-face.attributeForeground: #398EE6
+Emacs.font-lock-doc-string-face.attributeBold: on
+Emacs.font-lock-doc-string-face.attributeForeground: #51B200
+Emacs.font-lock-function-name-face.attributeForeground: black
+Emacs.font-lock-keyword-face.attributeBold: on
+Emacs.font-lock-keyword-face.attributeForeground: #A73232
+Emacs.font-lock-preprocessor-face.attributeForeground: #8722c9
+Emacs.font-lock-preprocessor-face.attributeBold: on
+Emacs.font-lock-reference-face.attributeForeground: red3
+Emacs.font-lock-string-face.attributeForeground: #228C00
+Emacs.font-lock-type-face.attributeBold: on
+Emacs.font-lock-type-face.attributeForeground: #008080
+Emacs.font-lock-variable-name-face.attributeForeground: black
+Emacs.font-lock-warning-face.attributeBold: on
+Emacs.font-lock-warning-face.attributeForeground: red
+Emacs.py-builtins-face.attributeBold: on
+Emacs.py-builtins-face.attributeForeground: #398EE6
+Emacs.py-pseudo-keyword-face.attributeBold: on
+Emacs.py-pseudo-keyword-face.attributeForeground: #398EE6
+Emacs.rst-level-1-face.attributeBold: on
+Emacs.rst-level-1-face.attributeForeground: snow1
+Emacs.rst-level-2-face.attributeBold: on
+Emacs.rst-level-2-face.attributeForeground: snow2
+Emacs.rst-level-3-face.attributeBold: on
+Emacs.rst-level-3-face.attributeForeground: snow3
+Emacs.rst-level-4-face.attributeBold: on
+Emacs.rst-level-4-face.attributeForeground: snow4
+Emacs.erc-notice-face.attributeForeground: #878899
+Emacs.erc-bold-face.attributeBold: on
+Emacs.erc-command-indicator-face.attributeBold: on
+Emacs.erc-dangerous-host-face.attributeForeground: red
+Emacs.erc-timestamp-face.attributeBold: nil
+Emacs.erc-timestamp-face.attributeForeground: gray45
+Emacs.erc-underline-face.attributeUnderline: on
+Emacs.erc-prompt-face.attributeBold: on
+Emacs.erc-prompt-face.attributeForeground: GoldenRod3
+Emacs.trailing-whitespace.attributeBackground: red
