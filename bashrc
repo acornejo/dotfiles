@@ -37,17 +37,18 @@ if [ -e "$HOME/.pythonrc" ]; then
 fi
 
 # Load color palette for dir listing
-if [ -f "$HOME/.DIR_COLORS" -a -n "$(which dircolors)" ]; then
-    eval `dircolors -b $HOME/.DIR_COLORS`
+if [ -f "$HOME/.DIR_COLORS" ] && hash dircolors 2>/dev/null
+then
+    eval $(dircolors -b $HOME/.DIR_COLORS)
 fi
 # Set bash completion
-if [ -f ~/.bash_completion ]; then
-    . ~/.bash_completion
+if [ -f "$HOME/.bash_completion" ]; then
+    . "$HOME/.bash_completion"
 fi
 
 # Set bc options
-if [ -f ~/.bc ]; then
-    export BC_ENV_ARGS=~/.bc
+if [ -f "$HOME/.bc" ]; then
+    export BC_ENV_ARGS="$HOME/.bc"
 fi
 
 if hash ack-grep 2>/dev/null; then
@@ -57,7 +58,7 @@ fi
 # Customize prompt
 if [ "$PS1" ]; then
     # Change colors and display depending on terminal
-    if [ "$TERM" == "dumb" ]; then
+    if [ "$TERM" = "dumb" ]; then
         HCOLOR=""
         PCOLOR=""
         TCOLOR=""
@@ -73,12 +74,12 @@ if [ "$PS1" ]; then
         USYMBOL='$'
         PKIND='\w'
         # Use different color for root user
-        if [ "$USER" == "root" ]; then
+        if [ "$USER" = "root" ]; then
             UCOLOR='\[\e[1;31m\]'
             USYMBOL='#'
         fi
         # Display special string if on SSH connection
-        if [ -n "$SSH_CONNECTION" -a -z "$STY" ]; then
+        if [ -n "$SSH_CONNECTION" ] && [ -z "$STY" ]; then
             PSTRING="[ssh@${HCOLOR}\h${TCOLOR}]"
             HSTRING=""
         else
@@ -95,10 +96,9 @@ if [ "$PS1" ]; then
 
     GIT_PS1=""
     if [ -r "$HOME/.git-prompt.sh" ]; then
-        source ~/.git-prompt.sh
+        . "$HOME/.git-prompt.sh"
         GIT_PS1="\$(__git_ps1)"
     fi
-
 
     export PS1="${PSTRING}${TCOLOR}[${HSTRING}${PCOLOR}${PKIND}${GCOLOR}${GIT_PS1}${TCOLOR}]${UCOLOR}${USYMBOL}${TCOLOR} "
     export PS2="> "
@@ -109,9 +109,9 @@ fi
 
 # for autojump
 if [ -f "/usr/share/autojump/autojump.bash" ]; then
-    source /usr/share/autojump/autojump.bash
+    . /usr/share/autojump/autojump.bash
 elif [ -f "/usr/local/etc/autojump.bash" ]; then
-    source /usr/local/etc/autojump.bash
+    . /usr/local/etc/autojump.bash
 fi
 
 # set preferred applications
@@ -144,7 +144,7 @@ shopt -s histappend
 shopt -s cmdhist
 
 # For glob expansion
-if [ -n "$(shopt | grep globstar)" ]; then
+if [ -n "$BASH_VERSINFO" ] && [ ${BASH_VERSINFO[0]} -eq 4 ]; then
     shopt -s globstar
 fi
 
@@ -155,16 +155,16 @@ else
     alias open="xdg-open"
 fi
 
-# Custom alias
-# save typying aliases
+# aliases: save typing
 alias ..="cd .."
+alias ...=" cd ../.."
 alias ll="ls -l $LS_OPTIONS"
 alias l="ll -h"
 alias dir="ls -1"
 alias f="find . -name"
 alias v="$EDITOR"
 
-# sane default options aliases
+# aliases: default options
 alias rm="rm -i"
 alias ping="ping -c4 -t4"
 alias route="route -n"
@@ -173,12 +173,12 @@ alias less="less -R"
 alias bc="bc -q -l"
 alias du="du -h -s -c *"
 
-# process management aliases
+# aliases: process management
 alias aps="/bin/ps axo user,pid,pcpu,pmem,command"
 alias ps="ps xo user,pid,pcpu,pmem,command"
 alias jobs="jobs -l"
 
-# git aliases
+# aliases: git
 alias gg="git status -s"
 alias gl="git log --pretty='format:%Cgreen%h%Creset %an - %s' --graph"
 alias gd="git diff"
