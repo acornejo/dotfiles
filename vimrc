@@ -262,6 +262,36 @@ iab travelling traveling
 iab Travelling traveling
 iab Cancelling Canceling
 
+" Hack for gnome-terminal to use <M-?> bindings
+set ttimeout ttimeoutlen=50
+let c='a'
+while c <= 'z'
+  exec "set <A-".c.">=\e".c
+  exec "imap \e".c." <A-".c.">"
+  let c = nr2char(1+char2nr(c))
+endw
+
+" Set window movement bindings (that play well with tmux)
+if exists('$TMUX')
+  function! TmuxOrSplitSwitch(wincmd, tmuxdir)
+    let previous_winnr = winnr()
+    execute "wincmd " . a:wincmd
+    if previous_winnr == winnr()
+        silent call system("tmux select-pane -" . a:tmuxdir)
+    endif
+  endfunction
+
+  nnoremap <silent> <M-h> :call TmuxOrSplitSwitch('h', 'L')<cr>
+  nnoremap <silent> <M-j> :call TmuxOrSplitSwitch('j', 'D')<cr>
+  nnoremap <silent> <M-k> :call TmuxOrSplitSwitch('k', 'U')<cr>
+  nnoremap <silent> <M-l> :call TmuxOrSplitSwitch('l', 'R')<cr>
+else
+  map <M-h> <C-w>h
+  map <M-j> <C-w>j
+  map <M-k> <C-w>k
+  map <M-l> <C-w>l
+endif
+
 " Shell command
 function! s:Dict(command)
   let command = join(map(split('dict ' . a:command), 'expand(v:val)'))
