@@ -6,3 +6,8 @@ then
     gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 1
     gsettings set org.compiz.unityshell:/org/compiz/profiles/unity/plugins/unityshell/ launcher-hide-mode 1
 fi
+
+if hash gconftool-2 2>/dev/null
+then
+    gconftool-2 -s /apps/gnome-terminal/global/use_mnemonics -t bool false
+fi
