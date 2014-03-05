@@ -33,7 +33,7 @@ set tabstop=4 shiftwidth=4  " Number of spaces that a tab represents
 set expandtab               " Expand tab to spaces
 set smarttab                " Replace tab with spaces
 set shiftround              " Round indents to multiples of shiftwidth
-set backspace=indent,eol,start " Backspace behaviour
+set backspace=2             " Allow backspace over indent, line breaks, or start of the line
 set foldmethod=syntax       " set syntax controlled folding
 set nofoldenable            " Remove to enable folding
 set hlsearch                " Highlight search result
