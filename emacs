@@ -1,7 +1,13 @@
 ;; disable splash sceen
 (setq inhibit-splash-screen t)
 ;; set size
-(if (window-system) (set-frame-height (selected-frame) 82) (set-frame-width (selected-frame) 82))
+;; (if (window-system) (set-frame-height (selected-frame) 82) (set-frame-width (selected-frame) 82))
+;; Hide menu bar
+(menu-bar-mode nil)
+;; Hide toolbar
+;; (tool-bar-mode nil)
+;; Hide scrollbar
+;; (scroll-bar-mode nil)
 ;; use y/n instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; delete whole line when at beginning
@@ -13,12 +19,6 @@
 ;; Switch to use for directory listings
 (setq dired-listing-switches "-l")
 (setq list-directory-brief-switches "-l")
-;; Hide menu bar
-(menu-bar-mode nil)
-;; Hide toolbar
-(tool-bar-mode nil)
-;; Hide scrollbar
-(scroll-bar-mode nil)
 ;; Show line and column numbers
 (line-number-mode 1)
 (column-number-mode 1)
