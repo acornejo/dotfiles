@@ -282,6 +282,7 @@ if exists('$TMUX')
         silent call system("tmux select-pane -" . a:tmuxdir)
     endif
   endfunction
+  let &t_ti = "\<Esc>]2;vim\<Esc>\\" . &t_ti
 
   nnoremap <silent> <M-h> :call TmuxOrSplitSwitch('h', 'L')<cr>
   nnoremap <silent> <M-j> :call TmuxOrSplitSwitch('j', 'D')<cr>
