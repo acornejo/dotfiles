@@ -25,24 +25,25 @@ select yn in "Yes" "No"; do
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
                 install_cask
-                brew install autojump tmux ack reattach-to-user-namespace htop wget bash bash-completion
+                brew install slate autojump tmux reattach-to-user-namespace htop wget bash bash-completion
                 brew cask install macvim
                 sudo ln -sf /usr/local/bin/{tmux, reattach-to-user-namespace} /usr/bin
             else
-                sudo apt-get install autojump tmux ack-grep vim htop git curl wget bash bash-completion
+                sudo apt-get install autojump tmux vim htop git curl wget bash bash-completion
             fi
             break;;
-        No ) break;;
+        No )
+            break;;
     esac
 done
 
-echo "Install extra packages? [latex, chrome, dropbox, email notifier, gimp, vlc]"
+echo "Install extra packages? [chrome, email notifier, dropbox, gimp, vlc, latex]"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
                 install_cask
-                brew cask install google-chrome google-notifier google-hangouts dropbox gimp vlc slate zotero basictex
+                brew cask install google-chrome google-hangouts gmail-notifr dropbox gimp vlc zotero basictex
             else
                 apt-get install google-chrome
             fi
