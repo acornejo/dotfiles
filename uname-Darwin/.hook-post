@@ -1,0 +1,38 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
+
+# load solarized profile
+open "$DIR/solarized.terminal"
+
+# set solarized profile in terminal.app
+defaults write com.apple.terminal "Default Window Settings" -string "solarized"
+defaults write com.apple.terminal "Startup Window Settings" -string "solarized"
+
+# allow alt-? keybindings
+defaults write com.apple.Terminal useOptionAsMetaKey -bool true
+
+TMUX_PATH=$(which tmux)
+if [ -n "$TMUX_PATH" ]; then
+    defaults write com.apple.terminal "Shell" -string "$TMUX_PATH -2 -f $HOME/.tmux.conf.osx attach"
+fi
+
+# Show indicator lights for open applications in the Dock
+defaults write com.apple.dock show-process-indicators -bool true
+# Remove the auto-hiding Dock delay
+defaults write com.apple.Dock autohide-delay -float 0
+# Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
+
+
+# Automatically open a new Finder window when a volume is mounted
+defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
+defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
+defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
+
+# Avoid creating .DS_Store files on network volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+
+# Require password immediately after sleep or screen saver begins
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
