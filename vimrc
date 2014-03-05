@@ -154,6 +154,8 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "norm
 " autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" && strlen(bufname("")) > 2 | cd %:p:h | endif
 " Change tab stop for html + javascript
 autocmd FileType html,javascript setlocal ts=2 sw=2
+" Disable line wrap for html
+autocmd FileType html setlocal tw=10000
 " Indent and wrap settings for latex
 autocmd BufNewFile,BufRead *.tex setlocal ft=tex fo=tcqaw ts=2 sw=2 nocin colorcolumn=75
 " Set gnuplot filetype
