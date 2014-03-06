@@ -282,7 +282,10 @@ if exists('$TMUX')
         silent call system("tmux select-pane -" . a:tmuxdir)
     endif
   endfunction
+
+  let previous_title = substitute(system("tmux display-message -p '#{pane_title}'"), '\n', '', '')
   let &t_ti = "\<Esc>]2;vim\<Esc>\\" . &t_ti
+  let &t_te = "\<Esc>]2;". previous_title . "\<Esc>\\" . &t_te"
 
   nnoremap <silent> <M-h> :call TmuxOrSplitSwitch('h', 'L')<cr>
   nnoremap <silent> <M-j> :call TmuxOrSplitSwitch('j', 'D')<cr>
