@@ -151,8 +151,6 @@ fi
 # for Darwin
 if [[ "$OSTYPE" == "darwin"* ]]; then
     LS_OPTIONS="-G"
-else
-    alias open="xdg-open"
 fi
 
 # aliases: save typing
