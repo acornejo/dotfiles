@@ -25,18 +25,29 @@
 \crefname{defn}{definition}{definitions}
 \crefname{prop}{proposition}{propositions}
 \crefname{fact}{fact}{facts}
-\crefname{claim}{claim}{claims}
+\crefname{clm}{claim}{claims}
 \crefname{equation}{equation}{equations}
 \crefname{figure}{figure}{figures}
 \crefname{subfigure}{figure}{figures}
 }{}
 
+\RequirePackage{amsmath, amssymb}
+
 \ifthenelse{\boolean{alexmacros@thms}}
 {
-\RequirePackage{amsmath,amsthm,amssymb}
+\RequirePackage{amsthm}
 % AMS math environments
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}%[section]
+\newtheorem{cor}{Corollary}
+\newtheorem{conj}{Conjecture}
+\theoremstyle{definition}
+\newtheorem*{asrt}{Assertion}
+\newtheorem{obs}{Observation}
+\newtheorem{defn}{Definition}
+%\newtheorem{fact}{Fact}
+\newtheorem{clm}{Claim}
+\newtheorem{cmt}{Comment}
 \ifthenelse{\boolean{alexmacros@cref}}{
 \newaliascnt{prop}{thm}
 \newtheorem{prop}[prop]{Proposition}
@@ -48,16 +59,6 @@
 \newtheorem{prop}{Proposition}
 \newtheorem{lem}{Lemma}
 }
-\newtheorem{cor}{Corollary}
-\newtheorem{conj}{Conjecture}
-\theoremstyle{definition}
-\newtheorem*{asrt}{Assertion}
-\newtheorem{obs}{Observation}
-\newtheorem{defn}{Definition}
-%\newtheorem{fact}{Fact}
-\newtheorem{claim}{Claim}
-\newtheorem{cmt}{Comment}
-
 \newtheoremstyle{namedthm}
   {3pt}
   {3pt}
@@ -81,7 +82,26 @@
 \theoremstyle{namedlem}
 \newtheorem{namedlem}{Named Lemma}
 \theoremstyle{plain}
-}{}
+}{
+\newtheorem{thm}{Theorem}%[section]
+\newtheorem{cor}{Corollary}
+\newtheorem{conj}{Conjecture}
+\newtheorem{obs}{Observation}
+\newtheorem{defn}{Definition}
+\newtheorem{clm}{Claim}
+\newtheorem{cmt}{Comment}
+\ifthenelse{\boolean{alexmacros@cref}}{
+\newaliascnt{prop}{thm}
+\newtheorem{prop}[prop]{Proposition}
+\aliascntresetthe{prop}
+\newaliascnt{lem}{thm}
+\newtheorem{lem}[lem]{Lemma}
+\aliascntresetthe{lem}}
+{
+\newtheorem{prop}{Proposition}
+\newtheorem{lem}{Lemma}
+}
+}
 
 % st, nd, rd, th superscripts
 \def\first{{\raise.8ex\hbox{\tiny st}~}}
@@ -96,8 +116,8 @@
 \newcommand{\bigO}{\mathcal{O}}
 
 % Mathematical shortcuts
-\DeclareMathOperator*{\argmax}{\mathrm{argmax}}
-\DeclareMathOperator*{\argmin}{\mathrm{argmin}}
+\newcommand{\argmax}{\operatorname{argmax}}
+\newcommand{\argmin}{\operatorname{argmin}}
 \newcommand{\half}{\frac{1}{2}}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
@@ -149,6 +169,7 @@
 }
 }{}
 
+\ifthenelse{\isundefined{\remark}}{
 \newcounter{remark}[section]
 \newenvironment{remark}{
 \addtocounter{remark}{1}
@@ -157,6 +178,7 @@
 }{%
 \end{quote}
 }
+}{}
 
 % Two column environment meant for graphics and text
 \newenvironment{twocolumns}[1][0.5\linewidth]{%
