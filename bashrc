@@ -19,6 +19,14 @@ if [ -z "$SSH_AGENT_PID" ]; then
     unset SSH_AGENT_FILE SSH_NEED_AGENT
 fi
 
+# Disable suspend resume keys
+if hash stty 2>/dev/null; then
+    stty stop ''
+    stty start ''
+    stty -ixon
+    stty -ixoff
+fi
+
 # Set path
 if [[ ":$PATH:" != *":$HOME/.bin:"* ]]; then
     export PATH=$HOME/.bin:/usr/local/bin:$PATH
