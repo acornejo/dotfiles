@@ -19,33 +19,18 @@ install_cask() {
 
 trap onexit 1 2 3 15 ERR
 
-echo "Install basic packages? [tmux, autojump, vim, git, ack, curl, wget]"
+echo "Install basic packages? [git, tmux, vim, mutt, autojump, curl, wget]"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
-                install_cask
-                brew install slate autojump tmux reattach-to-user-namespace htop wget bash bash-completion
-                brew cask install macvim
+                brew install slate autojump tmux reattach-to-user-namespace htop wget bash bash-completion mutt w3m
                 sudo ln -sf /usr/local/bin/{tmux, reattach-to-user-namespace} /usr/bin
-            else
-                sudo apt-get install autojump tmux vim htop git curl wget bash bash-completion
-            fi
-            break;;
-        No )
-            break;;
-    esac
-done
-
-echo "Install extra packages? [chrome, email notifier, dropbox, gimp, vlc, latex]"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes )
-            if [ "$UNAME" == "Darwin" ]; then
                 install_cask
-                brew cask install google-chrome google-hangouts gmail-notifr dropbox gimp vlc zotero basictex
+                brew cask install macvim
             else
-                apt-get install google-chrome
+                sudo apt-get install autojump tmux vim htop git curl wget bash bash-completion w3m
+                sudo apt-get install --no-install-recommends mutt
             fi
             break;;
         No )
@@ -53,7 +38,7 @@ select yn in "Yes" "No"; do
     esac
 done
 
-if [ -e "$HOME/.vimbundle.vim" ]; then
+if [ -e "$HOME/.vimbundle.vim" ] && hash vim 2>/dev/null && hash git 2>/dev/null; then
     echo "Install vim plugins (requires git and vim)?"
     select yn in "Yes" "No"; do
         case $yn in
@@ -69,3 +54,21 @@ if [ -e "$HOME/.vimbundle.vim" ]; then
         esac
     done
 fi
+
+echo "Install extra packages? [chrome, dropbox, gimp, vlc, latex]"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            if [ "$UNAME" == "Darwin" ]; then
+                install_cask
+                brew cask install google-chrome google-hangouts dropbox gimp vlc basictex
+                echo Inkscape must be installed manually.
+            else
+                apt-get install google-chrome latex-beamer inkscape gimp vlc texlive-latex-extra
+                echo Dropbox and google-talk plugin must be installed manually.
+            fi
+            break;;
+        No )
+            break;;
+    esac
+done
