@@ -1,0 +1,39 @@
+#!/bin/bash
+
+onexit() {
+    echo -en "\nPassword: "
+}
+
+checkpassword() {
+    expect << EOF >/dev/null
+spawn su $1 -c "exit"
+expect "Password:"
+send "$2\r"
+expect eof
+catch wait result
+exit [lindex \$result 3]
+EOF
+}
+
+authenticate() {
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "This console is locked by $USER"
+    local PASSWORD=""
+    while true; do
+        read -s -p "Password: " PASSWORD
+        echo
+        checkpassword $USER $PASSWORD
+        if [ "$?" -eq 0 ]; then
+            echo "unlocked!"
+            exit 0
+        else
+            echo "authentication failed!"
+        fi
+    done
+}
+
+trap onexit 1 2 3 15 20 ERR
+authenticate
