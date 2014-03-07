@@ -1,7 +1,9 @@
 #!/bin/bash
 
+RETRIES=0
+
 onexit() {
-    echo -en "\nPassword: "
+    return
 }
 
 checkpassword() {
@@ -15,22 +17,40 @@ exit [lindex \$result 3]
 EOF
 }
 
+header() {
+    clear
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "Locked by $USER"
+}
+
 authenticate() {
-    echo ""
-    echo ""
-    echo ""
-    echo ""
-    echo "This console is locked by $USER"
+    header
     local PASSWORD=""
+    local RETRY=0
     while true; do
         read -s -p "Password: " PASSWORD
         echo
         checkpassword $USER $PASSWORD
         if [ "$?" -eq 0 ]; then
-            echo "unlocked!"
+            if [ "$RETRIES" -ne 0 ]; then
+                echo "unlocked! ($RETRIES failed attempts)"
+                sleep 2
+            else
+                echo "unlocked!"
+            fi
             exit 0
         else
-            echo "authentication failed!"
+            RETRIES=$((RETRIES+1))
+            RETRY=$((RETRY+1))
+            echo "authentication failed! ($RETRIES failed attempts)"
+            if [ "$RETRY" -ge 5 ]; then
+                RETRY=0
+                sleep 5
+                header
+            fi
         fi
     done
 }
