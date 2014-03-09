@@ -173,6 +173,17 @@ autocmd FileType tioa setlocal makeprg=tempo.sh\ %
 autocmd Filetype java setlocal omnifunc=javacomplete#Complete
 autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
 
+"*********************************
+" Hack for gnome-terminal to use <M-?> bindings
+"*********************************
+set ttimeout ttimeoutlen=50
+let c='a'
+while c <= 'z'
+  exec "set <A-".c.">=\e".c
+  exec "imap \e".c." <A-".c.">"
+  let c = nr2char(1+char2nr(c))
+endw
+
 "************************************
 " Emacs like motion
 "************************************
@@ -181,10 +192,16 @@ cnoremap <C-f> <Right>
 inoremap <C-f> <Right>
 cnoremap <C-b> <Left>
 inoremap <C-b> <Left>
+inoremap <A-f> <C-o>w
+nnoremap <A-f> w
+inoremap <A-b> <C-o>b
+nnoremap <A-b> b
 cnoremap <C-a> <Home>
 inoremap <C-a> <Home>
+nnoremap <C-a> <Home>
 inoremap <C-e> <End>
 cnoremap <C-e> <End>
+nnoremap <C-e> <End>
 inoremap <C-k> <C-o>C
 cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 
@@ -264,15 +281,6 @@ iab cancelling canceling
 iab travelling traveling
 iab Travelling traveling
 iab Cancelling Canceling
-
-" Hack for gnome-terminal to use <M-?> bindings
-set ttimeout ttimeoutlen=50
-let c='a'
-while c <= 'z'
-  exec "set <A-".c.">=\e".c
-  exec "imap \e".c." <A-".c.">"
-  let c = nr2char(1+char2nr(c))
-endw
 
 " Set window movement bindings (that play well with tmux)
 if exists('$TMUX')
