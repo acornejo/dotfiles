@@ -20,7 +20,7 @@ if [ -z "$SSH_AGENT_PID" ]; then
 fi
 
 # Disable suspend resume keys
-if hash stty 2>/dev/null; then
+if tty >/dev/null && hash stty 2>/dev/null; then
     stty stop ''
     stty start ''
     stty -ixon
