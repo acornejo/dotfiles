@@ -20,7 +20,7 @@ if [ -z "$SSH_AGENT_PID" ]; then
 fi
 
 # Disable suspend resume keys
-if hash stty 2>/dev/null; then
+if tty >/dev/null && hash stty 2>/dev/null; then
     stty stop ''
     stty start ''
     stty -ixon
@@ -45,8 +45,7 @@ if [ -e "$HOME/.pythonrc" ]; then
 fi
 
 # Load color palette for dir listing
-if [ -f "$HOME/.DIR_COLORS" ] && hash dircolors 2>/dev/null
-then
+if [ -f "$HOME/.DIR_COLORS" ] && hash dircolors 2>/dev/null; then
     eval $(dircolors -b $HOME/.DIR_COLORS)
 fi
 # Set bash completion
@@ -96,9 +95,7 @@ if [ "$PS1" ]; then
         fi
         # Set terminal title
         if [ "$TERM" = "xterm" ]; then
-            export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} history -a; echo -ne "\033]0;${PSTRING}${PWD/${HOME}/~}\007""
-        else
-            export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} history -a"
+            export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} echo -ne "\033]0;${PSTRING}${PWD/${HOME}/~}\007""
         fi
     fi
 
@@ -146,10 +143,13 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 
 # History settings
 export HISTIGNORE="&:ls:ll:l:[bf]g:exit"
-export HISTCONTROL="erasedups"
+export HISTCONTROL="ignoredups:erasedups"
 export HISTFILESIZE=50000
-shopt -s histappend
-shopt -s cmdhist
+shopt -s histappend   # append to history file
+shopt -s cmdhist      # allow multiline history cmds
+shopt -s histreedit   # edit history if cmd failed
+shopt -s histverify   # allow editing history command before executing
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 # For glob expansion
 if [ -n "$BASH_VERSINFO" ] && [ ${BASH_VERSINFO[0]} -eq 4 ]; then
