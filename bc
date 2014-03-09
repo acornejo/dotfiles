@@ -51,15 +51,15 @@ define atan2(y, x) {
         } else if (x < 0) {
             return(pi);
         }
+    } else if (x == 0) {
+        return (pi*sign(y)/2);
     }
 
     fi = a(abs(y/x));
 
     if (x > 0) {
         return(fi * sign(y));
-    } else if (x == 0) {
-        return(pi * sign(y) / 2);
-    } else if (x < 0) {
+    } else {
         return((pi - fi) * sign(y));
     }
 }
