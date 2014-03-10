@@ -151,9 +151,14 @@ shopt -s histreedit   # edit history if cmd failed
 shopt -s histverify   # allow editing history command before executing
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
-# For glob expansion
 if [ -n "$BASH_VERSINFO" ] && [ ${BASH_VERSINFO[0]} -eq 4 ]; then
+    # For glob expansion
     shopt -s globstar
+    # For autocd
+    shopt -s autocd
+else
+    alias ..="cd .."
+    alias ...=" cd ../.."
 fi
 
 # for Darwin
@@ -162,8 +167,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # aliases: save typing
-alias ..="cd .."
-alias ...=" cd ../.."
 alias ll="ls -l $LS_OPTIONS"
 alias l="ll -h"
 alias dir="ls -1"
