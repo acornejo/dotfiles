@@ -45,8 +45,8 @@ if [ -e "$HOME/.pythonrc" ]; then
 fi
 
 # Load color palette for dir listing
-if [ -f "$HOME/.DIR_COLORS" ] && hash dircolors 2>/dev/null; then
-    eval $(dircolors -b $HOME/.DIR_COLORS)
+if [ -f "$HOME/.dircolors" ] && hash dircolors 2>/dev/null; then
+    eval $(dircolors -b $HOME/.dircolors)
 fi
 # Set bash completion
 if [ -f "$HOME/.bash_completion" ]; then
