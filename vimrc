@@ -300,6 +300,10 @@ if exists('$TMUX')
   nnoremap <silent> <M-j> :call TmuxOrSplitSwitch('j', 'D')<cr>
   nnoremap <silent> <M-k> :call TmuxOrSplitSwitch('k', 'U')<cr>
   nnoremap <silent> <M-l> :call TmuxOrSplitSwitch('l', 'R')<cr>
+  inoremap <silent> <M-h> <Esc>:call TmuxOrSplitSwitch('h', 'L')<cr>
+  inoremap <silent> <M-j> <Esc>:call TmuxOrSplitSwitch('j', 'D')<cr>
+  inoremap <silent> <M-k> <Esc>:call TmuxOrSplitSwitch('k', 'U')<cr>
+  inoremap <silent> <M-l> <Esc>:call TmuxOrSplitSwitch('l', 'R')<cr>
 else
   map <M-h> <C-w>h
   map <M-j> <C-w>j
