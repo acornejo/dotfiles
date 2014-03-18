@@ -73,15 +73,12 @@ if (has("gui_running"))
     set mousemodel=popup
     set columns=110
     set lines=67
-    " Change to directory of opened file on startup.
-    autocmd GUIEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 else
     hi SpellBad ctermfg=Red ctermbg=NONE guibg=NONE guifg=Red cterm=underline gui=underline term=reverse
     hi SpellCap ctermfg=Blue ctermbg=NONE guibg=NONE guifg=Blue cterm=underline gui=underline term=reverse
     if &term == "xterm" || &term == "screen-bce"
         set term=xterm
         set t_Co=256
-        hi CursorLine term=none cterm=none ctermbg=236
     endif
     if &term =~ "256color"
         set t_ut=                   " disable background color erase
@@ -146,12 +143,13 @@ set wildignore+=*/tmp/*,*.so,*.swp
 "************************************
 " Autocommands
 "************************************
+" Change directory to active buffer
+" autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" && strlen(bufname("")) > 2 | lcd %:p:h | endif
+" autocmd GUIEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" && strlen(bufname("")) > 2 | lcd %:p:h | endif
 " Reload vimrc when modified
 autocmd! BufWritePost .vimrc source ~/.vimrc
 " Go to last position when reopening file
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-" Change directory to active buffer
-" autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" && strlen(bufname("")) > 2 | cd %:p:h | endif
 " Change tab stop for html + javascript
 autocmd FileType html,javascript setlocal ts=2 sw=2
 " Disable line wrap for html
