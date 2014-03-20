@@ -65,6 +65,9 @@ echo "PasswordAuthentication no" | sudo tee -a /etc/sshd_config
 # disable challenge auth
 sudo sed -i '/ChallengeResponseAuthentication/d' /etc/sshd_config
 echo "ChallengeResponseAuthentication no" | sudo tee -a /etc/sshd_config
+# enable pubkey auth
+sudo sed -i '/PubkeyAuthentication/d' /etc/sshd_config
+echo "PubkeyAuthentication yes" | sudo tee -a /etc/sshd_config
 # enable ssh server
 sudo systemsetup -setremotelogin on
 
