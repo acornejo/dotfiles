@@ -53,3 +53,19 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 # Require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# -------------
+# SSH Stuff
+# -------------
+
+sudo -v
+# disable password auth
+sudo sed -i '/PasswordAuthentication/d' /etc/sshd_config
+echo "PasswordAuthentication no" | sudo tee -a /etc/sshd_config
+# disable challenge auth
+sudo sed -i '/ChallengeResponseAuthentication/d' /etc/sshd_config
+echo "ChallengeResponseAuthentication no" | sudo tee -a /etc/sshd_config
+# enable ssh server
+sudo systemsetup -setremotelogin on
+
+# Test132 hellp
