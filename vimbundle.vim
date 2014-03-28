@@ -37,4 +37,7 @@ Bundle 'marijnh/tern_for_vim'
 Bundle 'Valloric/MatchTagAlways'
 Bundle 'Valloric/YouCompleteMe'
 
+" Filetype support
+Bundle 'groenewege/vim-less'
+
 filetype plugin indent on
