@@ -1,3 +1,4 @@
+(add-to-list 'load-path (expand-file-name "~/.emacs.d"))
 ;; disable splash sceen
 (setq inhibit-splash-screen t)
 ;; set size
@@ -23,7 +24,7 @@
 (line-number-mode 1)
 (column-number-mode 1)
 ;; Highlight current line
-(global-hl-line-mode 1)
+(global-hl-line-mode 0)
 ;; Turn on auto-fill for text files
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 ;; Set column size
@@ -31,8 +32,9 @@
 ;; Save backups to another directory
 (setq make-backup-files t)
 (setq version-control t)
-(setq backup-directory-alist (quote ((".*" . "~/.emacs.d/backups"))))
 (setq delete-old-versions t)
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 ;; Show matching paren
 (show-paren-mode t)
 (setq show-paren-style 'parentheses)
@@ -40,8 +42,6 @@
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 ;; Change ugly font
 ;;(set-default-font "9x15")
-;; Color theme
-;;(load "~/.emacs.d/theme.el" nil t t)
 ;; recentf stuff
 (require 'recentf)
 (recentf-mode 1)
