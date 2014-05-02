@@ -16,6 +16,7 @@ set background=dark
 colorscheme solarized
 set statusline=%<%f%h%m%r%h%w\ %=\ %{&ff}\ %y\ %{&paste?'[paste]':''}\ %l,%c\ \ %P
 set laststatus=2            " Always display status line
+set winaltkeys=no           " Disable alt/meta for gui menus"
 set title titlestring=%t    " Set your xterm title
 set history=1024            " Remember command line history
 set nocp                    " No compatibility mode
@@ -175,32 +176,40 @@ autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
 " Hack for gnome-terminal to use <M-?> bindings
 "*********************************
 set ttimeout ttimeoutlen=50
-let c='a'
-while c <= 'z'
-  exec "set <A-".c.">=\e".c
-  exec "imap \e".c." <A-".c.">"
-  let c = nr2char(1+char2nr(c))
-endw
+if has("unix") 
+    let c='a'
+    while c <= 'z'
+        " maybe use "set <A-".nr2char(c)
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
+    endw
+endif
 
 "************************************
 " Emacs like motion
 "************************************
-inoremap <C-d> <Delete>
 cnoremap <C-f> <Right>
 inoremap <C-f> <Right>
+vnoremap <C-f> <Right>
 cnoremap <C-b> <Left>
 inoremap <C-b> <Left>
-inoremap <A-f> <C-o>w
-nnoremap <A-f> w
-inoremap <A-b> <C-o>b
-nnoremap <A-b> b
+vnoremap <C-b> <Left>
+inoremap <A-f> <C-o>W
+nnoremap <A-f> W
+inoremap <A-b> <C-o>B
+nnoremap <A-b> B
 cnoremap <C-a> <Home>
 inoremap <C-a> <Home>
 nnoremap <C-a> <Home>
+vnoremap <C-a> <Home>
 inoremap <C-e> <End>
 cnoremap <C-e> <End>
 nnoremap <C-e> <End>
+vnoremap <C-e> <End>
+inoremap <C-d> <Delete>
 inoremap <C-k> <C-o>C
+nnoremap <C-k> C
 cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 
 "************************************
