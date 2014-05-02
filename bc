@@ -21,6 +21,20 @@ define fact (n) {
   return res;
 }
 
+define binom(n, k) {
+    auto res;
+
+    if (n < 0 || k < 0) {
+        print "invalid argument to binomial!\n";
+        halt;
+    }
+
+    res = 1;
+    for (i=1; i<=k; i++)
+        res *= (n+1-i)/i;
+    return res;
+}
+
 define sign(x) {
     if (x == 0) {
         return 0;
