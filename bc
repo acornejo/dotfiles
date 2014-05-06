@@ -6,8 +6,15 @@ define tan(x) { return s(x)/c(x); }
 define atan(x) { return a(x); }
 define asin(x) { return 2*a(x/(1+sqrt(1-x*x))); }
 define acos(x) { return 2*a(sqrt(1-x*x)/(1+x)); }
-define log(x) { return l(x); }
 define exp(x) { return e(x); }
+
+define log(x) {
+    if (x <= 0) {
+        print "log is only defined for positive numbers.\n"
+        halt;
+    }
+    return l(x);
+}
 
 define fact (n) {
   if (n < 0) {
