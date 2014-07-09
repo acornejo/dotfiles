@@ -1,14 +1,26 @@
 #!/bin/bash
-for i in *.wma
-do
-    if [ -f "$i" ]; then
-        temp="/tmp/`basename $0`-$RANDOM"
-        dest=`echo "$i" | sed -e 's/wma$/mp3/'`
-        mkfifo "$temp"
-        mplayer -quiet -vo null -vc null -af volume=0,resample=44100:0:1 -ao pcm:waveheader:file="$temp" "$i" &
-        lame -V4 -h -b 128 --vbr-new "$temp" "$dest"
-        rm -f "$temp"
+
+function convert()
+{
+    INPUT=$1
+    OUTPUT=`echo "$1" | sed -e "s/\(.*\)\..*$/\1/"`.mp3
+    if [ "$INPUT" -nt "$OUTPUT" ]; then
+        TEMP="/tmp/`basename $0`-$RANDOM"
+        mkfifo "$TEMP"
+        mplayer -quiet -vo null -vc null -af volume=0,resample=44100:0:1 -ao pcm:waveheader:file="$TEMP" "$INPUT" &
+        lame -V4 -h -b 128 --vbr-new "$TEMP" "$OUTPUT"
+        rm -f "$TEMP"
     else
-        echo "$i is not a file"
+        echo "File $OUTPUT is up to date."
     fi
+}
+
+while [ $# -gt 0 ]; do
+    file=$1
+    if [ -f "$file" ]; then
+        convert "$file"
+    else
+        echo "File $file does not exist"
+    fi
+    shift
 done

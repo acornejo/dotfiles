@@ -1,4 +1,7 @@
 #!/bin/bash
+
+FMT=`basename $0 | sed -e "s/img2\(.*\)$/\1/"`
+
 function process()
 {
     INPUT=$1
@@ -12,13 +15,6 @@ function process()
         echo "File $OUTPUT is up to date"
     fi
 }
-
-FMT=`basename $0 | sed -e "s/img2\(.*\)$/\1/"`
-NAUTILUS_PWD=`echo $NAUTILUS_SCRIPT_CURRENT_URI | sed 's/file\:\/\///'`
-if [ -n "$NAUTILUS_PWD" ]; then
-    echo "changing to $NAUTILUS_PWD"
-    cd "$NAUTILUS_PWD"
-fi
 
 while [ $# -gt 0 ]; do
     file=$1

@@ -13,12 +13,6 @@ function convert()
     fi
 }
 
-NAUTILUS_PWD=`echo $NAUTILUS_SCRIPT_CURRENT_URI | sed 's/file\:\/\///'`
-if [ -n "$NAUTILUS_PWD" ]; then
-    echo "changing to $NAUTILUS_PWD"
-    cd "$NAUTILUS_PWD"
-fi
-
 while [ $# -gt 0 ]; do
     file=$1
     if [ -f "$file" ]; then

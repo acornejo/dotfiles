@@ -8,7 +8,6 @@ function convert()
         if [ -f "$OUTPUT" ]; then
             rm -f $OUTPUT
         fi
-            echo $OPTIONS
         echo -n "Converting $INPUT to $OUTPUT... "
         ffmpeg -i $INPUT -f mp4 -acodec libfaac -ab 128kb -vcodec mpeg4 -b 1200kb -mbd 2 -flags +4mv -s 320x180 $OUTPUT
 # 	    ffmpeg -i $INPUT -f mp4 -vcodec xvid -vtag mp4v -acodec aac -ac 2 -b 1024 -ab 128 -s 480x360 $OUTPUT
@@ -21,11 +20,6 @@ function convert()
     fi
 }
 
-NAUTILUS_PWD=`echo $NAUTILUS_SCRIPT_CURRENT_URI | sed 's/file\:\/\///'`
-if [ -n "$NAUTILUS_PWD" ]; then
-    echo "changing to $NAUTILUS_PWD"
-    cd "$NAUTILUS_PWD"
-fi
 OPTIONS=""
 FILES=""
 HAVE_OPTS="no"
@@ -40,6 +34,7 @@ for opts in $*; do
         OPTIONS="$OPTIONS $opts"
     fi
 done
+echo "options: $OPTIONS"
 
 for file in $FILES; do
     if [ -f "$file" ]; then
