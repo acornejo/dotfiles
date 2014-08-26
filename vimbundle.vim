@@ -9,7 +9,6 @@ Bundle 'mileszs/ack.vim'
 Bundle 'airblade/vim-rooter'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'jiangmiao/auto-pairs'
-Bundle 'Lokaltog/vim-easymotion'
 Bundle 'mhinz/vim-signify'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'chriskempson/base16-vim'
@@ -35,7 +34,7 @@ Bundle 'bling/vim-bufferline'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'marijnh/tern_for_vim'
 Bundle 'Valloric/MatchTagAlways'
-Bundle 'Valloric/YouCompleteMe'
+" Bundle 'Valloric/YouCompleteMe'
 
 " Filetype support
 Bundle 'groenewege/vim-less'

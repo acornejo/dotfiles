@@ -9,9 +9,9 @@ function convert()
             rm -f $OUTPUT
         fi
         echo -n "Converting $INPUT to $OUTPUT... "
-        ffmpeg -i $INPUT -f mp4 -acodec libfaac -ab 128kb -vcodec mpeg4 -b 1200kb -mbd 2 -flags +4mv -s 320x180 $OUTPUT
-# 	    ffmpeg -i $INPUT -f mp4 -vcodec xvid -vtag mp4v -acodec aac -ac 2 -b 1024 -ab 128 -s 480x360 $OUTPUT
-# 	    ffmpeg -i $INPUT -f mp4 -vcodec mpeg4 -acodec mp2 -maxrate 2500 -b 1800 -qmin 3 -qmax 5 -bufsize 4096 -g 300 -ar 44100 -ab 128 -s 512x384 -aspect 4:3 $OUTPUT
+        # ffmpeg -i $INPUT -f mp4 -acodec libfaac -ab 128kb -vcodec mpeg4 -b 1200kb -mbd 2 -flags +4mv -s 320x180 $OUTPUT
+	   #  ffmpeg -i $INPUT -f mp4 -vcodec xvid -vtag mp4v -acodec aac -ac 2 -b 1024 -ab 128 -s 480x360 $OUTPUT
+	    ffmpeg -i $INPUT -f mp4 -vcodec mpeg4 -acodec mp2  -qmin 5 -g 500 -s 1600x1200 -aspect 4:3 $OUTPUT
 # flv	    ffmpeg -i $INPUT -f mp4 -vcodec mpeg4 -s 512x384 -acodec mp3 -ar 22050 -ac 1 -aspect 4:3 $OUTPUT
 #            ffmpeg -i $INPUT -f mp4 -vcodec mpeg4 -maxrate 1000 -b 700  -qmin 3 -qmax 5 -bufsize 4096 -g 300 -acodec aac -ab 96 -s 320x240 -aspect 4:3 $OPTIONS $OUTPUT
         echo "done."
