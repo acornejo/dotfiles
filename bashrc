@@ -172,6 +172,7 @@ alias l="ll -h"
 alias dir="ls -1"
 alias f="find . -name"
 alias v="$EDITOR"
+alias vi="$EDITOR"
 
 # aliases: default options
 alias rm="rm -i"
