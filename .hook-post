@@ -25,7 +25,8 @@ select yn in "Yes" "No"; do
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
                 brew install slate autojump tmux reattach-to-user-namespace htop wget bash bash-completion mutt w3m
-                sudo ln -sf /usr/local/bin/{tmux, reattach-to-user-namespace} /usr/bin
+                sudo ln -sf /usr/local/bin/tmux /usr/bin
+                sudo ln -sf /usr/local/bin/reattach-to-user-namespace /usr/bin
                 install_cask
                 brew cask install macvim
             else
