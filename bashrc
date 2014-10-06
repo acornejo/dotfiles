@@ -1,6 +1,11 @@
 # This file is sourced by all *interactive* bash shells on startup.  This
 # file should generate *no output* or it will break the scp and rcp commands.
 
+# Set path
+if [[ ":$PATH:" != *":$HOME/.bin:"* ]]; then
+    export PATH=$HOME/.bin:/usr/local/bin:$PATH
+fi
+
 # Check if SSH agent present, if not start one.
 if [ -z "$SSH_AGENT_PID" ]; then
     SSH_AGENT_FILE=$HOME/.ssh-agent-${HOSTNAME}
@@ -27,11 +32,6 @@ if tty >/dev/null && hash stty 2>/dev/null; then
     stty -ixoff
 fi
 
-# Set path
-if [[ ":$PATH:" != *":$HOME/.bin:"* ]]; then
-    export PATH=$HOME/.bin:/usr/local/bin:$PATH
-fi
-
 # Latex environment variables
 if [ -e "$HOME/.latex" ]; then
     export TEXINPUTS=.:$HOME/.latex:
@@ -48,6 +48,7 @@ fi
 if [ -f "$HOME/.dircolors" ] && hash dircolors 2>/dev/null; then
     eval $(dircolors -b $HOME/.dircolors)
 fi
+
 # Set bash completion
 if [ -f "$HOME/.bash_completion" ]; then
     . "$HOME/.bash_completion"
@@ -95,7 +96,9 @@ if [ "$PS1" ]; then
         fi
         # Set terminal title
         if [ "$TERM" = "xterm" ]; then
-            export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} echo -ne "\033]0;${PSTRING}${PWD/${HOME}/~}\007""
+            export COLORTERM="xterm-256color"
+            export TERM="xterm-256color"
+        #     export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} echo -ne "\033]0;${PSTRING}${PWD/${HOME}/~}""
         fi
     fi
 
@@ -131,6 +134,10 @@ export GREP_OPTIONS="--color=auto"
 # For color in ls
 export LS_OPTIONS="--color=auto"
 export CLICOLOR="Yes"
+# for Darwin
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    LS_OPTIONS="-G"
+fi
 
 # For color man pages
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -151,6 +158,7 @@ shopt -s histreedit   # edit history if cmd failed
 shopt -s histverify   # allow editing history command before executing
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
+# Use newer bash features
 if [ -n "$BASH_VERSINFO" ] && [ ${BASH_VERSINFO[0]} -eq 4 ]; then
     # For glob expansion
     shopt -s globstar
@@ -159,11 +167,6 @@ if [ -n "$BASH_VERSINFO" ] && [ ${BASH_VERSINFO[0]} -eq 4 ]; then
 else
     alias ..="cd .."
     alias ...=" cd ../.."
-fi
-
-# for Darwin
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    LS_OPTIONS="-G"
 fi
 
 # aliases: save typing
@@ -261,3 +264,9 @@ hubpublish () {
     git remote add origin git@github.com:$REPO_USER/${REPO_NAME}.git
     echo "repo ready: commit some work and do 'git push origin master'"
 }
+
+for local_bash in ~/.bash.local.*; do
+    if [ -f "$local_bash" ]; then
+        source "$local_bash"
+    fi
+done
