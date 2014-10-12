@@ -7,7 +7,7 @@ onexit() {
 
 install_brew() {
     if ! hash brew 2>/dev/null; then
-        ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
 }
 
@@ -24,11 +24,12 @@ select yn in "Yes" "No"; do
     case $yn in
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
-                brew install slate autojump tmux reattach-to-user-namespace htop wget bash bash-completion mutt w3m
+                install_brew
+                brew install autojump tmux reattach-to-user-namespace htop wget bash bash-completion mutt w3m
                 sudo ln -sf /usr/local/bin/tmux /usr/bin
                 sudo ln -sf /usr/local/bin/reattach-to-user-namespace /usr/bin
                 install_cask
-                brew cask install macvim
+                brew cask install macvim slate
             else
                 sudo apt-get install autojump tmux vim htop git curl wget bash bash-completion w3m
                 sudo apt-get install --no-install-recommends mutt

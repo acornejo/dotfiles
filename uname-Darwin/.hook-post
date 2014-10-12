@@ -8,7 +8,7 @@ if [ -n "$MVIM_PATH" ]; then
     rm -f /usr/local/bin/vim
     cat > /usr/local/bin/vim << EOF
 #!/bin/bash
-exec $MVIM_PATH -v $*
+exec $MVIM_PATH -v \$*
 EOF
     chmod 755 /usr/local/bin/vim
 fi
