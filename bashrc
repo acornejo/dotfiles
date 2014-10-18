@@ -173,7 +173,8 @@ fi
 alias ll="ls -l $LS_OPTIONS"
 alias l="ll -h"
 alias dir="ls -1"
-alias f="find . -name"
+alias a="ack"
+alias m='make -j8'
 alias v="$EDITOR"
 alias vi="$EDITOR"
 
@@ -263,6 +264,24 @@ hubpublish () {
     fi
     git remote add origin git@github.com:$REPO_USER/${REPO_NAME}.git
     echo "repo ready: commit some work and do 'git push origin master'"
+}
+
+# extend command not found to open files
+eval "original_$(declare -f command_not_found_handle)"
+command_not_found_handle () {
+    local FILE="$*"
+    if [ -f "$FILE" ]; then
+        local MIME_TYPE=$(file --mime-type --brief "$FILE")
+        local MIME_CHARS=[[:alnum:]'!#$&.+-^_']
+        # open text files in $EDITOR
+        if [[ $MIME_TYPE =~ (text/$MIME_CHARS+|application/($MIME_CHARS+\+)?xml|application/x-empty) ]]; then
+            $EDITOR "$FILE"
+        else
+            open "$FILE"
+        fi
+    else
+        original_command_not_found_handle
+    fi
 }
 
 for local_bash in ~/.bash.local.*; do
