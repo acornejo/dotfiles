@@ -267,22 +267,24 @@ hubpublish () {
 }
 
 # extend command not found to open files
-eval "original_$(declare -f command_not_found_handle)"
-command_not_found_handle () {
-    local FILE="$*"
-    if [ -f "$FILE" ]; then
-        local MIME_TYPE=$(file --mime-type --brief "$FILE")
-        local MIME_CHARS=[[:alnum:]'!#$&.+-^_']
-        # open text files in $EDITOR
-        if [[ $MIME_TYPE =~ (text/$MIME_CHARS+|application/($MIME_CHARS+\+)?xml|application/x-empty) ]]; then
-            $EDITOR "$FILE"
+if [ `type -t command_not_found_handle` ]; then
+    eval "original_$(declare -f command_not_found_handle)"
+    command_not_found_handle () {
+        local FILE="$*"
+        if [ -f "$FILE" ]; then
+            local MIME_TYPE=$(file --mime-type --brief "$FILE")
+            local MIME_CHARS=[[:alnum:]'!#$&.+-^_']
+            # open text files in $EDITOR
+            if [[ $MIME_TYPE =~ (text/$MIME_CHARS+|application/($MIME_CHARS+\+)?xml|application/x-empty) ]]; then
+                $EDITOR "$FILE"
+            else
+                open "$FILE"
+            fi
         else
-            open "$FILE"
+            original_command_not_found_handle
         fi
-    else
-        original_command_not_found_handle
-    fi
-}
+    }
+fi
 
 for local_bash in ~/.bash.local.*; do
     if [ -f "$local_bash" ]; then
