@@ -44,6 +44,11 @@ if [ -e "$HOME/.pythonrc" ]; then
     export PYTHONSTARTUP="$HOME/.pythonrc"
 fi
 
+# make less more friendly for non-text input files, see lesspipe(1)
+if [ -x /usr/bin/lesspipe  ]; then
+    eval "$(SHELL=/bin/sh lesspipe)"
+fi
+
 # Load color palette for dir listing
 if [ -f "$HOME/.dircolors" ] && hash dircolors 2>/dev/null; then
     eval $(dircolors -b $HOME/.dircolors)
@@ -131,6 +136,9 @@ export BROWSER="google-chrome"
 # For color in grep
 export GREP_OPTIONS="--color=auto"
 
+# Color in ack
+export ACK_MATCH_COLOR="bold red"
+
 # For color in ls
 export LS_OPTIONS="--color=auto"
 export CLICOLOR="Yes"
@@ -140,6 +148,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # For color man pages
+export LESS="-FRSX"
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -183,7 +192,6 @@ alias rm="rm -i"
 alias ping="ping -c4 -t4"
 alias route="route -n"
 alias netstat="netstat -n"
-alias less="less -R"
 alias bc="bc -q -l"
 alias du="du -h -s -c *"
 
