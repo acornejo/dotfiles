@@ -57,7 +57,7 @@ set viminfo='10,\"100,:20,%,n~/.viminfo " save stuff to ~/.viminfo
 set spellfile=~/.vimspell.add           " save new words
 set spellsuggest=best,10
 set viewdir=~/.vim_view                 " save views
-set tags+=~/.vim_tags                   " save tags
+set tags+=~/.vim_tags                   " set tags location
 try
     set undofile                        " save undo to file
     set undodir=~/.vim_undo             " set undo directory
@@ -120,6 +120,8 @@ let g:buftabs_inactive_highlight_group="StatusLine" " Color for inactive tabs
 let g:buftabs_active_highlight_group="Title"   " Color for active tabs
 let g:yankring_history_file = ".vim_yankring"
 let g:yankring_min_element_length = 2
+let g:ctrlp_cache_dir = $HOME . '/.vim_ctrlp_cache'
+let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_map = '<c-8>'
 let g:ctrlp_working_path_mode=0
 let g:ctrlp_show_hidden = 0
@@ -135,6 +137,9 @@ let g:UltiSnipsJumpBackwardTrigger="<c-q>"
 let g:xmledit_enable_html = 1
 let g:sparkupExecuteMapping="<c-i>"
 let g:airline_powerline_fonts = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 let g:syntastic_html_tidy_ignore_errors=['trimming empty', 'lacks "alt" attribute', 'lacks "src" attribute']
 let g:syntastic_check_on_open = 0
 let g:signify_vcs_list = [ 'git' ]
@@ -231,12 +236,12 @@ cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 " Custom mappings
 "************************************
 let mapleader = ","
-" Open terminal
-map <leader>t :ConqueTermSplit bash<CR>
 " Browse Recently Used Files
 map <leader>r :CtrlPMRUFiles<CR>
 " Browse Files in current directory
 map <leader>f :CtrlP<CR>
+" Browse open buffers
+map <leader>b :CtrlPBuffer<CR>
 " Browse Current Directory
 map <leader>e :NERDTreeToggle<CR>
 " Switch to hexmode
@@ -244,12 +249,12 @@ map <leader>h <Plug>HexManager
 " Open Yank Ring
 map <leader>y :YRShow<CR>
 " Run make in vmux
-map <leader>m :call VimuxRunCommand("make")<CR>
+map <leader>m :call VimuxRunCommand("make -j8 2> >(tee /tmp/make.log)")<CR>
+map <leader>q :cfile /tmp/make.log<CR>:cw<CR>
+" Prompt for vmux command
+map <leader>v :call VimuxPromptCommand()<CR>
 " Run Git status
 map <leader>g :Gstatus<CR>
-" Open a mini buffer explorer
-set wcm=<C-Z>
-map <leader>b :b <C-Z>
 " Switch to the directory of the current buffer.
 map <leader>c :cd %:p:h<cr>
 " Tabularize shortcuts
@@ -341,6 +346,14 @@ function! s:Strip()
 endfunction
 command! Strip call s:Strip()
 
+function! s:Scratch()
+    new
+    setlocal buftype=nofile
+    setlocal bufhidden=hide
+    setlocal noswapfile
+endfunction
+command! Scratch call s:Scratch()
+
 function! s:LucCheckIfBufferIsNew(...)
   let number = a:0 ? a:1 : 1
   " save current and alternative buffer
@@ -356,5 +369,8 @@ function! s:LucCheckIfBufferIsNew(...)
   endif
   return value
 endfunction
-
 autocmd VimEnter * if s:LucCheckIfBufferIsNew(1) | bwipeout 1 | doautocmd BufRead | endif
+
+for f in split(glob("~/.vimrc.local.*"), "\n")
+    execute 'source ' . escape(f, '\ "')
+endfor
