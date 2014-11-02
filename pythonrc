@@ -38,7 +38,10 @@ if os.access(historyPath, os.W_OK):
     atexit.register(lambda x=historyPath: readline.write_history_file(x))
 
 if os.access(historyPath, os.R_OK):
-    readline.read_history_file(historyPath)
+    try:
+        readline.read_history_file(historyPath)
+    except:
+        pass
 
 from pprint import pprint as pp
 from pprint import pformat as pf
