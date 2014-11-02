@@ -47,9 +47,10 @@ set number                  " Enable line numbers
 set virtualedit=onemore     " Allow for cursor beyond last character
 set clipboard=unnamed       " Copy to system clipboard
 set shortmess=filmnxtToOI
+set splitbelow              " Splits occur below current window
+set splitright              " Splits occur to the right of current window
 "set completeopt=menuone     " remove preview from completeopt
 "set cursorline              " Highlight current line (slow)
-"set splitbelow              " Splits occur below current window
 "set mouse=a                 " enables mouse use in normal mode (useful for resizing window)
 
 " Storage of various files
@@ -100,16 +101,6 @@ let g:netrw_browsex_viewer='viewer'  " Open files with viewer
 let g:netrw_fast_browse=2            " Use fast browsing
 let g:netrw_liststyle=1              " Display file details in browser
 let g:python_failquietly=1           " Dont complain if there is no python
-let g:NERDTreeQuitOnOpen = 1         " Quit after opening file
-let g:NERDChristmasTree = 1          " Use colors in nerd tree
-let g:NERDTreeShowBookmarks=1        " show bookmarks in nerd tree
-let g:NERDTreeChDirMode=2            " change to current dir
-let g:ConqueTerm_Color = 1           " Enable color for latest output
-let g:ConqueTerm_CloseOnEnd = 1      " Close buffer when program ends
-let g:ConqueTerm_InsertOnEnter= 1    " Start insert mode when entering buffer
-let g:ConqueTerm_CWInsert = 1        " Allow <C-w> shortcuts
-let g:ConqueTerm_TERM = 'xterm'      " Use vt100 for safety, xterm is experimental
-"let g:ConqueTerm_FastMode = 1        " Make termainl faster (sacrifice color)
 let g:buftabs_marker_start=""        " marker around active buftab
 let g:buftabs_marker_end=""          " marker around active buftab
 let g:buftabs_separator=":"          " marker around active buftab
@@ -127,6 +118,7 @@ let g:ctrlp_working_path_mode=0
 let g:ctrlp_show_hidden = 0
 let g:ctrlp_mruf_exclude = '/tmp/.*\|\.git/.*'
 let g:ctrlp_user_command = 'ack %s -f'
+let g:ctrlp_extensions = ['proj']
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -242,8 +234,12 @@ map <leader>r :CtrlPMRUFiles<CR>
 map <leader>f :CtrlP<CR>
 " Browse open buffers
 map <leader>b :CtrlPBuffer<CR>
-" Browse Current Directory
-map <leader>e :NERDTreeToggle<CR>
+" Browse tags
+map <leader>t :CtrlPTag<CR>
+" Browse tags
+map <leader>p :CtrlPproj<CR>
+" Browse current folder
+map <leader>e :e .<CR>
 " Switch to hexmode
 map <leader>h <Plug>HexManager
 " Open Yank Ring
