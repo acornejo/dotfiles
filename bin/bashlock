@@ -59,5 +59,9 @@ authenticate() {
     done
 }
 
-trap onexit 1 2 3 15 18 20 ERR
-authenticate
+if [ `which expect` ]; then
+    trap onexit 1 2 3 15 18 20 ERR
+    authenticate
+else
+    echo "Bashlock requires that 'expect' is installed."
+fi
