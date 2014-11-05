@@ -245,7 +245,7 @@ map <leader>h <Plug>HexManager
 " Open Yank Ring
 map <leader>y :YRShow<CR>
 " Run make in vmux
-map <leader>m :call VimuxRunCommand("make -j8 2> >(tee /tmp/make.log)")<CR>
+map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
 map <leader>q :cfile /tmp/make.log<CR>:cw<CR>
 " Prompt for vmux command
 map <leader>v :call VimuxPromptCommand()<CR>
@@ -261,6 +261,7 @@ vmap <Leader>a: :Tabularize /:<CR>
 
 " Use sudo to overwrite files.
 command! Wsudo :execute ':silent w !sudo tee % > /dev/null' | :edit!
+command! -nargs=1 Silent | execute ':silent !'.<q-args> | execute ':redraw!'
 
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
