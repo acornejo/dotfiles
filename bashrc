@@ -7,7 +7,7 @@ if [[ ":$PATH:" != *":$HOME/.bin:"* ]]; then
 fi
 
 # Check if SSH agent present, if not start one.
-if [ -z "$SSH_AGENT_PID" ]; then
+if [ -z "$SSH_AUTH_SOCK" ]; then
     SSH_AGENT_FILE=$HOME/.ssh-agent-${HOSTNAME}
     SSH_NEED_AGENT="yes"
     if [ -f "$SSH_AGENT_FILE" ]; then
@@ -183,7 +183,6 @@ alias ll="ls -l $LS_OPTIONS"
 alias l="ll -h"
 alias dir="ls -1"
 alias a="ack"
-alias m='make -j8'
 alias v="$EDITOR"
 alias vi="$EDITOR"
 
