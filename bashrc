@@ -8,7 +8,7 @@ fi
 
 # Check if SSH agent present, if not start one.
 if [ -z "$SSH_AUTH_SOCK" ]; then
-    SSH_AGENT_FILE=$HOME/.ssh-agent-${HOSTNAME}
+    SSH_AGENT_FILE=`eval "echo ~$USER"`/.ssh-agent-${HOSTNAME}
     SSH_NEED_AGENT="yes"
     if [ -f "$SSH_AGENT_FILE" ]; then
         . $SSH_AGENT_FILE
