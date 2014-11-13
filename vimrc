@@ -184,27 +184,10 @@ if has("unix")
 endif
 
 "************************************
-" Emacs like motion
+" Readline-like editing not in vim-rsi
 "************************************
-cnoremap <C-f> <Right>
-inoremap <C-f> <Right>
-vnoremap <C-f> <Right>
-cnoremap <C-b> <Left>
-inoremap <C-b> <Left>
-vnoremap <C-b> <Left>
-inoremap <A-f> <C-o>W
-nnoremap <A-f> W
-inoremap <A-b> <C-o>B
-nnoremap <A-b> B
-cnoremap <C-a> <Home>
-inoremap <C-a> <Home>
 nnoremap <C-a> <Home>
-vnoremap <C-a> <Home>
-inoremap <C-e> <End>
-cnoremap <C-e> <End>
 nnoremap <C-e> <End>
-vnoremap <C-e> <End>
-inoremap <C-d> <Delete>
 inoremap <C-k> <C-o>C
 nnoremap <C-k> C
 cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
