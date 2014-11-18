@@ -16,12 +16,14 @@ set background=dark
 colorscheme solarized
 set statusline=%<%f%h%m%r%h%w\ %=\ %{&ff}\ %y\ %{&paste?'[paste]':''}\ %l,%c\ \ %P
 set laststatus=2            " Always display status line
-set winaltkeys=no           " Disable alt/meta for gui menus"
+set winaltkeys=no           " Disable alt/meta for gui menus
 set title titlestring=%t    " Set your xterm title
 set history=1024            " Remember command line history
 set nocp                    " No compatibility mode
 set sm                      " When a bracket is inserted briefly jump to the matching one
+set wildmode=longest,list,full " tab completion
 set wildmenu                " Enable wildmenu for completion with tab
+set wildignore+=*/tmp/*,*.so,*.swp  " Ignore in completion
 set autoread                " If file was changed outside, and no local changes, reload"
 set novb t_vb=              " No visual error
 set noeb                    " No sound for error (bell)
@@ -45,13 +47,19 @@ set hidden                  " When abandoning a buffer, hide it
 set noswapfile              " Disable swap file
 set number                  " Enable line numbers
 set virtualedit=onemore     " Allow for cursor beyond last character
-set clipboard=unnamed       " Copy to system clipboard
 set shortmess=filmnxtToOI
 set splitbelow              " Splits occur below current window
 set splitright              " Splits occur to the right of current window
 "set completeopt=menuone     " remove preview from completeopt
 "set cursorline              " Highlight current line (slow)
 "set mouse=a                 " enables mouse use in normal mode (useful for resizing window)
+
+" Use clipboard register.
+if has('unnamedplus')
+    set clipboard& clipboard+=unnamedplus
+else
+    set clipboard& clipboard+=unnamed
+endif
 
 " Storage of various files
 set viminfo='10,\"100,:20,%,n~/.viminfo " save stuff to ~/.viminfo
@@ -92,7 +100,6 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
 
-
 "************************************
 " Plugin settings
 "************************************
@@ -112,12 +119,11 @@ let g:buftabs_active_highlight_group="Title"   " Color for active tabs
 let g:yankring_history_file = ".vim_yankring"
 let g:yankring_min_element_length = 2
 let g:ctrlp_cache_dir = $HOME . '/.vim_ctrlp_cache'
-let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_map = '<c-8>'
 let g:ctrlp_working_path_mode=0
 let g:ctrlp_show_hidden = 0
 let g:ctrlp_mruf_exclude = '/tmp/.*\|\.git/.*'
-let g:ctrlp_user_command = 'ack %s -f'
 let g:ctrlp_extensions = ['proj']
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -135,15 +141,47 @@ let g:airline_right_sep = ''
 let g:syntastic_html_tidy_ignore_errors=['trimming empty', 'lacks "alt" attribute', 'lacks "src" attribute']
 let g:syntastic_check_on_open = 0
 let g:signify_vcs_list = [ 'git' ]
+let g:unite_source_history_yank_enable = 1
+let g:unite_source_history_yank_save_clipboard = 1
 
-set wildignore+=*/tmp/*,*.so,*.swp
+if executable('ag')
+    set grepprg=ag\ --nogroup\ --nocolor\ --column
+    if &grepformat !~# '%c'
+        set grepformat^=%f:%l:%c:%m
+    endif
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    let g:unite_source_grep_command = 'ag'
+    let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+    let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_rec_async_command= 'ag --nocolor --nogroup -g ""'
+    let g:ackprg = 'ag --nogroup --nocolor --column'
+elseif executable('ack')
+    let g:ctrlp_user_command = 'ack %s -f'
+endif
+
+call unite#custom#profile('default', 'context', {'start_insert': 1, 'winheight': 10, 'direction': 'botright', })
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+    " Play nice with supertab
+    let b:SuperTabDisabled=1
+    " Enable navigation with control-j and control-k in insert mode
+    imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+    imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+    imap <buffer> <C-w>   <Plug>(unite_toggle_auto_preview)
+    imap <buffer> <C-c>   <Plug>(unite_exit)
+    imap <buffer> <Esc>   <Plug>(unite_exit)
+    imap <silent><buffer><expr> <C-x> unite#do_action('split')
+    imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+    nmap <buffer> <Esc>   <Plug>(unite_exit)
+endfunction
 
 "************************************
 " Autocommands
 "************************************
-" Change directory to active buffer
-" autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" && strlen(bufname("")) > 2 | lcd %:p:h | endif
-" autocmd GUIEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" && strlen(bufname("")) > 2 | lcd %:p:h | endif
 " Reload vimrc when modified
 autocmd! BufWritePost .vimrc source ~/.vimrc
 " Go to last position when reopening file
@@ -211,12 +249,16 @@ cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 " Custom mappings
 "************************************
 let mapleader = ","
+" Browse using ag
+map <leader>a :Unite -buffer-name=grep grep:.<CR>
 " Browse Recently Used Files
-map <leader>r :CtrlPMRUFiles<CR>
+map <leader>r :Unite -start-insert -buffer-name=mure file_mru<CR>
 " Browse Files in current directory
-map <leader>f :CtrlP<CR>
+map <leader>f :Unite -start-insert -buffer-name=files file_rec/async:!<CR>
 " Browse open buffers
-map <leader>b :CtrlPBuffer<CR>
+map <leader>b :Unite -quick-match buffer<CR>
+" Open Yank Ring
+map <leader>y :Unite history/yank<CR>
 " Browse tags
 map <leader>t :CtrlPTag<CR>
 " Browse tags
@@ -225,8 +267,6 @@ map <leader>p :CtrlPproj<CR>
 map <leader>e :e .<CR>
 " Switch to hexmode
 map <leader>h <Plug>HexManager
-" Open Yank Ring
-map <leader>y :YRShow<CR>
 " Run make in vmux
 map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
 map <leader>q :cfile /tmp/make.log<CR>:cw<CR>
@@ -244,7 +284,7 @@ vmap <Leader>a: :Tabularize /:<CR>
 
 " Use sudo to overwrite files.
 command! Wsudo :execute ':silent w !sudo tee % > /dev/null' | :edit!
-command! -nargs=1 Silent | execute ':silent !'.<q-args> | execute ':redraw!'
+command! -nargs=1 -complete=shellcmd Silent | execute ':silent !'.<q-args> | execute ':redraw!'
 
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
@@ -296,11 +336,18 @@ if exists('$TMUX')
   inoremap <silent> <M-j> <Esc>:call TmuxOrSplitSwitch('j', 'D')<cr>
   inoremap <silent> <M-k> <Esc>:call TmuxOrSplitSwitch('k', 'U')<cr>
   inoremap <silent> <M-l> <Esc>:call TmuxOrSplitSwitch('l', 'R')<cr>
+
+  " Make cursor nice
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 else
   map <M-h> <C-w>h
   map <M-j> <C-w>j
   map <M-k> <C-w>k
   map <M-l> <C-w>l
+  " make cursors nice
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 " Shell command
@@ -320,19 +367,13 @@ command! -nargs=+ Dict call s:Dict(<q-args>)
 
 " Strip trailing whitespace
 function! s:Strip()
-  exe "normal mz"
+  execute "normal mz"
   %s/\s\+$//e
-  exe "normal `z"
+  execute "normal `z"
 endfunction
 command! Strip call s:Strip()
 
-function! s:Scratch()
-    new
-    setlocal buftype=nofile
-    setlocal bufhidden=hide
-    setlocal noswapfile
-endfunction
-command! Scratch call s:Scratch()
+command! -bar -nargs=? -bang Scratch :silent enew<bang>|set buftype=nofile bufhidden=hide noswapfile buflisted filetype=<args> modifiable
 
 function! s:LucCheckIfBufferIsNew(...)
   let number = a:0 ? a:1 : 1
