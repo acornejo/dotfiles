@@ -231,6 +231,11 @@ nnoremap <C-k> C
 cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 
 "************************************
+" Search backwards and fowards in command mode
+cnoremap <C-k> <Up>
+cnoremap <C-j> <Down>
+
+"************************************
 " Movement with line-wrapping
 "************************************
 " nnoremap j gj
