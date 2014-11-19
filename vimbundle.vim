@@ -28,6 +28,8 @@ Bundle 'acornejo/vim-texhelpers'
 Bundle 'tpope/vim-markdown'
 " quick html generation
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" gpg decryption
+Bundle 'jamessan/vim-gnupg'
 
 " #### general
 " ack/ag integration
@@ -62,8 +64,6 @@ Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-surround'
 " readline bindings for vim
 Bundle 'tpope/vim-rsi'
-" GPG support
-Bundle 'jamessan/vim-gnupg'
 " nice status bar
 Bundle 'bling/vim-airline'
 " guick jumping around file
