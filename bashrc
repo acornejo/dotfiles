@@ -64,10 +64,6 @@ if [ -f "$HOME/.bc" ]; then
     export BC_ENV_ARGS="$HOME/.bc"
 fi
 
-if hash ack-grep 2>/dev/null; then
-    alias ack="ack-grep"
-fi
-
 # Customize prompt
 if [ "$PS1" ]; then
     # Change colors and display depending on terminal
@@ -182,7 +178,6 @@ fi
 alias ll="ls -l $LS_OPTIONS"
 alias l="ll -h"
 alias dir="ls -1"
-alias a="ack"
 alias v="$EDITOR"
 alias vi="$EDITOR"
 
@@ -208,6 +203,18 @@ alias gu="echo -n 'pulling..'; git pull"
 alias gca="git commit -a -m"
 alias ga="git add"
 alias gc="git commit -m"
+
+# aliases: ack
+if hash ack-grep 2>/dev/null; then
+    alias ack="ack-grep"
+fi
+alias a="ack"
+
+# aliases: todo.sh
+if hash todo.sh 2>/dev/null; then
+    alias t="todo.sh"
+    complete -F _todo t
+fi
 
 bitclone () {
     local TERMS=(${1//// })
