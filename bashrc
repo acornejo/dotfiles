@@ -195,6 +195,7 @@ alias ps="ps xo user,pid,pcpu,pmem,command"
 alias jobs="jobs -l"
 
 # aliases: git
+alias g="git"
 alias gg="git status -s"
 alias gl="git log --pretty='format:%Cgreen%h%Creset %an - %s' --graph"
 alias gd="git diff"
