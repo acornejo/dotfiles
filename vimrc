@@ -103,10 +103,11 @@ endif
 "************************************
 " Plugin settings
 "************************************
-let g:netrw_list_hide='^\.'          " Hide .* files when browsing
-let g:netrw_browsex_viewer='viewer'  " Open files with viewer
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " Hide .* files
+let g:netrw_browsex_viewer='open'     " Open files with viewer
 let g:netrw_fast_browse=2            " Use fast browsing
 let g:netrw_liststyle=1              " Display file details in browser
+let g:netrw_hide=1                   " show not-hidden files
 let g:python_failquietly=1           " Dont complain if there is no python
 let g:buftabs_marker_start=""        " marker around active buftab
 let g:buftabs_marker_end=""          " marker around active buftab
@@ -143,6 +144,12 @@ let g:syntastic_check_on_open = 0
 let g:signify_vcs_list = [ 'git' ]
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_history_yank_save_clipboard = 1
+
+" unimpaired style maps for unite
+nmap [z :UnitePrevious<CR>
+nmap ]z :UniteNext<CR>
+nmap [Z :UniteFirst<CR>
+nmap ]Z :UniteLast<CR>
 
 if executable('ag')
     set grepprg=ag\ --nogroup\ --nocolor\ --column
@@ -255,7 +262,7 @@ cnoremap <C-j> <Down>
 "************************************
 let mapleader = ","
 " Browse using ag
-map <leader>a :Unite -buffer-name=grep grep:.<CR>
+map <leader>a :Ack 
 " Browse Recently Used Files
 map <leader>r :Unite -start-insert -buffer-name=mure file_mru<CR>
 " Browse Files in current directory
