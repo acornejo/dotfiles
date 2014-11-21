@@ -190,20 +190,12 @@ alias bc="bc -q -l"
 alias du="du -h -s -c *"
 
 # aliases: process management
-alias aps="/bin/ps axo user,pid,pcpu,pmem,command"
-alias ps="ps xo user,pid,pcpu,pmem,command"
+alias pa="/bin/ps axo user,pid,pcpu,pmem,command"
+alias p="ps xo user,pid,pcpu,pmem,command"
 alias jobs="jobs -l"
 
 # aliases: git
 alias g="git"
-alias gg="git status -s"
-alias gl="git log --pretty='format:%Cgreen%h%Creset %an - %s' --graph"
-alias gd="git diff"
-alias gp="echo -n 'pushing..'; git push"
-alias gu="echo -n 'pulling..'; git pull"
-alias gca="git commit -a -m"
-alias ga="git add"
-alias gc="git commit -m"
 
 # aliases: ack
 if hash ack-grep 2>/dev/null; then
