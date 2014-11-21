@@ -296,7 +296,7 @@ vmap <Leader>a: :Tabularize /:<CR>
 
 " Use sudo to overwrite files.
 command! Wsudo :execute ':silent w !sudo tee % > /dev/null' | :edit!
-command! -nargs=1 -complete=shellcmd Silent | execute ':silent !'.<q-args> | execute ':redraw!'
+command! -nargs=1 -complete=shellcmd Run | execute ':silent !'.<q-args> | execute ':redraw!'
 
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
