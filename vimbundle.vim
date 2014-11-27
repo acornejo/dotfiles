@@ -44,8 +44,6 @@ Bundle 'jiangmiao/auto-pairs'
 Bundle 'mhinz/vim-signify'
 " align blocks
 Bundle 'godlygeek/tabular'
-" quick open
-Bundle 'kien/ctrlp.vim'
 " syntax checker
 Bundle 'scrooloose/syntastic'
 " (un)comment blocks
@@ -76,6 +74,8 @@ Bundle 'Shougo/vimproc.vim'
 Bundle 'Shougo/unite.vim'
 " add MRU source to unite
 Bundle 'Shougo/neomru.vim'
+" add project source to unite
+Bundle 'acornejo/vim-unite-projects'
 " multiple cursors
 Bundle 'terryma/vim-multiple-cursors'
 
@@ -92,5 +92,7 @@ Bundle 'terryma/vim-multiple-cursors'
 " Bundle 'bling/vim-bufferline'
 " For local vimrc project files
 " Bundle 'MarcWeber/vim-addon-local-vimrc'
+" quick open
+" Bundle 'kien/ctrlp.vim'
 
 filetype plugin indent on
