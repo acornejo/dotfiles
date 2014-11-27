@@ -125,7 +125,6 @@ let g:ctrlp_map = '<c-8>'
 let g:ctrlp_working_path_mode=0
 let g:ctrlp_show_hidden = 0
 let g:ctrlp_mruf_exclude = '/tmp/.*\|\.git/.*'
-let g:ctrlp_extensions = ['proj']
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -167,7 +166,7 @@ elseif executable('ack')
 endif
 
 call unite#custom#profile('default', 'context', {'start_insert': 1, 'winheight': 10, 'direction': 'botright', })
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_current_file'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 
 " Custom mappings for the unite buffer
@@ -268,13 +267,11 @@ map <leader>r :Unite -start-insert -buffer-name=mure file_mru<CR>
 " Browse Files in current directory
 map <leader>f :Unite -start-insert -buffer-name=files file_rec/async:!<CR>
 " Browse open buffers
-map <leader>b :Unite -quick-match buffer<CR>
+map <leader>b :Unite -start-insert -buffer-name=buffers buffer<CR>
+" Browse projects
+map <leader>p :Unite -start-insert -buffer-name=projects projects<CR>
 " Open Yank Ring
 map <leader>y :Unite history/yank<CR>
-" Browse tags
-map <leader>t :CtrlPTag<CR>
-" Browse tags
-map <leader>p :CtrlPproj<CR>
 " Browse current folder
 map <leader>e :e .<CR>
 " Switch to hexmode
