@@ -2,97 +2,98 @@ set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 
 " #### plugin handler
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " #### colorschemes
 " solarized color scheme
-Bundle 'altercation/vim-colors-solarized'
+Plugin 'altercation/vim-colors-solarized'
 " base16 color scheme
-Bundle 'chriskempson/base16-vim'
+Plugin 'chriskempson/base16-vim'
 
 " #### filetype support
 " LESS
-Bundle 'groenewege/vim-less'
+Plugin 'groenewege/vim-less'
 " Javascript
-Bundle 'pangloss/vim-javascript'
+Plugin 'pangloss/vim-javascript'
 " CSV
-Bundle 'chrisbra/csv.vim'
+Plugin 'chrisbra/csv.vim'
 " XML
-Bundle 'sukima/xmledit'
+Plugin 'sukima/xmledit'
 " Latex
-Bundle 'acornejo/vim-texhelpers'
+Plugin 'acornejo/vim-texhelpers'
 " Markdown
-Bundle 'tpope/vim-markdown'
+Plugin 'tpope/vim-markdown'
 " quick html generation
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " gpg decryption
-Bundle 'jamessan/vim-gnupg'
+Plugin 'jamessan/vim-gnupg'
 
 " #### general
 " ack/ag integration
-Bundle 'mileszs/ack.vim'
+Plugin 'mileszs/ack.vim'
 " find and switch to project root
-Bundle 'airblade/vim-rooter'
+Plugin 'airblade/vim-rooter'
 " tmux integration
-Bundle 'benmills/vimux'
+Plugin 'benmills/vimux'
 " insert closing bracket, paren, etc
-Bundle 'jiangmiao/auto-pairs'
+Plugin 'jiangmiao/auto-pairs'
 " kark changed lines
-Bundle 'mhinz/vim-signify'
+Plugin 'mhinz/vim-signify'
 " align blocks
-Bundle 'godlygeek/tabular'
+Plugin 'godlygeek/tabular'
 " syntax checker
-Bundle 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 " (un)comment blocks
-Bundle 'tomtom/tcomment_vim'
+Plugin 'tomtom/tcomment_vim'
 " snippets
-Bundle 'SirVer/ultisnips'
+Plugin 'SirVer/ultisnips'
 " close all but this buffer
-Bundle 'duff/vim-bufonly'
+Plugin 'duff/vim-bufonly'
 " git integration
-Bundle 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 " netrw improvements
-Bundle 'tpope/vim-vinegar'
+Plugin 'tpope/vim-vinegar'
 " useful mappings
-Bundle 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-unimpaired'
 " surround text with anything
-Bundle 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
 " readline bindings for vim
-Bundle 'tpope/vim-rsi'
+Plugin 'tpope/vim-rsi'
 " nice status bar
-Bundle 'bling/vim-airline'
+Plugin 'bling/vim-airline'
 " guick jumping around file
-Bundle 'Lokaltog/vim-easymotion'
+Plugin 'Lokaltog/vim-easymotion'
 " highlight closing tag
-Bundle 'Valloric/MatchTagAlways'
+Plugin 'Valloric/MatchTagAlways'
 " asynchronous execution in vim
-Bundle 'Shougo/vimproc.vim'
+Plugin 'Shougo/vimproc.vim'
 " navigating everything (files,buffers,ack/ag)
-Bundle 'Shougo/unite.vim'
+Plugin 'Shougo/unite.vim'
 " add MRU source to unite
-Bundle 'Shougo/neomru.vim'
+Plugin 'Shougo/neomru.vim'
 " add project source to unite
-Bundle 'acornejo/vim-unite-projects'
+Plugin 'acornejo/vim-unite-projects'
 " multiple cursors
-Bundle 'terryma/vim-multiple-cursors'
+Plugin 'terryma/vim-multiple-cursors'
 
 " #### disabled
 " Hex editor
-" Bundle 'vim-scripts/hexman.vim'
+" Plugin 'vim-scripts/hexman.vim'
 " Yank register management
-" Bundle 'vim-scripts/YankRing.vim'
+" Plugin 'vim-scripts/YankRing.vim'
 " C/C++/Javascript completion
-" Bundle 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 " Javascript completion (with youcompleteme)
-" Bundle 'marijnh/tern_for_vim'
+" Plugin 'marijnh/tern_for_vim'
 " Buffer list in statusbar
-" Bundle 'bling/vim-bufferline'
+" Plugin 'bling/vim-bufferline'
 " For local vimrc project files
-" Bundle 'MarcWeber/vim-addon-local-vimrc'
+" Plugin 'MarcWeber/vim-addon-local-vimrc'
 " quick open
-" Bundle 'kien/ctrlp.vim'
+" Plugin 'kien/ctrlp.vim'
 
+call vundle#end()
 filetype plugin indent on

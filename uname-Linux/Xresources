@@ -240,3 +240,7 @@ Emacs.erc-underline-face.attributeUnderline: on
 Emacs.erc-prompt-face.attributeBold: on
 Emacs.erc-prompt-face.attributeForeground: GoldenRod3
 Emacs.trailing-whitespace.attributeBackground: red
+
+! ***  xterm settings **
+! enable xclipboard
+XTerm*disallowedWindowOps: 20,21,SetXprop
