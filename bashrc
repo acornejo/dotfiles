@@ -131,7 +131,7 @@ if [ "$PS1" ]; then
 
     if [ -r "$HOME/.git-prompt.sh" ]; then
         . "$HOME/.git-prompt.sh"
-        gitString='\[$white\] on \[$yellow\]$(__git_ps1 "% s")'
+        gitString='$(__git_ps1 "\[$white\] on \[$yellow\]%s")'
     else
         gitString=""
     fi
