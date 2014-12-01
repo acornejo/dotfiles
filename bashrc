@@ -131,12 +131,12 @@ if [ "$PS1" ]; then
 
     if [ -r "$HOME/.git-prompt.sh" ]; then
         . "$HOME/.git-prompt.sh"
-        gitString="\$(__git_ps1)"
+        gitString='\[$white\] on \[$yellow\]$(__git_ps1 "% s")'
     else
         gitString=""
     fi
 
-    export PS1="\n${titleString}\[$userColor\]\u\[$white\] at $sshString\[$red\]\h\[$white\] in \[$green\]\w\[$violet\]$gitString\n\[$promptColor\]$promptString\[$reset\] "
+    export PS1="\n${titleString}\[$userColor\]\u\[$white\] at $sshString\[$red\]\h\[$white\] in \[$green\]\w$gitString\n\[$promptColor\]$promptString\[$reset\] "
     export PS2="> "
     export PS4="+ "
 
