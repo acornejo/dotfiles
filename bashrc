@@ -65,6 +65,11 @@ if [ -f "$HOME/.bash_completion" ]; then
     . "$HOME/.bash_completion"
 fi
 
+# set git completion
+if [ -f "$HOME/.git-completion.bash" ]; then
+    . "$HOME/.git-completion.bash"
+fi
+
 # Set bc options
 if [ -f "$HOME/.bc" ]; then
     export BC_ENV_ARGS="$HOME/.bc"
@@ -222,6 +227,9 @@ alias p="ps xo user,pid,pcpu,pmem,command"
 
 # aliases: git
 alias g="git"
+if [ "$(type -t _git)" = "function" ]; then
+    complete -o default -o nospace -F _git g
+else
 
 # aliases: ack/ag
 if hash ack-grep 2>/dev/null; then
