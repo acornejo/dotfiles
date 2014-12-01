@@ -6,7 +6,6 @@ if filereadable(expand("$HOME/.vimbundle.vim"))
     endif
 endif
 
-" zc to close fold, zo to open fold, zC to close ALL folds, zO to open all folds
 "***********************************
 "General VIM Config
 "***********************************
@@ -14,12 +13,11 @@ syntax on
 filetype plugin indent on
 set background=dark
 colorscheme solarized
-set statusline=%<%f%h%m%r%h%w\ %=\ %{&ff}\ %y\ %{&paste?'[paste]':''}\ %l,%c\ \ %P
+set nocompatible            " No compatibility mode
 set laststatus=2            " Always display status line
 set winaltkeys=no           " Disable alt/meta for gui menus
 set title titlestring=%t    " Set your xterm title
 set history=1024            " Remember command line history
-set nocp                    " No compatibility mode
 set sm                      " When a bracket is inserted briefly jump to the matching one
 set wildmode=longest,list,full " tab completion
 set wildmenu                " Enable wildmenu for completion with tab
@@ -47,12 +45,11 @@ set hidden                  " When abandoning a buffer, hide it
 set noswapfile              " Disable swap file
 set number                  " Enable line numbers
 set virtualedit=onemore     " Allow for cursor beyond last character
-set shortmess=filmnxtToOI
+set shortmess=filmnxtToOI   " Customize messages
 set splitbelow              " Splits occur below current window
 set splitright              " Splits occur to the right of current window
-"set completeopt=menuone     " remove preview from completeopt
-"set cursorline              " Highlight current line (slow)
-"set mouse=a                 " enables mouse use in normal mode (useful for resizing window)
+set nostartofline           " Don’t reset cursor to start of line when moving around.
+set exrc                    " Enable per-directory .vimrc files
 
 " Use clipboard register.
 if has('unnamedplus')
@@ -93,11 +90,6 @@ else
     if &term =~ "256color"
         set t_ut=                   " disable background color erase
     endif
-endif
-
-" Load matchit.vim, but only if the user hasn't installed a newer version.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-  runtime! macros/matchit.vim
 endif
 
 "************************************
@@ -188,43 +180,31 @@ endfunction
 "************************************
 " Autocommands
 "************************************
-" Reload vimrc when modified
-autocmd! BufWritePost .vimrc source ~/.vimrc
-" Go to last position when reopening file
-autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-" Change tab stop for html + javascript
-autocmd FileType html,javascript setlocal ts=2 sw=2
-" Disable line wrap for html
-autocmd FileType html setlocal tw=10000
-" Indent and wrap settings for latex
-autocmd BufNewFile,BufRead *.tex setlocal ft=tex fo=tcqaw ts=2 sw=2 nocin colorcolumn=75
-" Set gnuplot filetype
-autocmd BufNewFile,BufRead *.plt,*.gnuplot setf gnuplot
-" Set tioa filetype
-autocmd BufNewFile,BufRead *.tioa setf tioa
-" Enable spell for text files
-autocmd BufNewFile,BufRead *.txt,*.html,*.tex,*.md,README setlocal spell spelllang=en_us
-" set make prog
-autocmd FileType java setlocal makeprg=javac\ % efm=%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#
-autocmd FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\" efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-autocmd FileType gnuplot setlocal makeprg=cat\ %\\\|gnuplot\ \-persist\ \&
-autocmd FileType tioa setlocal makeprg=tempo.sh\ %
-" enable autocomplete
-autocmd Filetype java setlocal omnifunc=javacomplete#Complete
-autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-
-"*********************************
-" Hack for gnome-terminal to use <M-?> bindings
-"*********************************
-set ttimeout ttimeoutlen=50
-if has("unix") 
-    let c='a'
-    while c <= 'z'
-        " maybe use "set <A-".nr2char(c)
-    exec "set <A-".c.">=\e".c
-    exec "imap \e".c." <A-".c.">"
-    let c = nr2char(1+char2nr(c))
-    endw
+if has("autocmd")
+    " Reload vimrc when modified
+    autocmd! BufWritePost .vimrc source ~/.vimrc
+    " Go to last position when reopening file
+    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    " Change tab stop for html + javascript
+    autocmd FileType html,javascript setlocal ts=2 sw=2
+    " Disable line wrap for html
+    autocmd FileType html setlocal tw=10000
+    " Indent and wrap settings for latex
+    autocmd BufNewFile,BufRead *.tex setlocal ft=tex fo=tcqaw ts=2 sw=2 nocin colorcolumn=75
+    " Set gnuplot filetype
+    autocmd BufNewFile,BufRead *.plt,*.gnuplot setf gnuplot
+    " Set tioa filetype
+    autocmd BufNewFile,BufRead *.tioa setf tioa
+    " Enable spell for text files
+    autocmd BufNewFile,BufRead *.txt,*.html,*.tex,*.md,README setlocal spell spelllang=en_us
+    " set make prog
+    autocmd FileType java setlocal makeprg=javac\ % efm=%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#
+    autocmd FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\" efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+    autocmd FileType gnuplot setlocal makeprg=cat\ %\\\|gnuplot\ \-persist\ \&
+    autocmd FileType tioa setlocal makeprg=tempo.sh\ %
+    " enable autocomplete
+    autocmd Filetype java setlocal omnifunc=javacomplete#Complete
+    autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
 endif
 
 "************************************
@@ -240,21 +220,6 @@ cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 " Search backwards and fowards in command mode
 cnoremap <C-k> <Up>
 cnoremap <C-j> <Down>
-
-"************************************
-" Movement with line-wrapping
-"************************************
-" nnoremap j gj
-" nnoremap k gk
-" nnoremap ^ g^
-" nnoremap $ g$
-
-"************************************
-" Moving Between buffers
-"************************************
-" noremap <C-H> :bprev!<CR>
-" noremap <C-L> :bnext!<CR>
-" noremap <C-K> :bd<CR>
 
 "************************************
 " Custom mappings
@@ -286,10 +251,10 @@ map <leader>g :Gstatus<CR>
 " Switch to the directory of the current buffer.
 map <leader>c :cd %:p:h<cr>
 " Tabularize shortcuts
-nmap <Leader>a= :Tabularize /=<CR>
-vmap <Leader>a= :Tabularize /=<CR>
-nmap <Leader>a: :Tabularize /:<CR>
-vmap <Leader>a: :Tabularize /:<CR>
+nmap <leader>a= :Tabularize /=<CR>
+vmap <leader>a= :Tabularize /=<CR>
+nmap <leader>a: :Tabularize /:<CR>
+vmap <leader>a: :Tabularize /:<CR>
 
 " Use sudo to overwrite files.
 command! Wsudo :execute ':silent w !sudo tee % > /dev/null' | :edit!
@@ -401,6 +366,13 @@ function! s:LucCheckIfBufferIsNew(...)
 endfunction
 autocmd VimEnter * if s:LucCheckIfBufferIsNew(1) | bwipeout 1 | doautocmd BufRead | endif
 
+" Load matchit.vim, but only if the user hasn't installed a newer version.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+  runtime! macros/matchit.vim
+endif
+
 for f in split(glob("~/.vimrc.local.*"), "\n")
     execute 'source ' . escape(f, '\ "')
 endfor
+
+set secure                  " disable unsafe commands in per-directory .vimrc"
