@@ -219,7 +219,6 @@ alias du="du -h -s -c *"
 # aliases: process management
 alias pa="/bin/ps axo user,pid,pcpu,pmem,command"
 alias p="ps xo user,pid,pcpu,pmem,command"
-alias j="jobs -l"
 
 # aliases: git
 alias g="git"
