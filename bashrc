@@ -229,7 +229,7 @@ alias p="ps xo user,pid,pcpu,pmem,command"
 alias g="git"
 if [ "$(type -t _git)" = "function" ]; then
     complete -o default -o nospace -F _git g
-else
+fi
 
 # aliases: ack/ag
 if hash ack-grep 2>/dev/null; then
