@@ -192,86 +192,26 @@ alias du="du -h -s -c *"
 # aliases: process management
 alias pa="/bin/ps axo user,pid,pcpu,pmem,command"
 alias p="ps xo user,pid,pcpu,pmem,command"
-alias jobs="jobs -l"
+alias j="jobs -l"
 
 # aliases: git
 alias g="git"
 
-# aliases: ack
+# aliases: ack/ag
 if hash ack-grep 2>/dev/null; then
     alias ack="ack-grep"
 fi
-alias a="ack"
+if hash ag 2>/dev/null; then
+    alias a="ag"
+else
+    alias a="ack"
+fi
 
 # aliases: todo.sh
 if hash todo.sh 2>/dev/null; then
     alias t="todo.sh"
     complete -F _todo t
 fi
-
-bitclone () {
-    local TERMS=(${1//// })
-    if [ ${#TERMS[@]} -gt 1 ]; then
-        local REPO_USER=${TERMS[0]}
-        local REPO_NAME=${TERMS[1]}
-    else
-        local REPO_USER=${USER}
-        local REPO_NAME=${1}
-    fi
-    REPO_NAME=$(basename ${REPO_NAME} .git).git
-    git clone git@bitbucket.org:${REPO_USER}/${REPO_NAME}
-}
-
-hubclone () {
-    local TERMS=(${1//// })
-    if [ ${#TERMS[@]} -gt 1 ]; then
-        local REPO_USER=${TERMS[0]}
-        local REPO_NAME=${TERMS[1]}
-    else
-        local REPO_USER=${USER}
-        local REPO_NAME=${1}
-    fi
-    REPO_NAME=$(basename ${REPO_NAME} .git).git
-    git clone https://github.com/${REPO_USER}/${REPO_NAME}
-}
-
-bitpublish () {
-    local TERMS=(${1//// })
-    if [ ${#TERMS[@]} -gt 1 ]; then
-        local REPO_USER=${TERMS[0]}
-        local REPO_NAME=${TERMS[1]}
-    else
-        local REPO_USER=${USER}
-        local DEFAULT_REPO=$(basename $PWD)
-        local REPO_NAME=${1:-$DEFAULT_REPO}
-    fi
-    REPO_NAME=$(basename ${REPO_NAME} .git)
-    curl --user $REPO_USER https://api.bitbucket.org/1.0/repositories/ --data name=$REPO_NAME 2>/dev/null
-    if ! git rev-parse 2>/dev/null; then
-        git init .
-    fi
-    git remote add origin git@bitbucket.org:$REPO_USER/${REPO_NAME}.git
-    echo "repo ready: commit some work and do 'git push origin master'"
-}
-
-hubpublish () {
-    local TERMS=(${1//// })
-    if [ ${#TERMS[@]} -gt 1 ]; then
-        local REPO_USER=${TERMS[0]}
-        local REPO_NAME=${TERMS[1]}
-    else
-        local REPO_USER=${USER}
-        local DEFAULT_REPO=$(basename $PWD)
-        local REPO_NAME=${1:-$DEFAULT_REPO}
-    fi
-    REPO_NAME=$(basename ${REPO_NAME} .git)
-    curl --user $REPO_USER https://api.github.com/user/repos --data '{"name":"$REPO_NAME"}' 2>/dev/null
-    if ! git rev-parse 2>/dev/null; then
-        git init .
-    fi
-    git remote add origin git@github.com:$REPO_USER/${REPO_NAME}.git
-    echo "repo ready: commit some work and do 'git push origin master'"
-}
 
 # extend command not found to open files
 if [ `type -t command_not_found_handle` ]; then
