@@ -141,7 +141,7 @@ if [ "$PS1" ]; then
         gitString=""
     fi
 
-    export PS1="\n${titleString}\[$userColor\]\u\[$white\] at $sshString\[$red\]\h\[$white\] in \[$green\]\w$gitString\n\[$promptColor\]$promptString\[$reset\] "
+    export PS1="\n${titleString}\[$userColor\]\u\[$white\] at $sshString\[$blue\]\h\[$white\] in \[$green\]\w$gitString\n\[$promptColor\]$promptString\[$reset\] "
     export PS2="> "
     export PS4="+ "
 
