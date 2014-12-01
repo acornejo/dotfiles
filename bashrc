@@ -253,6 +253,8 @@ if [ `type -t command_not_found_handle` ]; then
             else
                 open "$FILE"
             fi
+        elif [ -d "$FILE" ]; then
+            cd "$FILE"
         else
             original_command_not_found_handle
         fi
