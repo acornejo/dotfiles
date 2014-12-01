@@ -245,7 +245,7 @@ if [ `type -t command_not_found_handle` ]; then
     command_not_found_handle () {
         local FILE="$*"
         if [ -f "$FILE" ]; then
-            local MIME_TYPE=$(file --mime-type --brief "$FILE")
+            local MIME_TYPE=$(file -L --mime-type --brief "$FILE")
             local MIME_CHARS=[[:alnum:]'!#$&.+-^_']
             # open text files in $EDITOR
             if [[ $MIME_TYPE =~ (text/$MIME_CHARS+|application/($MIME_CHARS+\+)?xml|application/x-empty) ]]; then
