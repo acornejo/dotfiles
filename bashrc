@@ -32,6 +32,12 @@ if tty >/dev/null && hash stty 2>/dev/null; then
     stty -ixoff
 fi
 
+# set TERM variable
+if [ "$TERM" = "xterm" ]; then
+    export COLORTERM="xterm-256color"
+    export TERM="xterm-256color"
+fi
+
 # Latex environment variables
 if [ -e "$HOME/.latex" ]; then
     export TEXINPUTS=.:$HOME/.latex:
@@ -66,54 +72,75 @@ fi
 
 # Customize prompt
 if [ "$PS1" ]; then
-    # Change colors and display depending on terminal
     if [ "$TERM" = "dumb" ]; then
-        HCOLOR=""
-        PCOLOR=""
-        TCOLOR=""
-        UCOLOR=""
-        USYMBOL="$"
-        GCOLOR=""
+        reset=""
+        black=""
+        blue=""
+        cyan=""
+        green=""
+        orange=""
+        purple=""
+        red=""
+        violet=""
+        white=""
+        yellow=""
+        titleString=""
+    elif tput setaf 1 &> /dev/null; then
+        reset=$(tput sgr0);
+        # Solarized colors, taken from http://git.io/solarized-colors.
+        black=$(tput setaf 0);
+        blue=$(tput setaf 33);
+        cyan=$(tput setaf 37);
+        green=$(tput setaf 64);
+        orange=$(tput setaf 166);
+        purple=$(tput setaf 125);
+        red=$(tput setaf 124);
+        violet=$(tput setaf 61);
+        white=$(tput setaf 15);
+        yellow=$(tput setaf 136);
     else
-        HCOLOR='\[\e[1;31m\]'
-        PCOLOR='\[\e[34m\]'
-        TCOLOR='\[\e[00m\]'
-        UCOLOR='\[\e[1;32m\]'
-        GCOLOR='\[\e[33m\]'
-        USYMBOL='$'
-        PKIND='\w'
-        # Use different color for root user
-        if [ "$USER" = "root" ]; then
-            UCOLOR='\[\e[1;31m\]'
-            USYMBOL='#'
-        fi
-        # Display special string if on SSH connection
-        if [ -n "$SSH_CONNECTION" ] && [ -z "$STY" ]; then
-            PSTRING="[ssh@${HCOLOR}\h${TCOLOR}]"
-            HSTRING=""
-        else
-            PSTRING=""
-            HSTRING=""
-        fi
-        # Set terminal title
-        if [ "$TERM" = "xterm" ]; then
-            export COLORTERM="xterm-256color"
-            export TERM="xterm-256color"
-        #     export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} echo -ne "\033]0;${PSTRING}${PWD/${HOME}/~}""
-        fi
+        reset="\e[0m";
+        black="\e[1;30m";
+        blue="\e[1;34m";
+        cyan="\e[1;36m";
+        green="\e[1;32m";
+        orange="\e[1;33m";
+        purple="\e[1;35m";
+        red="\e[1;31m";
+        violet="\e[1;35m";
+        white="\e[1;37m";
+        yellow="\e[1;33m";
+        titleString="\[\033]0;\w\007\]"
     fi
 
-    GIT_PS1=""
+    if [ "$USER" = "root" ]; then
+        userColor="$red"
+        promptColor="$red"
+        promptString="#"
+    else
+        userColor="$orange"
+        promptColor="$white"
+        promptString="$"
+    fi
+
+    if [ -n "$SSH_CONNECTION" ] && [ -z "$STY" ]; then
+        sshString="\[$white\]ssh@"
+    else
+        sshString=""
+    fi
+
     if [ -r "$HOME/.git-prompt.sh" ]; then
         . "$HOME/.git-prompt.sh"
-        GIT_PS1="\$(__git_ps1)"
+        gitString="\$(__git_ps1)"
+    else
+        gitString=""
     fi
 
-    export PS1="${PSTRING}${TCOLOR}[${HSTRING}${PCOLOR}${PKIND}${GCOLOR}${GIT_PS1}${TCOLOR}]${UCOLOR}${USYMBOL}${TCOLOR} "
+    export PS1="\n${titleString}\[$userColor\]\u\[$white\] at $sshString\[$red\]\h\[$white\] in \[$green\]\w\[$violet\]$gitString\n\[$promptColor\]$promptString\[$reset\] "
     export PS2="> "
     export PS4="+ "
 
-    unset HCOLOR PCOLOR TCOLOR GCOLOR UCOLOR USYMBOL PKIND PSTRING GIT_PS1
+    unset GIT_PS1
 fi
 
 # for autojump
