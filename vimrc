@@ -288,6 +288,17 @@ iab travelling traveling
 iab Travelling traveling
 iab Cancelling Canceling
 
+set ttimeout ttimeoutlen=50
+if has("unix")
+    let c='a'
+    while c <= 'z'
+        " maybe use "set <A-".nr2char(c)
+        exec "set <A-".c.">=\e".c
+        exec "imap \e".c." <A-".c.">"
+        let c = nr2char(1+char2nr(c))
+    endw
+endif
+
 " Set window movement bindings (that play well with tmux)
 if exists('$TMUX')
   function! TmuxOrSplitSwitch(wincmd, tmuxdir)
