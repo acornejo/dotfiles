@@ -103,6 +103,7 @@ if [ "$PS1" ]; then
         violet=$(tput setaf 61);
         white=$(tput setaf 15);
         yellow=$(tput setaf 136);
+        titleString="\[\033]0;\w\007\]"
     else
         reset="\e[0m";
         black="\e[1;30m";
@@ -136,7 +137,7 @@ if [ "$PS1" ]; then
 
     if [ -r "$HOME/.git-prompt.sh" ]; then
         . "$HOME/.git-prompt.sh"
-        gitString='$(__git_ps1 "\[$white\] on \[$yellow\]%s")'
+        gitString="\$(__git_ps1 \"\[$white\] on \[$yellow\]%s\")"
     else
         gitString=""
     fi
@@ -145,7 +146,7 @@ if [ "$PS1" ]; then
     export PS2="> "
     export PS4="+ "
 
-    unset GIT_PS1
+    unset reset black blue cyan green orange purple red violet white yellow titleString userColor promptColor promptString gitString
 fi
 
 # for autojump
