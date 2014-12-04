@@ -89,7 +89,6 @@ if [ "$PS1" ]; then
         violet=""
         white=""
         yellow=""
-        titleString=""
     elif tput setaf 1 &> /dev/null; then
         reset=$(tput sgr0);
         # Solarized colors, taken from http://git.io/solarized-colors.
@@ -103,7 +102,6 @@ if [ "$PS1" ]; then
         violet=$(tput setaf 61);
         white=$(tput setaf 15);
         yellow=$(tput setaf 136);
-        titleString="\[\033]0;\w\007\]"
     else
         reset="\e[0m";
         black="\e[1;30m";
@@ -116,7 +114,12 @@ if [ "$PS1" ]; then
         violet="\e[1;35m";
         white="\e[1;37m";
         yellow="\e[1;33m";
+    fi
+
+    if [[ "$TERM" = *"xterm"* ]]; then
         titleString="\[\033]0;\w\007\]"
+    else
+        titleString=""
     fi
 
     if [ "$USER" = "root" ]; then
