@@ -135,6 +135,7 @@ let g:syntastic_check_on_open = 0
 let g:signify_vcs_list = [ 'git' ]
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_history_yank_save_clipboard = 1
+let g:unite_project_folder = '~/devel'
 
 " unimpaired style maps for unite
 nmap [z :UnitePrevious<CR>
