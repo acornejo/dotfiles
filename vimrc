@@ -206,6 +206,8 @@ if has("autocmd")
     " enable autocomplete
     autocmd Filetype java setlocal omnifunc=javacomplete#Complete
     autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
+    " delete fugitive buffers when inactive
+    autocmd BufReadPost fugitive://* set bufhidden=delete
 endif
 
 "************************************
@@ -227,7 +229,7 @@ cnoremap <C-j> <Down>
 "************************************
 let mapleader = ","
 " Browse using ag
-map <leader>a :Ack 
+map <leader>a :Ack
 " Browse Recently Used Files
 map <leader>r :Unite -start-insert -buffer-name=mure file_mru<CR>
 " Browse Files in current directory
