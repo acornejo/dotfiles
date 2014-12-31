@@ -29,7 +29,9 @@ Plugin 'tpope/vim-markdown'
 " quick html generation
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " gpg decryption
+if version >= 702
 Plugin 'jamessan/vim-gnupg'
+endif
 
 " #### general
 " ack/ag integration
@@ -41,15 +43,21 @@ Plugin 'benmills/vimux'
 " insert closing bracket, paren, etc
 Plugin 'jiangmiao/auto-pairs'
 " kark changed lines
+if version >= 703
 Plugin 'mhinz/vim-signify'
+endif
 " align blocks
 Plugin 'godlygeek/tabular'
 " syntax checker
 Plugin 'scrooloose/syntastic'
 " (un)comment blocks
+if version >= 702
 Plugin 'tomtom/tcomment_vim'
+endif
 " snippets
+if version >= 701
 Plugin 'SirVer/ultisnips'
+endif
 " close all but this buffer
 Plugin 'duff/vim-bufonly'
 " git integration
@@ -69,13 +77,21 @@ Plugin 'Lokaltog/vim-easymotion'
 " highlight closing tag
 Plugin 'Valloric/MatchTagAlways'
 " asynchronous execution in vim
+if version >= 703
 Plugin 'Shougo/vimproc.vim'
+endif
 " navigating everything (files,buffers,ack/ag)
+if version >= 703
 Plugin 'Shougo/unite.vim'
+endif
 " add MRU source to unite
+if version >= 703
 Plugin 'Shougo/neomru.vim'
+endif
 " add project source to unite
+if version >= 703
 Plugin 'acornejo/vim-unite-projects'
+endif
 " multiple cursors
 Plugin 'terryma/vim-multiple-cursors'
 
