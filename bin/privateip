@@ -1,0 +1,8 @@
+#!/bin/bash
+if hash ip; then
+    # unix
+    ip route get 8.8.8.8 | awk '/src/ {for (x=1;x<=NF;x++) if ($x~"src") print $(x+1) }'
+else
+    # os x
+    ifconfig `route get 8.8.8.8 | awk '/interface/ {print $2}'` | awk '/inet / {print $2}'
+fi
