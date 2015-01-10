@@ -85,13 +85,17 @@ Xft.antialias: 1
 Xft.rgba: rgb
 
 ! ****** X Term *********
+!enable xclipboard
+XTerm*disallowedWindowOps: 20,21,SetXprop
 XTerm*cursorColor: firebrick
 !XTerm*loginShell: true
 XTerm*jumpScroll: true
 XTerm*limitResize: 0
 XTerm*faceName: monospace
 XTerm*faceSize: 10
-XTerm*geometry: 120x40
+XTerm*geometry: 44x13
+XTerm*background: black
+XTerm*foreground: white
 XTerm*VT100.Translations: #override \
 Ctrl <Key>V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 Ctrl <Key>X: select-set(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
@@ -240,7 +244,3 @@ Emacs.erc-underline-face.attributeUnderline: on
 Emacs.erc-prompt-face.attributeBold: on
 Emacs.erc-prompt-face.attributeForeground: GoldenRod3
 Emacs.trailing-whitespace.attributeBackground: red
-
-! ***  xterm settings **
-! enable xclipboard
-XTerm*disallowedWindowOps: 20,21,SetXprop
