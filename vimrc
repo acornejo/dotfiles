@@ -361,6 +361,15 @@ function! s:Strip()
 endfunction
 command! Strip call s:Strip()
 
+command! -bar -nargs=1 -bang -complete=file Rename :
+  \ let s:file = expand('%:p') |
+  \ setlocal modified |
+  \ keepalt saveas<bang> <args> |
+  \ if s:file !=# expand('%:p') |
+  \   call delete(s:file) |
+  \ endif |
+  \ unlet s:file
+
 command! -bar -nargs=? -bang Scratch :silent enew<bang>|set buftype=nofile bufhidden=hide noswapfile buflisted filetype=<args> modifiable
 
 function! s:LucCheckIfBufferIsNew(...)
