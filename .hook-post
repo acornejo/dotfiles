@@ -19,20 +19,20 @@ install_cask() {
 
 trap onexit 1 2 3 15 ERR
 
-echo "Install basic packages? [git, tmux, vim, mutt, autojump, curl, wget]"
+echo "Install basic packages? [git, tmux, vim, autojump, curl, wget]"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
                 install_brew
-                brew install autojump tmux reattach-to-user-namespace htop wget bash bash-completion mutt w3m
+                brew install autojump tmux reattach-to-user-namespace htop wget bash bash-completion w3m
                 sudo ln -sf /usr/local/bin/tmux /usr/bin
                 sudo ln -sf /usr/local/bin/reattach-to-user-namespace /usr/bin
                 install_cask
                 brew cask install macvim slate
             else
                 sudo apt-get install autojump tmux vim htop git curl wget bash bash-completion w3m
-                sudo apt-get install --no-install-recommends mutt
+                sudo apt-get install --no-install-recommends
             fi
             break;;
         No )
@@ -69,6 +69,22 @@ select yn in "Yes" "No"; do
                 apt-get install google-chrome latex-beamer inkscape gimp vlc texlive-latex-extra
                 echo Dropbox and google-talk plugin must be installed manually.
             fi
+            break;;
+        No )
+            break;;
+    esac
+done
+
+echo "Configure git?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            echo -n "Full name: "
+            read fullname
+            git config --global user.name "$fullname"
+            echo -n "Email: "
+            read email
+            git config --global user.email $email
             break;;
         No )
             break;;
