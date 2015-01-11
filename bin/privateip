@@ -1,5 +1,5 @@
 #!/bin/bash
-if hash ip; then
+if hash ip 2> /dev/null; then
     # unix
     ip route get 8.8.8.8 | awk '/src/ {for (x=1;x<=NF;x++) if ($x~"src") print $(x+1) }'
 else
