@@ -90,3 +90,17 @@ select yn in "Yes" "No"; do
             break;;
     esac
 done
+
+echo "Copy ssh keys and config?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            echo -n "Server name: "
+            read server
+            mkdir -p ~/.ssh
+            scp $server:".ssh/id_* .ssh/config" ~/.ssh
+            break;;
+        No )
+            break;;
+    esac
+done
