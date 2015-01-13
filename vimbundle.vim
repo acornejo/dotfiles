@@ -57,6 +57,7 @@ endif
 " snippets
 if version >= 701
 Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 endif
 " close all but this buffer
 Plugin 'duff/vim-bufonly'
