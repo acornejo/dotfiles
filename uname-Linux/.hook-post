@@ -18,3 +18,11 @@ cat << EOF > "$OPEN"
 exec xdg-open \$*
 EOF
 chmod 755 "$OPEN"
+
+# -------------------
+# Fix tmux config
+# -------------------
+if [ -f "$HOME/.tmux.conf" -a -f "$HOME/.tmux.conf.linux" ]; then
+    mv "$HOME/.tmux.conf" "$HOME/.tmux.conf.main"
+    mv "$HOME/.tmux.conf.linux" "$HOME/.tmux.conf"
+fi

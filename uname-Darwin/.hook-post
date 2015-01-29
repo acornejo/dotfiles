@@ -2,7 +2,9 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 
-# create console mvim shortcut
+# -------------------
+# Use mvim if exists
+# -------------------
 MVIM_PATH=$(which mvim)
 if [ -n "$MVIM_PATH" ]; then
     if [ -f /usr/local/bin/vim ]; then
@@ -18,13 +20,21 @@ EOF
 fi
 
 # -------------------
+# Fix tmux config
+# -------------------
+if [ -f "$HOME/.tmux.conf" -a -f "$HOME/.tmux.conf.osx" ]; then
+    mv "$HOME/.tmux.conf" "$HOME/.tmux.conf.main"
+    mv "$HOME/.tmux.conf.osx" "$HOME/.tmux.conf"
+fi
+
+# -------------------
 # Config Terminal.app
 # -------------------
 
 # setup tmux in terminal
 TMUX_PATH=$(which tmux)
 if [ -n "$TMUX_PATH" ]; then
-    defaults write com.apple.terminal "Shell" -string "$TMUX_PATH -2 -f $HOME/.tmux.conf.osx attach"
+    defaults write com.apple.terminal "Shell" -string "$TMUX_PATH -2 attach"
 fi
 
 # load terminal profiles
@@ -109,5 +119,3 @@ sudo sed -i '/PubkeyAuthentication/d' /etc/sshd_config
 echo "PubkeyAuthentication yes" | sudo tee -a /etc/sshd_config
 # enable ssh server
 sudo systemsetup -setremotelogin on
-
-# Test132 hellp

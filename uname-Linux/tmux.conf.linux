@@ -1,0 +1,5 @@
+source-file ~/.tmux.conf.main
+
+# For os x clipboard
+bind-key -t vi-copy y copy-pipe "xclip -sel clip -i"
+bind-key -t vi-copy Enter copy-pipe "xclip -sel clip -i"
