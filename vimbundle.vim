@@ -1,6 +1,10 @@
 set nocompatible
 filetype off
 
+let s:python_ver = 0
+silent! python import sys, vim;
+            \ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
+
 set rtp+=~/.vim/bundle/vundle/
 call vundle#begin()
 
@@ -55,7 +59,7 @@ if version >= 702
 Plugin 'tomtom/tcomment_vim'
 endif
 " snippets
-if version >= 701
+if version >= 701 && s:python_ver >= 260
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 endif
