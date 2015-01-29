@@ -5,7 +5,11 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )"
 # create console mvim shortcut
 MVIM_PATH=$(which mvim)
 if [ -n "$MVIM_PATH" ]; then
-    rm -f /usr/local/bin/vim
+    if [ -f /usr/local/bin/vim ]; then
+        if [ ! -f /usr/local/bin/vim.old ]; then
+            mv /usr/local/bin/vim /usr/local/bin/vim.old
+        fi
+    fi
     cat > /usr/local/bin/vim << EOF
 #!/bin/bash
 exec $MVIM_PATH -v \$*
