@@ -1,3 +1,5 @@
+/* by Alex Cornejo */
+/* Make bc into a usable calculator */
 e=e(1)
 pi=4*a(1)
 define sin(x) { return s(x); }
