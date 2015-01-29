@@ -158,9 +158,11 @@ elseif executable('ack')
     let g:ctrlp_user_command = 'ack %s -f'
 endif
 
-call unite#custom#profile('default', 'context', {'start_insert': 1, 'winheight': 10, 'direction': 'botright', })
-call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_current_file'])
-call unite#filters#sorter_default#use(['sorter_rank'])
+if has("unite")
+    call unite#custom#profile('default', 'context', {'start_insert': 1, 'winheight': 10, 'direction': 'botright', })
+    call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_current_file'])
+    call unite#filters#sorter_default#use(['sorter_rank'])
+endif
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
