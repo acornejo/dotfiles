@@ -14,8 +14,8 @@ Plugin 'gmarik/vundle'
 " #### colorschemes
 " solarized color scheme
 Plugin 'altercation/vim-colors-solarized'
-" base16 color scheme
-Plugin 'chriskempson/base16-vim'
+" molokai
+Plugin 'tomasr/molokai'
 
 " #### filetype support
 " LESS
@@ -99,6 +99,8 @@ Plugin 'acornejo/vim-unite-projects'
 endif
 " multiple cursors
 Plugin 'terryma/vim-multiple-cursors'
+" session management
+Plugin 'tpope/vim-obsession'
 
 " #### disabled
 " Hex editor
@@ -115,6 +117,8 @@ Plugin 'terryma/vim-multiple-cursors'
 " Plugin 'MarcWeber/vim-addon-local-vimrc'
 " quick open
 " Plugin 'kien/ctrlp.vim'
+" base16 color scheme
+"Plugin 'chriskempson/base16-vim'
 
 call vundle#end()
 filetype plugin indent on
