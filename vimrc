@@ -63,7 +63,7 @@ else
 endif
 
 " Storage of various files
-set viminfo='10,\"100,:20,%,n~/.viminfo " save stuff to ~/.viminfo
+set viminfo='10,\"100,:20,n~/.viminfo " save stuff to ~/.viminfo
 set spellfile=~/.vimspell.add           " save new words
 set spellsuggest=best,10
 set viewdir=~/.vim_view                 " save views
