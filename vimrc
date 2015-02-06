@@ -6,6 +6,10 @@ if filereadable(expand("$HOME/.vimbundle.vim"))
     endif
 endif
 
+for f in split(glob("~/.vimrc.pre.*"), "\n")
+    execute 'source ' . escape(f, '\ "')
+endfor
+
 "***********************************
 "General VIM Config
 "***********************************
@@ -396,7 +400,7 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
 
-for f in split(glob("~/.vimrc.local.*"), "\n")
+for f in split(glob("~/.vimrc.post.*"), "\n")
     execute 'source ' . escape(f, '\ "')
 endfor
 
