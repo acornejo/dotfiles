@@ -6,6 +6,10 @@ if [[ ":$PATH:" != *":$HOME/.bin:"* ]]; then
     export PATH=$HOME/.bin:/usr/local/bin:$PATH
 fi
 
+for bashrc in ~/.bash.pre.*; do
+    test -f "$bashrc" && source "$bashrc"
+done
+
 # Check if SSH agent present, if not start one.
 if [ -z "$SSH_AUTH_SOCK" ]; then
     SSH_AGENT_FILE=`eval "echo ~$USER"`/.ssh-agent-${HOSTNAME}
@@ -227,7 +231,7 @@ alias du="du -h -s -c *"
 
 # aliases: process management
 alias pa="/bin/ps axo user,pid,pcpu,pmem,command"
-alias p="ps xo user,pid,pcpu,pmem,command"
+alias p="/bin/ps xo user,pid,pcpu,pmem,command"
 
 # aliases: git
 alias g="git"
@@ -273,8 +277,6 @@ if [ `type -t command_not_found_handle` ]; then
     }
 fi
 
-for local_bash in ~/.bash.local.*; do
-    if [ -f "$local_bash" ]; then
-        source "$local_bash"
-    fi
+for bashrc in ~/.bash.post.*; do
+    test -f "$bashrc" && source "$bashrc"
 done
