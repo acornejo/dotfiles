@@ -154,7 +154,7 @@ if executable('ag')
     endif
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:unite_source_grep_command = 'ag'
-    let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+    let g:unite_source_grep_default_opts = '--nogroup --nocolor --column -i'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_rec_async_command= 'ag --nocolor --nogroup -g ""'
     let g:ackprg = 'ag --nogroup --nocolor --column'
@@ -162,11 +162,11 @@ elseif executable('ack')
     let g:ctrlp_user_command = 'ack %s -f'
 endif
 
-if has("unite")
+augroup plugin-unite
     call unite#custom#profile('default', 'context', {'start_insert': 1, 'winheight': 10, 'direction': 'botright', })
     call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_current_file'])
     call unite#filters#sorter_default#use(['sorter_rank'])
-endif
+augroup END
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -235,7 +235,7 @@ cnoremap <C-j> <Down>
 "************************************
 let mapleader = ","
 " Browse using ag
-map <leader>a :Ack
+map <leader>a :Unite -start-insert -buffer-name=ag grep:.<CR>
 " Browse Recently Used Files
 map <leader>r :Unite -start-insert -buffer-name=mure file_mru<CR>
 " Browse Files in current directory
