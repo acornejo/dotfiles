@@ -163,7 +163,7 @@ elseif executable('ack')
 endif
 
 augroup plugin-unite
-    call unite#custom#profile('default', 'context', {'start_insert': 1, 'winheight': 10, 'direction': 'botright', })
+    call unite#custom#profile('default', 'context', {'start_insert': 1, 'winheight': 15, 'direction': 'botright', })
     call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_current_file'])
     call unite#filters#sorter_default#use(['sorter_rank'])
 augroup END
@@ -235,7 +235,7 @@ cnoremap <C-j> <Down>
 "************************************
 let mapleader = ","
 " Browse using ag
-map <leader>a :Unite -start-insert -buffer-name=ag grep:.<CR>
+map <leader>a :Unite -start-insert -no-quit -buffer-name=ag grep:.<CR>
 " Browse Recently Used Files
 map <leader>r :Unite -start-insert -buffer-name=mure file_mru<CR>
 " Browse Files in current directory
@@ -260,10 +260,10 @@ map <leader>g :Gstatus<CR>
 " Switch to the directory of the current buffer.
 map <leader>c :cd %:p:h<cr>
 " Tabularize shortcuts
-nmap <leader>a= :Tabularize /=<CR>
-vmap <leader>a= :Tabularize /=<CR>
-nmap <leader>a: :Tabularize /:<CR>
-vmap <leader>a: :Tabularize /:<CR>
+nmap <leader>t= :Tabularize /=<CR>
+vmap <leader>t= :Tabularize /=<CR>
+nmap <leader>t: :Tabularize /:<CR>
+vmap <leader>t: :Tabularize /:<CR>
 
 " Use sudo to overwrite files.
 command! Wsudo :execute ':silent w !sudo tee % > /dev/null' | :edit!
