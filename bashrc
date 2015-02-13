@@ -197,11 +197,12 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 export HISTIGNORE="&:ls:ll:l:[bf]g:exit"
 export HISTCONTROL="ignoredups:erasedups"
 export HISTFILESIZE=50000
+export HISTSIZE=10000
 shopt -s histappend   # append to history file
 shopt -s cmdhist      # allow multiline history cmds
 shopt -s histreedit   # edit history if cmd failed
 shopt -s histverify   # allow editing history command before executing
-export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # Use newer bash features
 if [ -n "$BASH_VERSINFO" ] && [ ${BASH_VERSINFO[0]} -eq 4 ]; then
