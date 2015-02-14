@@ -1,0 +1,23 @@
+#!/bin/bash
+
+fv() {
+    dir=${1:-.}
+    selected=$(find $dir -maxdepth 1 | fzf)
+    if [ -n "$selected" ]; then
+        if [ -d "$selected" ]; then
+            fv $selected
+        else
+            vim $selected
+        fi
+    fi
+}
+
+if ! hash fzf > /dev/null; then
+    echo "Error: $0 requires fzf to be in the path!"
+fi
+
+if ! hash find > /dev/null; then
+    echo "Error: $0 requires find to be in the path!"
+fi
+
+fv $1
