@@ -256,6 +256,24 @@ if hash todo.sh 2>/dev/null; then
     complete -F _todo t
 fi
 
+if hash fzf; then
+    fv() {
+        local dir=${1:-.}
+        local selected=$(find "$dir" -maxdepth 1 | fzf)
+        if [ -n "$selected" ]; then
+            if [ -d "$selected" ]; then
+                if [ "$selected" = "$dir" ]; then
+                    cd $selected
+                else
+                    fv "$selected"
+                fi
+            else
+                ${EDITOR:-vim} "$selected"
+            fi
+        fi
+    }
+fi
+
 # extend command not found to open files
 if [ `type -t command_not_found_handle` ]; then
     eval "original_$(declare -f command_not_found_handle)"
