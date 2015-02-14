@@ -140,6 +140,7 @@ let g:signify_vcs_list = [ 'git' ]
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_history_yank_save_clipboard = 1
 let g:unite_project_folder = '~/devel'
+let g:unite_project_list_command = 'find %s -type d -maxdepth 1'
 
 " unimpaired style maps for unite
 nmap [z :UnitePrevious<CR>
@@ -214,6 +215,8 @@ if has("autocmd")
     autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
     " delete fugitive buffers when inactive
     autocmd BufReadPost fugitive://* set bufhidden=delete
+    " change directory
+    autocmd VimEnter * cd %:p:h
 endif
 
 "************************************
