@@ -189,6 +189,10 @@ endfunction
 " Autocommands
 "************************************
 if has("autocmd")
+    " disable syntax highlight on big ruby files
+    " autocmd FileType ruby if line2byte(line("$") + 1) > 10000 | syntax clear | endif
+    " disable folding in ruby
+    autocmd FileType ruby setlocal foldmethod=manual
     " Reload vimrc when modified
     autocmd! BufWritePost .vimrc source ~/.vimrc
     " Go to last position when reopening file
