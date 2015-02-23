@@ -259,16 +259,12 @@ fi
 if hash fzf; then
     fv() {
         local dir=${1:-.}
-        local selected=$(find "$dir" -maxdepth 1 | fzf)
+        local selected=$(ls "$dir" | fzf)
         if [ -n "$selected" ]; then
-            if [ -d "$selected" ]; then
-                if [ "$selected" = "$dir" ]; then
-                    cd $selected
-                else
-                    fv "$selected"
-                fi
+            if [ -d "$dir/$selected" ]; then
+                fv "$dir/$selected"
             else
-                ${EDITOR:-vim} "$selected"
+                ${EDITOR:-vim} "$dir/$selected"
             fi
         fi
     }
