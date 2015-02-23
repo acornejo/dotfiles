@@ -22,6 +22,8 @@ Plugin 'tomasr/molokai'
 Plugin 'groenewege/vim-less'
 " Javascript
 Plugin 'pangloss/vim-javascript'
+" jsx
+Plugin 'mxw/vim-jsx'
 " CSV
 Plugin 'chrisbra/csv.vim'
 " XML
