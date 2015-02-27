@@ -1,0 +1,51 @@
+#!/bin/bash
+
+USERNAME=$1
+NEWUID=$2
+NEWGID=${3:-$2}
+
+usage() {
+    echo "$(basename $0) username newuid [newgid]"
+}
+
+if [ "$#" -lt 2 ]; then
+    usage
+    exit 1
+fi
+
+# check that USERNAME exists
+if ! id -u $USERNAME >/dev/null 2>&1 ; then
+    echo "Error: user $USERNAME not found."
+    exit 1
+fi
+
+# check that NEWUID does NOT exist
+if getent passwd $NEWUID >/dev/null 2>&1; then
+    echo "Error: user with $NEWUID already exists."
+    exit 1
+fi
+
+# check that NEWUID does NOT exist
+if getent group $NEWGID >/dev/null 2>&1; then
+    echo "Error: group with $NEWGID already exists."
+    exit 1
+fi
+
+# check that USERNAME is not running any proceses
+pgrep -u $USERNAME >/dev/null 2>&1
+if [ "$?" -ne 1 ]; then
+    echo "Error: cannot perform while $USERNAME has ongoing procesess.."
+    exit 1
+fi
+
+OLDUID=$(id -g $USERNAME)
+OLDGID=$(id -u $USERNAME)
+GROUP=$(getent group $OLDGID | awk -F: '{print $1}')
+
+echo "Changing from $USERNAME to have uid:gid -> $NEWUID:$NEWGID."
+echo "   press Ctrl-C to abort, press enter to continue..."
+read
+sudo usermod -u $NEWUID -g $NEWGID $USERNAME
+sudo groupmod -g $NEWGID $GROUP
+sudo find /  -user $OLDUID -exec chown .$NEWUID \{\} \
+sudo find / -group $OLDGID -exec chown .$NEWGID {} \;
