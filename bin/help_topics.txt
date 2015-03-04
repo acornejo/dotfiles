@@ -737,7 +737,7 @@ SSH-proxy
 =========
 Execute::
 
-    ssh -ND 8080 remoteserver
+    ssh -nNT -D 8080 remoteserver
     chrome --proxy-server="socks5://localhost:8080"
 
 SSH-nopass
