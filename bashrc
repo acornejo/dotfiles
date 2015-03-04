@@ -231,6 +231,15 @@ alias netstat="netstat -n"
 alias bc="bc -q -l"
 alias du="du -h -s -c *"
 
+# aliases: clipboard
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias ccopy="pbcopy"
+    alias cpaste="pbpaste"
+else
+    alias ccopy="xclip -selection c"
+    alias cpaste="xclip -selection c -o"
+fi
+
 # aliases: process management
 alias pa="/bin/ps axo user,pid,pcpu,pmem,command"
 alias p="/bin/ps xo user,pid,pcpu,pmem,command"
