@@ -1,4 +1,4 @@
-Prolog-CSP
+prolog-CSP
 ==========
 
 First install GNU prolog::
@@ -145,7 +145,7 @@ To configure grub to boot an ISO file in your usb stick::
     }
     EOF
 
-Ubuntu-Repositories
+ubuntu-repositories
 ===================
 
 To install the usual ubuntu repositories (media labe mirror)::
@@ -163,17 +163,18 @@ To install the usual ubuntu repositories (media labe mirror)::
 
 To setup priorities on repositories::
 
+    DIST="oneiric"
     cat << EOF > /etc/apt/preferences
     Package: *
-    Pin: release a=karmic-security
+    Pin: release a=${DIST}-security
     Pin-Priority: 990
 
     Package: *
-    Pin: release a=karmic-updates
+    Pin: release a=${DIST}-updates
     Pin-Priority: 900
 
     Package: *
-    Pin: release a=karmic-proposed
+    Pin: release a=${DIST}-proposed
     Pin-Priority: 400
 
     Package: *
@@ -181,7 +182,7 @@ To setup priorities on repositories::
     Pin-Priority: -1
     EOF
 
-User-management
+user-management
 ===============
 To lock a user::
 
@@ -191,9 +192,10 @@ To unlock a user::
 
     usermod -U user
     
-To add a user::
+To add a user with a fixed password::
 
-    useradd -p `mkpasswd` -m user
+    useradd -m user
+    echo "user:passwd" | chpasswd
 
 To remove a user::
 
@@ -203,10 +205,10 @@ To add an existing user to an existing group::
 
     usermod -G group -a user
 
-To copy the groups of one user to another::
+To copy the groups USER1 into USER2::
 
-    groups=$(cat /etc/group | grep $SUDO_USER | cut -f1 -d: | grep -v $SUDO_USER | tr '\n' ',')
-    usermod -G $groups -a $USER2
+    GROUPS=$(awk -F: "{ if (\$4 ~ /$USER1/) print \$1  }" ORS=',' /etc/group | sed 's/,$//')
+    usermod -G $GROUPS -a $USER2
 
 Firefox-Tweaks
 ==============
@@ -226,7 +228,7 @@ Extensions: Download Statusbar, AdBlock Plus, Vimperator.
 
 6. Create two new integers named nglayout.initialpaint.delay and content.notify.interval, setting them to 0.
 
-Git-Primer
+git-primer
 ==========
 
 To convert directory to git repository::
@@ -245,7 +247,7 @@ To push tags::
 
     git push --tags
 
-Git-Advanced
+git-advanced
 ============
 
 To squash the last N commits together:
@@ -253,11 +255,16 @@ To squash the last N commits together:
     git reset --soft HEAD~N
     git commit -m "new commit message"
 
-If you want to edit a commit message which includes all previous
-messages:
+If you want to squash the last N commits and edit a commit message which
+includes all previous commit messages:
 
     git reset --soft HEAD~N
     git commit --edit -m"$(git log --format=%B --reverse HEAD..HEAD@{1})"
+
+To delete a branch branchname, both locally and in the remote origin:
+
+   git branch -d branchname
+   git push origin :branchname
 
 git-submodules
 ==============
@@ -313,7 +320,7 @@ Checkout the SVN repository into your local git repo::
 
 Commit your changes using git (as usual)::
 
-    git ci -a -m "did edits."
+    git ci -a -m "commit message."
 
 Update your local git repo from the remote SVN repository::
 
