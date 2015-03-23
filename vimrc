@@ -170,7 +170,6 @@ augroup plugin-unite
 augroup END
 
 " Custom mappings for the unite buffer
-autocmd FileType unite call s:unite_settings()
 function! s:unite_settings()
     " Play nice with supertab
     let b:SuperTabDisabled=1
@@ -188,9 +187,10 @@ endfunction
 "************************************
 " Autocommands
 "************************************
-if has("autocmd")
+augroup custom-cmds
     " disable syntax highlight on big ruby files
     " autocmd FileType ruby if line2byte(line("$") + 1) > 10000 | syntax clear | endif
+    autocmd FileType unite call s:unite_settings()
     " disable folding in ruby
     autocmd FileType ruby setlocal foldmethod=manual
     " Reload vimrc when modified
@@ -221,7 +221,7 @@ if has("autocmd")
     autocmd BufReadPost fugitive://* set bufhidden=delete
     " change directory
     autocmd VimEnter * cd %:p:h
-endif
+augroup END
 
 "************************************
 " Readline-like editing not in vim-rsi
@@ -384,23 +384,6 @@ command! -bar -nargs=1 -bang -complete=file Rename :
   \ unlet s:file
 
 command! -bar -nargs=? -bang Scratch :silent enew<bang>|set buftype=nofile bufhidden=hide noswapfile buflisted filetype=<args> modifiable
-
-function! s:LucCheckIfBufferIsNew(...)
-  let number = a:0 ? a:1 : 1
-  " save current and alternative buffer
-  let current = bufnr('%')
-  let alternative = bufnr('#')
-  let value = 0
-  " check buffer name
-  if bufexists(number) && bufname(number) == ''
-    silent! execute 'buffer' number
-    let value = line('$') == 1 && getline(1) == ''
-    silent! execute 'buffer' alternative
-    silent! execute 'buffer' current
-  endif
-  return value
-endfunction
-autocmd VimEnter * if s:LucCheckIfBufferIsNew(1) | bwipeout 1 | doautocmd BufRead | endif
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
