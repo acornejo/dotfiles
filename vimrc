@@ -39,7 +39,7 @@ set expandtab               " Expand tab to spaces
 set smarttab                " Replace tab with spaces
 set shiftround              " Round indents to multiples of shiftwidth
 set backspace=2             " Allow backspace over indent, line breaks, or start of the line
-set foldmethod=syntax       " set syntax controlled folding
+set foldmethod=manual       " set manual folding for quick opening of large files
 set nofoldenable            " Remove to enable folding
 set hlsearch                " Highlight search result
 set ignorecase              " Search ignores case
@@ -139,7 +139,7 @@ let g:syntastic_check_on_open = 0
 let g:signify_vcs_list = [ 'git' ]
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_history_yank_save_clipboard = 1
-let g:unite_project_folder = '~/devel'
+let g:unite_project_folder = '~/src'
 let g:unite_project_list_command = 'find %s -type d -maxdepth 1'
 
 " unimpaired style maps for unite
