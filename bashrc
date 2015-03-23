@@ -266,7 +266,7 @@ if hash todo.sh 2>/dev/null; then
     complete -F _todo t
 fi
 
-if hash fzf; then
+if hash fzf 2>/dev/null; then
     fv() {
         local dir=${1:-.}
         local selected=$(ls "$dir" | fzf)
