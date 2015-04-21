@@ -941,6 +941,33 @@ MAC-list
 3. Carmen  (P4-1800mhz)  00:07:95:A7:67:3C
 4. Casiopea  Wifi 00:04:75:FD:AC:7D Eth 08:00:46:A9:5D:DD
 
+OpenSSL
+=======
+
+To generate a private/public key pairs:
+
+    openssl genrsa -des3 -out private.pem 4096
+
+To extract the public key from the private key
+
+    openssl rsa -in private.pem -pubout -out public.pem
+
+To encrypt FILE to FILE.enc using the public key
+
+    openssl rsautl -encrypt -inkey public.pem -pubin -in FILE -out FILE.enc
+
+To decript FILE.enc to FILE using the private key
+
+    openssl rsautl -decript -inkey private.pem -in FILE.enc -out FILE
+
+To produce signature of FILE using private key
+
+    openssl dgst -sha256 -sign private.pem -out signature FILE
+
+To verify signature of FILE using public key
+
+    openssl dgst -sha256 -verify public.pem -signature signature FILE
+
 Encrypt-LOOPAES
 ===============
 Create image::
