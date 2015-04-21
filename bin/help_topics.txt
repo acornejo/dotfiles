@@ -944,9 +944,17 @@ MAC-list
 OpenSSL
 =======
 
-To generate a private/public key pairs:
+To generate a private/public key pairs with password:
 
     openssl genrsa -des3 -out private.pem 4096
+
+To generate a private/public key pair without password
+
+    openssl genrsa -out private.pem 4096
+
+To view a key
+
+    openssl rsa -in private.pem -text
 
 To extract the public key from the private key
 
@@ -967,6 +975,14 @@ To produce signature of FILE using private key
 To verify signature of FILE using public key
 
     openssl dgst -sha256 -verify public.pem -signature signature FILE
+
+To extract the public key out of certificate
+
+    openssl x509 -pubkey -noout -in certificate.crt -out public.pem
+
+To view a certificate
+
+    openssl x509 -in certificate.{crt,cer,pem} -text -noout
 
 Encrypt-LOOPAES
 ===============
