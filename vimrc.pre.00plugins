@@ -34,6 +34,8 @@ Plug 'acornejo/vim-texhelpers', {'for': 'tex'}
 Plug 'tpope/vim-markdown', {'for': 'markdown'}
 " quick html generation
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
+" go
+Plug 'fatih/vim-go'
 " gpg decryption
 if version >= 702
 Plug 'jamessan/vim-gnupg', {'for': 'gpg'}
@@ -84,7 +86,7 @@ Plug 'tpope/vim-rsi'
 " nice status bar
 Plug 'bling/vim-airline'
 " guick jumping around file
-Plug 'Lokaltog/vim-easymotion', {'on': ['<Plug>(EasyAlign)', 'EasyAlign']}
+Plug 'Lokaltog/vim-easymotion'
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
 " multiple cursors
