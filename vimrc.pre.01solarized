@@ -1,0 +1,14 @@
+function! s:hascolorscheme(name)
+    let pat = 'colors/'.a:name.'.vim'
+    return !empty(globpath(&rtp, pat))
+endfunction
+
+if ! s:hascolorscheme('solarized')
+    finish
+endif
+
+if !empty($BADTERM)
+    let g:solarized_termcolors=256
+endif
+
+colorscheme solarized
