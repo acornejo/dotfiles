@@ -84,7 +84,7 @@ Plug 'tpope/vim-rsi'
 " nice status bar
 Plug 'bling/vim-airline'
 " guick jumping around file
-Plug 'Lokaltog/vim-easymotion'
+Plug 'Lokaltog/vim-easymotion', {'on': ['<Plug>(EasyAlign)', 'EasyAlign']}
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
 " multiple cursors
