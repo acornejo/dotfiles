@@ -19,7 +19,7 @@ install_cask() {
 
 trap onexit 1 2 3 15 ERR
 
-echo "Install basic packages? [git, tmux, vim, autojump, curl, wget]"
+echo "Install basic packages? [git, tmux, vim, autojump, curl, wget, fzf]"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
@@ -33,6 +33,10 @@ select yn in "Yes" "No"; do
             else
                 sudo apt-get install autojump tmux vim htop git curl wget bash bash-completion w3m
                 sudo apt-get install --no-install-recommends
+            fi
+            if hash git 2>/dev/null; then
+                git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+                ~/.fzf/install
             fi
             break;;
         No )
