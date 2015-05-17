@@ -74,6 +74,9 @@ if [ -f "$HOME/.git-completion.bash" ]; then
     . "$HOME/.git-completion.bash"
 fi
 
+# set up fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
 # Set bc options
 if [ -f "$HOME/.bc" ]; then
     export BC_ENV_ARGS="$HOME/.bc"
