@@ -19,27 +19,29 @@ Plug 'tomasr/molokai'
 
 " #### filetype support
 " LESS
-Plug 'groenewege/vim-less'
+Plug 'groenewege/vim-less', {'for': 'less'}
 " Javascript
-Plug 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript', {'for': 'javascript'}
 " jsx
-Plug 'mxw/vim-jsx'
+Plug 'mxw/vim-jsx', {'for': 'jsx'}
 " CSV
-Plug 'chrisbra/csv.vim'
+Plug 'chrisbra/csv.vim', {'for': 'csv'}
 " XML
 Plug 'sukima/xmledit'
 " Latex
-Plug 'acornejo/vim-texhelpers'
+Plug 'acornejo/vim-texhelpers', {'for': 'tex'}
 " Markdown
-Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-markdown', {'for': 'markdown'}
 " quick html generation
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 " gpg decryption
 if version >= 702
-Plug 'jamessan/vim-gnupg'
+Plug 'jamessan/vim-gnupg', {'for': 'gpg'}
 endif
 
 " #### general
+" fzf integration
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 " ack/ag integration
 Plug 'mileszs/ack.vim'
 " find and switch to project root
@@ -69,6 +71,8 @@ endif
 Plug 'duff/vim-bufonly'
 " git integration
 Plug 'tpope/vim-fugitive'
+" gitk emulation
+Plug 'gregsexton/gitv', {'on': ['Gitv']}
 " netrw improvements
 Plug 'tpope/vim-vinegar'
 " useful mappings
@@ -83,46 +87,47 @@ Plug 'bling/vim-airline'
 Plug 'Lokaltog/vim-easymotion'
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
-" asynchronous execution in vim
-if version >= 703
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-endif
-" navigating everything (files,buffers,ack/ag)
-if version >= 703
-Plug 'Shougo/unite.vim'
-endif
-" add MRU source to unite
-if version >= 703
-Plug 'Shougo/neomru.vim'
-endif
-" add project source to unite
-if version >= 703
-Plug 'acornejo/vim-unite-projects'
-endif
 " multiple cursors
 Plug 'terryma/vim-multiple-cursors'
 " session management
 Plug 'tpope/vim-obsession'
+" Yank register management
+Plug 'vim-scripts/YankRing.vim'
 
 " C/C++/Javascript completion
 if version > 703 || (version >= 703 && has('patch584'))
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' , 'on': [] }
+command! YcmCompleter call plug#load('YouCompleteMe') | call youcompleteme#Enable() | YcmCompleter
 endif
 
 " #### disabled
 " Hex editor
-" Plugin 'vim-scripts/hexman.vim'
-" Yank register management
-" Plugin 'vim-scripts/YankRing.vim'
+" Plug 'vim-scripts/hexman.vim'
 " Javascript completion (with youcompleteme)
-" Plugin 'marijnh/tern_for_vim'
+" Plug 'marijnh/tern_for_vim'
 " Buffer list in statusbar
-" Plugin 'bling/vim-bufferline'
+" Plug 'bling/vim-bufferline'
 " For local vimrc project files
-" Plugin 'MarcWeber/vim-addon-local-vimrc'
+" Plug 'MarcWeber/vim-addon-local-vimrc'
 " quick open
-" Plugin 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
 " base16 color scheme
-"Plugin 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
+" navigating everything (files,buffers,ack/ag)
+" if version >= 703
+"  Plug 'Shougo/unite.vim'
+" endif
+" add MRU source to unite
+" if version >= 703
+"  Plug 'Shougo/neomru.vim'
+" endif
+" add project source to unite
+" if version >= 703
+" Plug 'acornejo/vim-unite-projects'
+" endif
+" asynchronous execution in vim
+" if version >= 703
+"  Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+" endif
 
 call plug#end()

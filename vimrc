@@ -1,3 +1,6 @@
+" remap leader
+let mapleader = ","
+
 for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
 endfor
@@ -54,7 +57,7 @@ else
 endif
 
 " Storage of various files
-set viminfo='10,\"100,:20,n~/.viminfo " save stuff to ~/.viminfo
+set viminfo='1000,\"100,:20,n~/.viminfo " save stuff to ~/.viminfo
 set spellfile=~/.vimspell.add           " save new words
 set spellsuggest=best,10
 set viewdir=~/.vim_view                 " save views
@@ -106,6 +109,7 @@ let g:buftabs_inactive_highlight_group="StatusLine" " Color for inactive tabs
 let g:buftabs_active_highlight_group="Title"   " Color for active tabs
 let g:yankring_history_file = ".vim_yankring"
 let g:yankring_min_element_length = 2
+let g:yankring_manage_numbered_reg = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -188,23 +192,9 @@ cnoremap <C-j> <Down>
 "************************************
 " Custom mappings
 "************************************
-let mapleader = ","
-" Browse using ag
-map <leader>a :Unite -start-insert -no-quit -buffer-name=ag grep:.<CR>
-" Browse Recently Used Files
-map <leader>r :Unite -start-insert -buffer-name=mure file_mru<CR>
-" Browse Files in current directory
-map <leader>f :Unite -start-insert -buffer-name=files file_rec/async:!<CR>
-" Browse open buffers
-map <leader>b :Unite -start-insert -buffer-name=buffers buffer<CR>
-" Browse projects
-map <leader>p :Unite -start-insert -buffer-name=projects projects<CR>
 " Open Yank Ring
-map <leader>y :Unite history/yank<CR>
-" Browse current folder
+map <leader>y :YRShow<CR>
 map <leader>e :e .<CR>
-" Switch to hexmode
-map <leader>h <Plug>HexManager
 " Run make in vmux
 map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
 map <leader>q :cfile /tmp/make.log<CR>:cw<CR>
