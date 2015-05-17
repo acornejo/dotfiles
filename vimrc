@@ -1,11 +1,3 @@
-if filereadable(expand("$HOME/.vimbundle.vim"))
-    if isdirectory(expand("$HOME/.vim/bundle/vundle"))
-        source ~/.vimbundle.vim
-    else
-        echo "Must install vundle to handle plugins."
-    endif
-endif
-
 for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
 endfor
@@ -16,7 +8,6 @@ endfor
 syntax on
 filetype plugin indent on
 set background=dark
-colorscheme solarized
 set nocompatible            " No compatibility mode
 set laststatus=2            " Always display status line
 set winaltkeys=no           " Disable alt/meta for gui menus
@@ -139,6 +130,7 @@ let g:syntastic_check_on_open = 0
 let g:signify_vcs_list = [ 'git' ]
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_history_yank_save_clipboard = 1
+let g:unite_source_grep_max_candidates = 500
 let g:unite_project_folder = '~/src'
 let g:unite_project_list_command = 'find %s -type d -maxdepth 1'
 

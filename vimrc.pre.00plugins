@@ -1,108 +1,108 @@
-set nocompatible
-filetype off
+if ! filereadable(expand("$HOME/.vim/autoload/plug.vim"))
+    echo "Must install plug.vim to handle plugins."
+    echo ""
+    echo "curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    finish
+endif
 
 let s:python_ver = 0
 silent! python import sys, vim;
             \ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#begin()
-
-" #### plugin handler
-Plugin 'gmarik/vundle'
+call plug#begin('~/.vim/plugged')
 
 " #### colorschemes
 " solarized color scheme
-Plugin 'altercation/vim-colors-solarized'
+Plug 'altercation/vim-colors-solarized'
 " molokai
-Plugin 'tomasr/molokai'
+Plug 'tomasr/molokai'
 
 " #### filetype support
 " LESS
-Plugin 'groenewege/vim-less'
+Plug 'groenewege/vim-less'
 " Javascript
-Plugin 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript'
 " jsx
-Plugin 'mxw/vim-jsx'
+Plug 'mxw/vim-jsx'
 " CSV
-Plugin 'chrisbra/csv.vim'
+Plug 'chrisbra/csv.vim'
 " XML
-Plugin 'sukima/xmledit'
+Plug 'sukima/xmledit'
 " Latex
-Plugin 'acornejo/vim-texhelpers'
+Plug 'acornejo/vim-texhelpers'
 " Markdown
-Plugin 'tpope/vim-markdown'
+Plug 'tpope/vim-markdown'
 " quick html generation
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 " gpg decryption
 if version >= 702
-Plugin 'jamessan/vim-gnupg'
+Plug 'jamessan/vim-gnupg'
 endif
 
 " #### general
 " ack/ag integration
-Plugin 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim'
 " find and switch to project root
-Plugin 'airblade/vim-rooter'
+Plug 'airblade/vim-rooter'
 " tmux integration
-Plugin 'benmills/vimux'
+Plug 'benmills/vimux'
 " insert closing bracket, paren, etc
-Plugin 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 " kark changed lines
 if version >= 703
-Plugin 'mhinz/vim-signify'
+Plug 'mhinz/vim-signify'
 endif
 " align blocks
-Plugin 'godlygeek/tabular'
+Plug 'godlygeek/tabular'
 " syntax checker
-Plugin 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 " (un)comment blocks
 if version >= 702
-Plugin 'tomtom/tcomment_vim'
+Plug 'tomtom/tcomment_vim'
 endif
 " snippets
 if version >= 701 && s:python_ver >= 260
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 endif
 " close all but this buffer
-Plugin 'duff/vim-bufonly'
+Plug 'duff/vim-bufonly'
 " git integration
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 " netrw improvements
-Plugin 'tpope/vim-vinegar'
+Plug 'tpope/vim-vinegar'
 " useful mappings
-Plugin 'tpope/vim-unimpaired'
+Plug 'tpope/vim-unimpaired'
 " surround text with anything
-Plugin 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 " readline bindings for vim
-Plugin 'tpope/vim-rsi'
+Plug 'tpope/vim-rsi'
 " nice status bar
-Plugin 'bling/vim-airline'
+Plug 'bling/vim-airline'
 " guick jumping around file
-Plugin 'Lokaltog/vim-easymotion'
+Plug 'Lokaltog/vim-easymotion'
 " highlight closing tag
-Plugin 'Valloric/MatchTagAlways'
+Plug 'Valloric/MatchTagAlways'
 " asynchronous execution in vim
 if version >= 703
-Plugin 'Shougo/vimproc.vim'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 endif
 " navigating everything (files,buffers,ack/ag)
 if version >= 703
-Plugin 'Shougo/unite.vim'
+Plug 'Shougo/unite.vim'
 endif
 " add MRU source to unite
 if version >= 703
-Plugin 'Shougo/neomru.vim'
+Plug 'Shougo/neomru.vim'
 endif
 " add project source to unite
 if version >= 703
-Plugin 'acornejo/vim-unite-projects'
+Plug 'acornejo/vim-unite-projects'
 endif
 " multiple cursors
-Plugin 'terryma/vim-multiple-cursors'
+Plug 'terryma/vim-multiple-cursors'
 " session management
-Plugin 'tpope/vim-obsession'
+Plug 'tpope/vim-obsession'
 
 " #### disabled
 " Hex editor
@@ -122,5 +122,4 @@ Plugin 'tpope/vim-obsession'
 " base16 color scheme
 "Plugin 'chriskempson/base16-vim'
 
-call vundle#end()
-filetype plugin indent on
+call plug#end()
