@@ -104,13 +104,16 @@ Plug 'terryma/vim-multiple-cursors'
 " session management
 Plug 'tpope/vim-obsession'
 
+" C/C++/Javascript completion
+if version > 703 || (version >= 703 && has('patch584'))
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+endif
+
 " #### disabled
 " Hex editor
 " Plugin 'vim-scripts/hexman.vim'
 " Yank register management
 " Plugin 'vim-scripts/YankRing.vim'
-" C/C++/Javascript completion
-" Plugin 'Valloric/YouCompleteMe'
 " Javascript completion (with youcompleteme)
 " Plugin 'marijnh/tern_for_vim'
 " Buffer list in statusbar

@@ -222,6 +222,7 @@ alias l="ll -h"
 alias dir="ls -1"
 alias v="$EDITOR"
 alias vi="$EDITOR"
+alias vim="$EDITOR"
 
 # aliases: default options
 alias rm="rm -i"
