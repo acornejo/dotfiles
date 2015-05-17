@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# This hook is called with the following parameters:
+#
+# $1 -- Name of the remote to which the push is being done
+# $2 -- URL to which the push is being done
+#
+# If pushing without using a named remote those arguments will be equal.
+# Information about the commits which are being pushed is supplied as
+# lines to the standard input in the form:
+#
+#   <local ref> <local sha1> <remote ref> <remote sha1>
+ 
+# settings to tweak
+remote_to_follow='origin'
+protected_branch='master'
+
+# Check if we actually have commits to push
+commits=$(git log @{u}..)
+if [ -z "$commits" ]; then
+    exit 0
+fi
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$current_branch" = "$protected_branch" ]; then
+    git fetch $remote_to_follow
+    git reset --hard $remote_follow/$protected_branch
+fi
+exit 0

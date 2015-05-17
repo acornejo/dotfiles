@@ -1,0 +1,10 @@
+#!/bin/bash
+
+branch=$2
+test -z $branch && branch=$(git rev-parse --abbrev-ref HEAD)
+
+remote=$1
+test -z $remote && echo "remote required." 1>&2 && exit 1
+
+git fetch $remote
+git reset --hard $remote/$branch
