@@ -203,12 +203,15 @@ map <leader>v :call VimuxPromptCommand()<CR>
 " Run Git status
 map <leader>g :Gstatus<CR>
 " Switch to the directory of the current buffer.
-map <leader>c :cd %:p:h<cr>
+map <leader>c :Fcd<cr>
 " Tabularize shortcuts
 nmap <leader>t= :Tabularize /=<CR>
 vmap <leader>t= :Tabularize /=<CR>
 nmap <leader>t: :Tabularize /:<CR>
 vmap <leader>t: :Tabularize /:<CR>
+
+" change directory to current file
+command! Fcd :cd %:p:h | :echo 'changed directory to '.getcwd()
 
 " Use sudo to overwrite files.
 command! Wsudo :execute ':silent w !sudo tee % > /dev/null' | :edit!
