@@ -52,10 +52,8 @@ Plug 'airblade/vim-rooter'
 Plug 'benmills/vimux'
 " insert closing bracket, paren, etc
 Plug 'jiangmiao/auto-pairs'
-" kark changed lines
-if version >= 703
-Plug 'mhinz/vim-signify'
-endif
+" mark changed lines in git
+Plug 'airblade/vim-gitgutter'
 " align blocks
 Plug 'godlygeek/tabular'
 " syntax checker
@@ -130,6 +128,10 @@ endif
 " asynchronous execution in vim
 " if version >= 703
 "  Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+" endif
+" mark changed lines in vcs
+" if version >= 703
+"  Plug 'mhinz/vim-signify'
 " endif
 
 call plug#end()
