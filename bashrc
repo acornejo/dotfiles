@@ -75,6 +75,7 @@ if [ -f "$HOME/.git-completion.bash" ]; then
 fi
 
 # set up fzf
+export FZF_DEFAULT_OPTS='--bind alt-p:page-up,alt-n:page-down'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # Set bc options
