@@ -1,0 +1,23 @@
+#!/bin/bash
+
+exec 1>&2
+
+if ! hash aspell 2>/dev/null; then
+   echo "warning: Aspell not installed - unable to check spelling."
+fi
+
+if ! hash awk 2>/dev/null; then
+   echo "warning: awk not installed - unable to check spelling."
+fi
+
+WORDS=$(git log --format=%B -n 1 | aspell list | awk '!_[$0]++')
+
+if [ -n "$WORDS" ]; then
+    echo "warning: the following words might be misspelled: "
+    for word in $WORDS; do
+      echo "  - $word"
+    done
+    echo "run git commit --amend to fix this."
+    echo
+    exit 1
+fi
