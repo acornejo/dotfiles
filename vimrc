@@ -153,6 +153,8 @@ augroup custom-cmds
     autocmd FileType html,javascript setlocal ts=2 sw=2
     " Disable line wrap for html
     autocmd FileType html setlocal tw=10000
+    " Set type of salt sls files to yaml
+    autocmd BufNewFile,BufRead *.sls setlocal ft=yaml ts=2 sw=2
     " Indent and wrap settings for latex
     autocmd BufNewFile,BufRead *.tex setlocal ft=tex fo=tcqaw ts=2 sw=2 nocin colorcolumn=75
     " Set gnuplot filetype
