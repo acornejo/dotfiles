@@ -2,22 +2,52 @@
 
 exec 1>&2
 
-if ! hash aspell 2>/dev/null; then
-   echo "warning: Aspell not installed - unable to check spelling."
+MESSAGE=$(git log --format=%B -n 1)
+TITLE=$(echo "$MESSAGE" | head -n1)
+BODY=$(echo "$MESSAGE" | sed '1d')
+BODY_MINUSLEADINGSPACES=$(echo $BODY | sed '/./,$!d')
+LEADINGSPACES=${BODY%$BODY_MINUSLEADINGSPACES}
+
+exit_status=0
+
+if hash aspell 2>/dev/null && hash awk 2>/dev/null; then
+    WORDS=$(echo "$MESSAGE" | aspell list | awk '!_[$0]++')
+    if [ -n "$WORDS" ]; then
+        echo "warning: The commit message might be misspelled. See the following words:"
+        echo
+        for word in $WORDS; do
+            echo "  - $word"
+        done
+        exit_status=1
+    fi
+else
+    echo "error: need aspell and awk to check spelling of commit messages."
+    exit_status=1
 fi
 
-if ! hash awk 2>/dev/null; then
-   echo "warning: awk not installed - unable to check spelling."
+if [ ${#TITLE} -gt 50 ]; then
+    echo "warning: The title of the commit message exceeds 50 characters."
+    exit_status=1
+else
+    if [ -n "$BODY" ] && [ -z "$LEADINGSPACES" ]; then
+        echo "warning: The title of the commit message is not a single line, or is"
+        echo "         missing a separating blank line from the body of the message."
+        exit_status=1
+    fi
 fi
 
-WORDS=$(git log --format=%B -n 1 | aspell list | awk '!_[$0]++')
-
-if [ -n "$WORDS" ]; then
-    echo "warning: the following words might be misspelled: "
-    for word in $WORDS; do
-      echo "  - $word"
-    done
-    echo "run git commit --amend to fix this."
+LONG_LINES=$(echo "$BODY" | awk 'length > 72 { print $0 }' 2>/dev/null)
+if [ -n "$LONG_LINES" ]; then
+    echo "warning: The body of the commit message is not word-wrapped to 72 characters."
+    echo "         The following are the offending lines:"
     echo
-    exit 1
+    echo "$LONG_LINES" | sed 's/^/> /'
+    exit_status=1
 fi
+
+if [ $exit_status -ne 0 ]; then
+    echo
+    echo "run 'git commit --amend' to fix this."
+    echo
+fi
+exit $exit_status

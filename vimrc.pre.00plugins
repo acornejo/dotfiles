@@ -96,7 +96,7 @@ Plug 'vim-scripts/YankRing.vim'
 
 " C/C++/Javascript completion
 if version > 703 || (version >= 703 && has('patch584'))
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' , 'on': [] }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' , 'on': [] }
 command! YcmCompleter call plug#load('YouCompleteMe') | call youcompleteme#Enable() | YcmCompleter
 endif
 
