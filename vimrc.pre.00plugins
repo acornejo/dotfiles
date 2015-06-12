@@ -81,6 +81,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 " readline bindings for vim
 Plug 'tpope/vim-rsi'
+" repeat action for scripts
+Plug 'tpope/vim-repeat'
 " nice status bar
 Plug 'bling/vim-airline'
 " guick jumping around file
