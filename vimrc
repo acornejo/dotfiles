@@ -1,5 +1,5 @@
 " remap leader
-let mapleader = ","
+let mapleader = " "
 
 for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
@@ -199,7 +199,7 @@ map <leader>y :YRShow<CR>
 map <leader>e :e .<CR>
 " Run make in vmux
 map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
-map <leader>q :cfile /tmp/make.log<CR>:cw<CR>
+map <leader>M :cfile /tmp/make.log<CR>:cw<CR>
 " Prompt for vmux command
 map <leader>v :call VimuxPromptCommand()<CR>
 " Run Git status
