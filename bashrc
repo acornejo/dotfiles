@@ -76,6 +76,7 @@ fi
 
 # set up fzf
 export FZF_DEFAULT_OPTS='--bind alt-p:page-up,alt-n:page-down'
+hash ag 2>/dev/null && export FZF_DEFAULT_COMMAND='ag -l -g ""'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # Set bc options
