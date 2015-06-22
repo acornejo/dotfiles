@@ -217,7 +217,7 @@ command! -nargs=1 -complete=shellcmd Run | execute ':silent !'.<q-args> | execut
 inoremap {<CR> {<CR>}<c-o>O
 
 " Switch off highlighting
-nnoremap <silent> <esc> :noh<return><esc>
+nnoremap <CR> :noh<CR><CR>
 
 " Switch between current and previous file
 nnoremap <BS> <C-^>
