@@ -187,11 +187,6 @@ nnoremap <C-k> C
 cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 
 "************************************
-" Search backwards and fowards in command mode
-cnoremap <C-k> <Up>
-cnoremap <C-j> <Down>
-
-"************************************
 " Custom mappings
 "************************************
 " Open Yank Ring
@@ -215,15 +210,17 @@ vmap <leader>t: :Tabularize /:<CR>
 " change directory to current file
 command! Fcd :cd %:p:h | :echo 'changed directory to '.getcwd()
 
-" Use sudo to overwrite files.
-command! Wsudo :execute ':silent w !sudo tee % > /dev/null' | :edit!
+" run external command
 command! -nargs=1 -complete=shellcmd Run | execute ':silent !'.<q-args> | execute ':redraw!'
 
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
 
 " Switch off highlighting
-nnoremap <CR> :noh<CR><CR>
+nnoremap <silent> <esc> :noh<return><esc>
+
+" Switch between current and previous file
+nnoremap <BS> <C-^>
 
 " Save a few keystrokes
 nnoremap ; :

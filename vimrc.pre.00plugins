@@ -81,6 +81,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 " readline bindings for vim
 Plug 'tpope/vim-rsi'
+" unix wrapper utilities
+Plug 'tpope/vim-eunuch'
 " repeat action for scripts
 Plug 'tpope/vim-repeat'
 " nice status bar
