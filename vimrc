@@ -10,7 +10,6 @@ endfor
 "***********************************
 syntax on
 filetype plugin indent on
-set background=dark
 set nocompatible            " No compatibility mode
 set laststatus=2            " Always display status line
 set winaltkeys=no           " Disable alt/meta for gui menus

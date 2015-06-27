@@ -12,3 +12,9 @@ if !empty($BADTERM)
 endif
 
 colorscheme solarized
+
+if !empty($LIGHTTERM)
+    set background=light
+else
+    set background=dark
+endif
