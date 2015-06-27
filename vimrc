@@ -185,7 +185,6 @@ augroup END
 nnoremap <C-a> <Home>
 nnoremap <C-e> <End>
 inoremap <C-k> <C-o>C
-nnoremap <C-k> C
 cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 
 "************************************
@@ -280,7 +279,7 @@ if exists('$TMUX')
   inoremap <silent> <M-k> <Esc>:call TmuxOrSplitSwitch('k', 'U')<cr>
   inoremap <silent> <M-l> <Esc>:call TmuxOrSplitSwitch('l', 'R')<cr>
 
-  " Make cursor nice
+  " make cursors nice
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 else
@@ -311,6 +310,7 @@ command! -nargs=+ Dict call s:Dict(<q-args>)
 " Strip trailing whitespace
 function! s:Strip()
   execute "normal mz"
+  %s/\s\+$//gn
   %s/\s\+$//e
   execute "normal `z"
 endfunction
