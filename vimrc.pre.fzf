@@ -1,3 +1,7 @@
+function! s:oldfiles()
+    return filter(map(copy(v:oldfiles), 'expand(v:val)'), 'filereadable(v:val)')
+endfunction
+
 function! s:buflist()
   redir => ls
   silent ls
@@ -72,7 +76,7 @@ nnoremap <silent> <Leader>p :call fzf#run({
 \ })<CR>
 
 nnoremap <silent> <Leader>r :call fzf#run({
-\    'source': v:oldfiles,
+\    'source': <sid>oldfiles(),
 \    'sink' : 'e ',
 \    'options' : '-m',
 \ })<CR>

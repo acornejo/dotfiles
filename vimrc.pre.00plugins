@@ -97,6 +97,10 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-obsession'
 " Yank register management
 Plug 'vim-scripts/YankRing.vim'
+" Mark display/jump improvements
+Plug 'kshenoy/vim-signature'
+" For autocorrect
+Plug 'tpope/vim-abolish'
 
 " C/C++/Javascript completion
 if version > 703 || (version >= 703 && has('patch584'))
@@ -139,3 +143,8 @@ endif
 " endif
 
 call plug#end()
+
+" Load matchit.vim, but only if the user hasn't installed a newer version.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+  runtime! macros/matchit.vim
+endif

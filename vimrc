@@ -1,10 +1,3 @@
-" remap leader
-let mapleader = " "
-
-for f in split(glob("~/.vimrc.pre.*"), "\n")
-    execute 'source ' . escape(f, '\ "')
-endfor
-
 "***********************************
 "General VIM Config
 "***********************************
@@ -47,6 +40,7 @@ set splitbelow              " Splits occur below current window
 set splitright              " Splits occur to the right of current window
 set nostartofline           " Don’t reset cursor to start of line when moving around.
 set exrc                    " Enable per-directory .vimrc files
+set secure                  " disable unsafe commands in per-directory .vimrc
 
 " Use clipboard register.
 if has('unnamedplus')
@@ -136,6 +130,9 @@ if executable('ag')
     let g:ackprg = 'ag --nogroup --nocolor --column'
 endif
 
+" remap leader
+let mapleader = " "
+
 "************************************
 " Autocommands
 "************************************
@@ -191,139 +188,21 @@ cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
 "************************************
 " Open Yank Ring
 map <leader>y :YRShow<CR>
-map <leader>e :e .<CR>
 " Run make in vmux
 map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
 map <leader>M :cfile /tmp/make.log<CR>:cw<CR>
 " Prompt for vmux command
 map <leader>v :call VimuxPromptCommand()<CR>
-" Run Git status
-map <leader>g :Gstatus<CR>
-" Switch to the directory of the current buffer.
-map <leader>c :Fcd<cr>
-" Tabularize shortcuts
-nmap <leader>t= :Tabularize /=<CR>
-vmap <leader>t= :Tabularize /=<CR>
-nmap <leader>t: :Tabularize /:<CR>
-vmap <leader>t: :Tabularize /:<CR>
-
-" change directory to current file
-command! Fcd :cd %:p:h | :echo 'changed directory to '.getcwd()
-
-" run external command
-command! -nargs=1 -complete=shellcmd Run | execute ':silent !'.<q-args> | execute ':redraw!'
-
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
-
 " Switch off highlighting
 nnoremap <CR> :noh<CR><CR>
-
 " Switch between current and previous file
 nnoremap <BS> <C-^>
-
 " Save a few keystrokes
 nnoremap ; :
 
-" Autocorrect some common errors
-iab disc disk
-iab discs disks
-iab Disc Disk
-iab Discs Disks
-iab colour color
-iab neighbour neighbor
-iab neighbours neighbors
-iab neighbourhood neighborhood
-iab behaviour behavior
-iab Behaviour Behavior
-iab centre center
-iab Centre Center
-iab ocurr occur
-iab cancelling canceling
-iab travelling traveling
-iab Travelling traveling
-iab Cancelling Canceling
-
-set ttimeout ttimeoutlen=50
-if has("unix")
-    let c='a'
-    while c <= 'z'
-        " maybe use "set <A-".nr2char(c)
-        exec "set <A-".c.">=\e".c
-        exec "imap \e".c." <A-".c.">"
-        let c = nr2char(1+char2nr(c))
-    endw
-endif
-
-" Set window movement bindings (that play well with tmux)
-if exists('$TMUX')
-  function! TmuxOrSplitSwitch(wincmd, tmuxdir)
-    let previous_winnr = winnr()
-    execute "wincmd " . a:wincmd
-    if previous_winnr == winnr()
-        silent call system("tmux select-pane -" . a:tmuxdir)
-    endif
-  endfunction
-
-  let previous_title = substitute(system("tmux display-message -p '#{pane_title}'"), '\n', '', '')
-  let &t_ti = "\<Esc>]2;vim\<Esc>\\" . &t_ti
-  let &t_te = "\<Esc>]2;". previous_title . "\<Esc>\\" . &t_te"
-
-  nnoremap <silent> <M-h> :call TmuxOrSplitSwitch('h', 'L')<cr>
-  nnoremap <silent> <M-j> :call TmuxOrSplitSwitch('j', 'D')<cr>
-  nnoremap <silent> <M-k> :call TmuxOrSplitSwitch('k', 'U')<cr>
-  nnoremap <silent> <M-l> :call TmuxOrSplitSwitch('l', 'R')<cr>
-  inoremap <silent> <M-h> <Esc>:call TmuxOrSplitSwitch('h', 'L')<cr>
-  inoremap <silent> <M-j> <Esc>:call TmuxOrSplitSwitch('j', 'D')<cr>
-  inoremap <silent> <M-k> <Esc>:call TmuxOrSplitSwitch('k', 'U')<cr>
-  inoremap <silent> <M-l> <Esc>:call TmuxOrSplitSwitch('l', 'R')<cr>
-
-  " make cursors nice
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  map <M-h> <C-w>h
-  map <M-j> <C-w>j
-  map <M-k> <C-w>k
-  map <M-l> <C-w>l
-  " make cursors nice
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
-
-" Shell command
-function! s:Dict(command)
-  let command = join(map(split('dict ' . a:command), 'expand(v:val)'))
-  let winnr = bufwinnr('^dict$')
-  silent! execute  winnr < 0 ? 'botright new ' . fnameescape('dict') : winnr . 'wincmd w'
-  setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap
-  echo 'Searching for word ' . command . '...'
-  silent! execute 'silent %!'. command
-  silent! execute 'resize ' . line('$')
-  silent! redraw
-  silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-  silent! execute 'nnoremap <silent> <buffer> q :bd<CR>'
-endfunction
-command! -nargs=+ Dict call s:Dict(<q-args>)
-
-" Strip trailing whitespace
-function! s:Strip()
-  execute "normal mz"
-  %s/\s\+$//gn
-  %s/\s\+$//e
-  execute "normal `z"
-endfunction
-command! Strip call s:Strip()
-
-command! -bar -nargs=? -bang Scratch :silent enew<bang>|set buftype=nofile bufhidden=hide noswapfile buflisted filetype=<args> modifiable
-
-" Load matchit.vim, but only if the user hasn't installed a newer version.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-  runtime! macros/matchit.vim
-endif
-
-for f in split(glob("~/.vimrc.post.*"), "\n")
+for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
 endfor
-
-set secure                  " disable unsafe commands in per-directory .vimrc"
+au VimEnter * for f in split(glob("~/.vimrc.post.*"), "\n") | execute 'source ' . escape(f, '\ "') | endfor

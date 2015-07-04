@@ -1,0 +1,40 @@
+" search in dictionary
+function! s:Dict(command)
+  if ! executable('dict')
+    echo "dict binary not found"
+  else
+    let command = join(map(split('dict ' . a:command), 'expand(v:val)'))
+    let winnr = bufwinnr('^dict$')
+    silent! execute  winnr < 0 ? 'botright new ' . fnameescape('dict') : winnr . 'wincmd w'
+    setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap
+    echo 'Searching for word ' . command . '...'
+    silent! execute 'silent %!'. command
+    silent! execute 'resize ' . line('$')
+    silent! redraw
+    silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+    silent! execute 'nnoremap <silent> <buffer> q :bd<CR>'
+  endif
+endfunction
+command! -nargs=+ Dict call s:Dict(<q-args>)
+
+" strip trailing whitespace
+function! s:Strip()
+  execute "normal mz"
+  %s/\s\+$//gn
+  %s/\s\+$//e
+  execute "normal `z"
+endfunction
+command! Strip call s:Strip()
+
+" open scratch buffer
+function! s:Scratch()
+  silent! execute ':enew'
+  setlocal buftype=nofile bufhidden=hide noswapfile buflisted modifiable
+endfunction
+command! -nargs=? Scratch call s:Scratch()
+
+" change directory to current file
+command! Cd :cd %:p:h | :echo 'changed directory to '.getcwd()
+
+" run external command
+command! -nargs=1 -complete=shellcmd Run | execute ':silent !'.<q-args> | execute ':redraw!'

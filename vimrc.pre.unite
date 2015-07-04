@@ -1,9 +1,11 @@
-function! s:hasplugin(name)
-    let pat = 'autoload/'.a:name.'.vim'
-    return !empty(globpath(&rtp, pat))
+" define plugin function
+function! HasPlugin(name)
+    let al = 'autoload/'.a:name.'.vim'
+    let pl = 'plugin/'.a:name.'.vim'
+    return !empty(globpath(&rtp, al)) || !empty(globpath(&rtp, pl))
 endfunction
 
-if ! s:hasplugin("unite")
+if !HasPlugin("unite")
     finish
 endif
 
