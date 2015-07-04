@@ -20,6 +20,15 @@ function! s:ag_trigger()
   endif
 endfunction
 
+function! s:ag_curword()
+  let pattern = expand('<cword>')
+  if empty(pattern)
+    echo "no word under cursor."
+  else
+    execute 'Ag' pattern
+  endif
+endfunction
+
 function! s:ag_handler(lines)
   if len(a:lines) < 2 | return | endif
 
@@ -47,6 +56,8 @@ command! -nargs=1 Ag call fzf#run({
 nnoremap <silent> <Leader>f :FZF<CR>
 
 nnoremap <silent> <Leader>a :call <sid>ag_trigger()<CR>
+
+nnoremap <silent> <Leader>A :call <sid>ag_curword()<CR>
 
 nnoremap <silent> <Leader>b :call fzf#run({
 \   'source':  reverse(<sid>buflist()),
