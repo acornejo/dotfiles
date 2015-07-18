@@ -176,14 +176,6 @@ augroup custom-cmds
 augroup END
 
 "************************************
-" Readline-like editing not in vim-rsi
-"************************************
-nnoremap <C-a> <Home>
-nnoremap <C-e> <End>
-inoremap <C-k> <C-o>C
-cnoremap <C-k> <C-\>estrpart(getcmdline(), 0, getcmdpos()-1)<CR>
-
-"************************************
 " Custom mappings
 "************************************
 " Open Yank Ring
