@@ -1,0 +1,8 @@
+" define diftab command
+command GdiffTab tabedit %|Gdiff
+
+" add difftab binding to commit/status window
+autocmd FileType gitcommit noremap <buffer> dt :GdiffTab<cr>
+
+" delete fugitive buffers when inactive
+autocmd BufReadPost fugitive://* set bufhidden=delete
