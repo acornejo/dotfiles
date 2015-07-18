@@ -62,7 +62,7 @@ catch
 endtry
 
 " Change settings depending on mode
-if (has("gui_running"))
+if has("gui_running")
     set guioptions-=m " remove menubar
     set guioptions-=T " remove toolbar
     set guioptions-=r " remove scrollbar
@@ -120,6 +120,7 @@ let g:airline_right_sep = ''
 let g:syntastic_html_tidy_ignore_errors=['trimming empty', 'lacks "alt" attribute', 'lacks "src" attribute']
 let g:syntastic_check_on_open = 0
 let g:signify_vcs_list = [ 'git' ]
+let g:rsi_no_meta = 1
 
 " Use silversearcher instead of grep
 if executable('ag')
@@ -167,19 +168,21 @@ augroup custom-cmds
     " enable autocomplete
     autocmd Filetype java setlocal omnifunc=javacomplete#Complete
     autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-    " delete fugitive buffers when inactive
-    autocmd BufReadPost fugitive://* set bufhidden=delete
     " change directory
     autocmd VimEnter * cd %:p:h
     " close unused netrw buffers
     autocmd FileType netrw setl bufhidden=wipe
+    " http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+    au BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
+    au InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
+    " Unset paste on InsertLeave
+    au InsertLeave * silent! set nopaste
 augroup END
+
 
 "************************************
 " Custom mappings
 "************************************
-" Open Yank Ring
-map <leader>y :YRShow<CR>
 " Run make in vmux
 map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
 map <leader>M :cfile /tmp/make.log<CR>:cw<CR>

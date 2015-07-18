@@ -1,3 +1,6 @@
+" disable since meta bindings break macros that use <Esc>char
+finish
+
 " fix meta key bindings
 set ttimeout ttimeoutlen=50
 if has("unix")

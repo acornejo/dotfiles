@@ -1,19 +1,32 @@
-function! s:oldfiles()
+function! s:recent_list()
     return filter(map(copy(v:oldfiles), 'expand(v:val)'), 'filereadable(v:val)')
 endfunction
 
-function! s:buflist()
+function! s:buf_list()
   redir => ls
   silent ls
   redir END
   return split(ls, '\n')
 endfunction
 
-function! s:bufopen(e)
+function! s:buf_handler(e)
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
-function! s:ag_trigger()
+function! s:reg_list()
+  return ['0: ' . @0, '1: ' . @1, '2: ' . @2, '3: ' . @3, '4: ' . @4, '5: ' . @5, '6: ' . @6, '7: ' . @7, '8: ' . @8, '9: ' . @9]
+endfunction
+
+function! s:reg_handler(reg)
+  if empty(a:reg)
+    echo "aborted register paste"
+  else
+    let token = split(a:reg, '\: ')
+    execute 'normal! "' . token[0] . 'p'
+  endif
+endfunction
+
+function! s:ag_prompt()
   call inputsave()
   let pattern = input('Ag: ')
   call inputrestore()
@@ -50,33 +63,61 @@ function! s:dir_handler(dir)
 endfunction
 
 command! -nargs=1 Ag call fzf#run({
-\ 'source':  'ag --nogroup --column --color "'.escape(<q-args>, '"\').'"',
-\ 'sink*':   function('<sid>ag_handler'),
-\ 'dir':     getcwd(),
+\ 'source': 'ag --nogroup --column --color "'.escape(<q-args>, '"\').'"',
+\ 'sink*': function('<sid>ag_handler'),
+\ 'dir': getcwd(),
 \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --no-multi',
-\ 'down':    '50%'
+\ 'down': '50%'
 \ })
 
+command! FZFTag if !empty(tagfiles()) | call fzf#run({
+\ 'source': "sed '/^\\!/d;s/\t.*//' " . join(tagfiles()) . ' | uniq',
+\ 'sink': 'tag',
+\ 'options': '+m',
+\ 'down': '50%'
+\ }) | else | echo 'No tags' | endif
+
+command! FZFTagFile if !empty(tagfiles()) | call fzf#run({
+\ 'source': "cat " . join(tagfiles()) . ' | grep -P "' . expand('%:t') . '"' . " | sed '/^\\!/d;s/\t.*//' | uniq",
+\ 'sink': 'tag',
+\ 'options': '+m',
+\ 'down': '50%'
+\ }) | else | echo 'No tags' | endif
+
+command! FZFBuf call fzf#run({
+\ 'source': reverse(<sid>buf_list()),
+\ 'sink': function('<sid>buf_handler'),
+\ 'options': '-m',
+\ 'down': len(<sid>buf_list()) + 2
+\ })
+
+command! FZFYank call fzf#run({
+\ 'source': reverse(<sid>reg_list()),
+\ 'sink': function('<sid>reg_handler'),
+\ 'options': '-m',
+\ 'down': 12
+\ })
+
+command! FZFRecent call fzf#run({
+\ 'source': <sid>recent_list(),
+\ 'sink': 'e',
+\ 'options': '-m',
+\ 'down': '50%'
+\ })
+
+command! FZFProjects call fzf#run({
+\ 'source': 'ls -1 ~/src',
+\ 'sink': function('<sid>dir_handler'),
+\ 'options': '-m',
+\ 'down': '50%'
+\ })
+
+nnoremap <silent> <Leader>t :FZFTagFile<CR>
+nnoremap <silent> <Leader>T :FZFTag<CR>
 nnoremap <silent> <Leader>f :FZF<CR>
-
-nnoremap <silent> <Leader>a :call <sid>ag_trigger()<CR>
-
+nnoremap <silent> <Leader>a :call <sid>ag_prompt()<CR>
 nnoremap <silent> <Leader>A :call <sid>ag_curword()<CR>
-
-nnoremap <silent> <Leader>b :call fzf#run({
-\   'source':  reverse(<sid>buflist()),
-\   'sink':    function('<sid>bufopen'),
-\   'options': '+m',
-\   'down':    len(<sid>buflist()) + 2
-\ })<CR>
-
-nnoremap <silent> <Leader>p :call fzf#run({
-\    'source': 'ls -1 ~/src',
-\    'sink' : function('<sid>dir_handler'),
-\ })<CR>
-
-nnoremap <silent> <Leader>r :call fzf#run({
-\    'source': <sid>oldfiles(),
-\    'sink' : 'e ',
-\    'options' : '-m',
-\ })<CR>
+nnoremap <silent> <Leader>y :FZFYank<CR>
+nnoremap <silent> <Leader>b :FZFBuf<CR>
+nnoremap <silent> <Leader>r :FZFRecent<CR>
+nnoremap <silent> <Leader>p :FZFProjects<CR>
