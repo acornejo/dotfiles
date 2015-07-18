@@ -2,9 +2,9 @@
 
 if hash gsettings 2>/dev/null
 then
-    gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 6
-    gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 1
-    gsettings set org.compiz.unityshell:/org/compiz/profiles/unity/plugins/unityshell/ launcher-hide-mode 1
+    gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 6 >/dev/null 2>&1
+    gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 1 >/dev/null 2>&1
+    gsettings set org.compiz.unityshell:/org/compiz/profiles/unity/plugins/unityshell/ launcher-hide-mode 1 >/dev/null 2>&1
 fi
 
 if hash gconftool-2 2>/dev/null

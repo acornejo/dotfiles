@@ -19,7 +19,7 @@ install_cask() {
 
 trap onexit 1 2 3 15 ERR
 
-echo "Install basic packages? [git, tmux, vim, autojump, curl, wget, fzf]"
+echo "Install basic packages? [git, tmux, vim, autojump, curl, wget]"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
@@ -34,32 +34,11 @@ select yn in "Yes" "No"; do
                 sudo apt-get install autojump tmux vim htop git curl wget bash bash-completion w3m
                 sudo apt-get install --no-install-recommends
             fi
-            if hash git 2>/dev/null; then
-                git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-                ~/.fzf/install
-            fi
             break;;
         No )
             break;;
     esac
 done
-
-if [ -e "$HOME/.vimbundle.vim" ] && hash vim 2>/dev/null && hash git 2>/dev/null; then
-    echo "Install vim plugins (requires git and vim)?"
-    select yn in "Yes" "No"; do
-        case $yn in
-            Yes )
-                VUNDLE_GIT="https://github.com/gmarik/vundle.git"
-                VUNDLE_DIR="$HOME/.vim/bundle/vundle"
-                if [ ! -e "$VUNDLE_DIR" ]; then
-                    git clone $VUNDLE_GIT $VUNDLE_DIR
-                fi
-                vim -u "$HOME/.vimbundle.vim" +PluginInstall! +PluginClean +qall;
-                break;;
-            No ) break;;
-        esac
-    done
-fi
 
 echo "Install extra packages? [chrome, dropbox, gimp, vlc, latex]"
 select yn in "Yes" "No"; do
