@@ -1,11 +1,7 @@
 #!/bin/bash
 
 script_dir() {
-    local cdir=$(cd $(dirname $0) && pwd)
-    while [ -n "$(readlink $cdir)" ]; do
-        cdir=$(readlink $cdir)
-    done
-    echo $(dirname $cdir)
+    echo $(cd $(dirname $0) && git rev-parse --show-toplevel)
 }
 
 run_hook() {
@@ -36,7 +32,9 @@ link_file() {
         fi
         run_hook "$1/.hook-pre"
         for f in $list; do
-            link_file "$1/$f" "$2/$3$f"
+            if ! grep -Fxq "$f" "$1/.exclude" 2>/dev/null; then
+                link_file "$1/$f" "$2/$3$f"
+            fi
         done
         run_hook "$1/.hook-post"
     else

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+script_dir() {
+    echo $(cd $(dirname $0) && git rev-parse --show-toplevel)
+}
+
+BASE_DIR=$(script_dir)
+
+FILES=$(find $HOME -maxdepth 4 -type l)
+for FILE in $FILES; do
+    LINK=$(readlink $FILE)
+    if [[ ${LINK} = ${BASE_DIR}* ]]; then
+        rm -f $FILE
+    fi
+done
