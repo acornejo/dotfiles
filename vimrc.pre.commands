@@ -33,6 +33,36 @@ function! s:Scratch()
 endfunction
 command! -nargs=? Scratch call s:Scratch()
 
+function! s:SwitchSourceHeader()
+  let source = ["cpp", "C", "c"]
+  let header = ["h", "hpp"]
+  let candidates = []
+
+  for ext in source
+    if expand("%:e") == ext
+        let candidates = header
+        break
+    endif
+  endfor
+
+  for ext in header
+    if expand("%:e") == ext
+        let candidates = source
+        break
+    endif
+  endfor
+
+  for ext in candidates
+    let file = expand("%:t:r") . "." . ext
+    let found = findfile (file)
+    if filereadable(found)
+        execute ":edit " . found
+        break
+    endif
+  endfor
+endfunction
+command! SwitchSourceHeader call s:SwitchSourceHeader()
+
 " change directory to current file
 command! Cd :cd %:p:h | :echo 'changed directory to '.getcwd()
 

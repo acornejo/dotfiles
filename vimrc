@@ -188,6 +188,8 @@ map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
 map <leader>M :cfile /tmp/make.log<CR>:cw<CR>
 " Prompt for vmux command
 map <leader>v :call VimuxPromptCommand()<CR>
+" Switch between source and header
+map <leader>s :SwitchSourceHeader<CR>
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
 " Switch off highlighting
