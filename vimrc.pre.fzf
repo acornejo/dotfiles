@@ -13,6 +13,18 @@ function! s:buf_handler(e)
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
+function! s:tag_handler(tag)
+    if !empty(a:tag)
+        let token = split(split(a:tag, '\t')[2],';"')[0]
+        let m = &magic
+        setlocal nomagic
+        execute token
+        if m
+            setlocal magic
+        endif
+    endif
+endfunction
+
 function! s:reg_list()
   return ['0: ' . @0, '1: ' . @1, '2: ' . @2, '3: ' . @3, '4: ' . @4, '5: ' . @5, '6: ' . @6, '7: ' . @7, '8: ' . @8, '9: ' . @9]
 endfunction
@@ -78,9 +90,9 @@ command! FZFTag if !empty(tagfiles()) | call fzf#run({
 \ }) | else | echo 'No tags' | endif
 
 command! FZFTagFile if !empty(tagfiles()) | call fzf#run({
-\ 'source': "cat " . join(tagfiles()) . ' | grep -P "' . expand('%:t') . '"' . " | sed '/^\\!/d;s/\t.*//' | uniq",
-\ 'sink': 'tag',
-\ 'options': '+m',
+\ 'source': "cat " . join(tagfiles()) . ' | grep -P "' . expand('%:t') . '"',
+\ 'sink': function('<sid>tag_handler'),
+\ 'options': '+m --with-nth=1',
 \ 'down': '50%'
 \ }) | else | echo 'No tags' | endif
 
@@ -106,7 +118,7 @@ command! FZFRecent call fzf#run({
 \ })
 
 command! FZFProjects call fzf#run({
-\ 'source': 'ls -1 ~/src',
+\ 'source': "ls -1p ~/src | awk -F/ '/\\/$/ {print $1}'",
 \ 'sink': function('<sid>dir_handler'),
 \ 'options': '-m',
 \ 'down': '50%'
