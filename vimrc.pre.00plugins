@@ -18,6 +18,8 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 
 " #### filetype support
+" C/C++
+Plug 'octol/vim-cpp-enhanced-highlight'
 " LESS
 Plug 'groenewege/vim-less', {'for': 'less'}
 " Javascript
@@ -95,8 +97,6 @@ Plug 'Valloric/MatchTagAlways'
 Plug 'terryma/vim-multiple-cursors'
 " session management
 Plug 'tpope/vim-obsession'
-" Yank register management
-Plug 'vim-scripts/YankRing.vim'
 " Mark display/jump improvements
 Plug 'kshenoy/vim-signature'
 " For autocorrect
@@ -105,7 +105,7 @@ Plug 'tpope/vim-abolish'
 " C/C++/Javascript completion
 if version > 703 || (version >= 703 && has('patch584'))
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' , 'on': [] }
-command! YcmCompleter call plug#load('YouCompleteMe') | call youcompleteme#Enable() | YcmCompleter
+command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
 endif
 
 " #### disabled
@@ -141,6 +141,8 @@ endif
 " if version >= 703
 "  Plug 'mhinz/vim-signify'
 " endif
+" Yank register management
+" Plug 'vim-scripts/YankRing.vim'
 
 call plug#end()
 
