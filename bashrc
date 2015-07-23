@@ -164,8 +164,8 @@ fi
 # for autojump
 if [ -f "/usr/share/autojump/autojump.bash" ]; then
     . /usr/share/autojump/autojump.bash
-elif [ -f "/usr/local/etc/autojump.bash" ]; then
-    . /usr/local/etc/autojump.bash
+elif [ -f "/usr/local/share/autojump/autojump.bash" ]; then
+    . /usr/local/share/autojump/autojump.bash
 fi
 
 # set preferred applications
