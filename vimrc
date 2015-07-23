@@ -44,9 +44,9 @@ set secure                  " disable unsafe commands in per-directory .vimrc
 
 " Use clipboard register.
 if has('unnamedplus')
-    set clipboard& clipboard+=unnamedplus
+    set clipboard+=unnamedplus
 else
-    set clipboard& clipboard+=unnamed
+    set clipboard+=unnamed
 endif
 
 " Storage of various files
@@ -119,6 +119,7 @@ let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:syntastic_html_tidy_ignore_errors=['trimming empty', 'lacks "alt" attribute', 'lacks "src" attribute']
 let g:syntastic_check_on_open = 0
+let g:syntastic_cpp_config_file = '.vim_syntax'
 let g:signify_vcs_list = [ 'git' ]
 let g:rsi_no_meta = 1
 
@@ -169,7 +170,7 @@ augroup custom-cmds
     autocmd Filetype java setlocal omnifunc=javacomplete#Complete
     autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
     " change directory
-    autocmd VimEnter * cd %:p:h
+    autocmd VimEnter * if isdirectory(expand('%:p:h')) | cd %:p:h | endif
     " close unused netrw buffers
     autocmd FileType netrw setl bufhidden=wipe
     " http://vim.wikia.com/wiki/Highlight_unwanted_spaces
@@ -194,10 +195,10 @@ map <leader>s :SwitchSourceHeader<CR>
 inoremap {<CR> {<CR>}<c-o>O
 " Switch off highlighting
 nnoremap <CR> :noh<CR><CR>
-" Switch between current and previous file
-nnoremap <BS> <C-^>
 " Save a few keystrokes
 nnoremap ; :
+" close buffer not window
+nnoremap ZC :bp<bar>bd #<CR>
 
 for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
