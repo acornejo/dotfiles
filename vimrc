@@ -119,6 +119,8 @@ let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:syntastic_html_tidy_ignore_errors=['trimming empty', 'lacks "alt" attribute', 'lacks "src" attribute']
 let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {"mode": "passive" }
 let g:syntastic_cpp_config_file = '.vim_syntax'
 let g:signify_vcs_list = [ 'git' ]
 let g:rsi_no_meta = 1
@@ -176,6 +178,8 @@ augroup custom-cmds
     " http://vim.wikia.com/wiki/Highlight_unwanted_spaces
     au BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
     au InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
+    " spell check commit messages
+    au BufNewFile,BufRead COMMIT_EDITMSG setlocal spell
     " Unset paste on InsertLeave
     au InsertLeave * silent! set nopaste
 augroup END
@@ -185,20 +189,20 @@ augroup END
 " Custom mappings
 "************************************
 " Run make in vmux
-map <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
-map <leader>M :cfile /tmp/make.log<CR>:cw<CR>
+nnoremap <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
+nnoremap <leader>M :cfile /tmp/make.log<CR>:cw<CR>
 " Prompt for vmux command
-map <leader>v :call VimuxPromptCommand()<CR>
+nnoremap <leader>v :call VimuxPromptCommand()<CR>
 " Switch between source and header
-map <leader>s :SwitchSourceHeader<CR>
+nnoremap <leader>s :SwitchSourceHeader<CR>
+" close buffer not window
+nnoremap <leader>C :bp<bar>bd #<CR>
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
 " Switch off highlighting
-nnoremap <CR> :noh<CR><CR>
+nnoremap <silent> <backspace> :noh<CR>
 " Save a few keystrokes
-nnoremap ; :
-" close buffer not window
-nnoremap ZC :bp<bar>bd #<CR>
+nnoremap <cr> :
 
 for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
