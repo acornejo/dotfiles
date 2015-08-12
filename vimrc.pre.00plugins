@@ -18,6 +18,8 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 
 " #### filetype support
+" Git
+Plug 'tpope/vim-git'
 " C/C++
 Plug 'octol/vim-cpp-enhanced-highlight'
 " LESS
@@ -65,7 +67,7 @@ if version >= 702
 Plug 'tomtom/tcomment_vim'
 endif
 " snippets
-if version >= 701 && s:python_ver >= 260
+if version >= 703 && s:python_ver >= 260
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 endif
@@ -89,12 +91,12 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-repeat'
 " nice status bar
 Plug 'bling/vim-airline'
-" guick jumping around file
+" quick jumping around file
 Plug 'Lokaltog/vim-easymotion'
+" camel case ,w ,e ,b motions
+Plug 'bkad/CamelCaseMotion'
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
-" multiple cursors
-Plug 'terryma/vim-multiple-cursors'
 " session management
 Plug 'tpope/vim-obsession'
 " Mark display/jump improvements
@@ -143,6 +145,8 @@ endif
 " endif
 " Yank register management
 " Plug 'vim-scripts/YankRing.vim'
+" " multiple cursors
+" Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
 
