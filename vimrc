@@ -202,7 +202,9 @@ inoremap {<CR> {<CR>}<c-o>O
 " Switch off highlighting
 nnoremap <silent> <backspace> :noh<CR>
 " Save a few keystrokes
-nnoremap <cr> :
+nnoremap <expr> <cr> (&buftype is# "" ? ":" : "<cr>")
+" disable Ex mode key
+nnoremap Q <nop>
 
 for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
