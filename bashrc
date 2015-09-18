@@ -1,7 +1,12 @@
 # This file is sourced by all *interactive* bash shells on startup.  This
 # file should generate *no output* or it will break the scp and rcp commands.
 
-# Set path
+# Add ~/.local/bin to path
+if [[ ":$PATH:" != *":$HOME/.local/bin"* ]]; then
+    export PATH=$HOME/.local/bin:$PATH
+fi
+
+# Add ~/.bin to path
 if [[ ":$PATH:" != *":$HOME/.bin:"* ]]; then
     export PATH=$HOME/.bin:/usr/local/bin:$PATH
 fi
@@ -301,7 +306,7 @@ if [ `type -t command_not_found_handle` ]; then
                 open "$FILE"
             fi
         elif [ -d "$FILE" ]; then
-            cd "$FILE"
+            cd "$FILE" && ls -p
         else
             original_command_not_found_handle
         fi
