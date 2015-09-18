@@ -590,6 +590,21 @@ Remove::
 
     bluez ttf-arabeyes ttf-arphic-ukai ttf-arphic-uming ttf-baekmuk ttf-bengali-fonts ttf-devanagari-fonts ttf-gujarati-fonts ttf indic-fonts ttf-kannada-fonts ttf-kochi-gothic ttf-kochi-mincho ttf-lao ttf-malayalam-fonts ttf-oriya-fonts ttf-punjabi-fonts ttf-tamil-fonts ttf-telugu-fonts ttf-thai-tlwg cups
 
+Core-Dumps
+==========
+
+To enable once:
+
+    sysctl kernel.core_pattern="/tmp/core.%e.%p.%h.%t"
+    sysctl fs.suid_dumpable=1
+    ulimit -c unlimited
+
+To persist across reboots:
+
+    echo " * soft core unlimited" >> /etc/security/limits.conf
+    echo "kernel.core_pattern=/tmp/core.%e.%p.%h.%t" >> /etc/sysctl.conf
+    echo "fs.suid_dumpable=1 >> /etc/sysctl.conf
+
 Recover-HD
 ==========
 Go into server and dump your drive::
@@ -1039,6 +1054,26 @@ To extract the public key out of certificate
 To view a certificate
 
     openssl x509 -in certificate.{crt,cer,pem} -text -noout
+
+Encrypt-ENCFS:
+
+To mount an encrypted volume:
+
+    encfs ~/.hidden ~/visible
+
+To unmount an encrypted volume:
+
+    fusermount -u ~/visible
+
+Install in Debian:
+
+    apt-get install encfs
+
+Install in OSX:
+
+    brew install Caskroom/cask/osxfuse
+    brew install encfs
+
 
 Encrypt-LOOPAES
 ===============
