@@ -25,7 +25,7 @@ select yn in "Yes" "No"; do
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
                 install_brew
-                brew install autojump tmux reattach-to-user-namespace htop wget bash bash-completion w3m
+                brew install autojump tmux reattach-to-user-namespace htop wget bash bash-completion w3m the_silver_searcher
                 test -f /usr/local/bin/bash && echo /usr/local/bin/bash | sudo tee -a /etc/shells && chsh -s /usr/local/bin/bash
                 sudo ln -sf /usr/local/bin/tmux /usr/bin
                 sudo ln -sf /usr/local/bin/reattach-to-user-namespace /usr/bin
