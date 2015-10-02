@@ -40,7 +40,7 @@ define binom(n, k) {
 
     res = 1;
     for (i=1; i<=k; i++)
-        res *= (n+1-i)/i;
+        res = int(res*(n+1-i)/i);
     return res;
 }
 
