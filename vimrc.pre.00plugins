@@ -103,6 +103,8 @@ Plug 'tpope/vim-obsession'
 Plug 'kshenoy/vim-signature'
 " For autocorrect
 Plug 'tpope/vim-abolish'
+" multiple cursors
+Plug 'terryma/vim-multiple-cursors'
 
 " C/C++/Javascript completion
 if version > 703 || (version >= 703 && has('patch584'))
@@ -145,8 +147,6 @@ endif
 " endif
 " Yank register management
 " Plug 'vim-scripts/YankRing.vim'
-" " multiple cursors
-" Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
 
