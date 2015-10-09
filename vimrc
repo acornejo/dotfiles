@@ -195,6 +195,8 @@ nnoremap <leader>M :cfile /tmp/make.log<CR>:cw<CR>
 nnoremap <leader>v :call VimuxPromptCommand()<CR>
 " Switch between source and header
 nnoremap <leader>s :SwitchSourceHeader<CR>
+" Split line
+nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>$
 " close buffer not window
 nnoremap <leader>C :bp<bar>bd #<CR>
 " Smart identation with braces
@@ -205,6 +207,7 @@ nnoremap <silent> <backspace> :noh<CR>
 nnoremap <expr> <cr> (&buftype is# "" ? ":" : "<cr>")
 " disable Ex mode key
 nnoremap Q <nop>
+
 
 for f in split(glob("~/.vimrc.pre.*"), "\n")
     execute 'source ' . escape(f, '\ "')
