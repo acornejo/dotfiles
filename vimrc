@@ -198,7 +198,7 @@ nnoremap <leader>s :SwitchSourceHeader<CR>
 " Split line
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>$
 " close buffer not window
-nnoremap <leader>C :bp<bar>bd #<CR>
+nnoremap <leader>Z :bp<bar>bd #<CR>
 " Smart identation with braces
 inoremap {<CR> {<CR>}<c-o>O
 " Switch off highlighting
