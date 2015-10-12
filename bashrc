@@ -311,6 +311,13 @@ if hash fzf 2>/dev/null; then
             fi
         fi
     }
+
+    fbr() {
+        local branches branch
+        branches=$(git branch | awk '{print $NF}' | sort -r) &&
+        branch=$(echo "$branches" | fzf +m) &&
+        test -t 1 && git checkout $branch || echo $branch
+    }
 fi
 
 # extend command not found to open files
