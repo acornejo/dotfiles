@@ -321,7 +321,7 @@ if hash fzf 2>/dev/null; then
 fi
 
 # extend command not found to open files
-if type -t command_not_found_handle && hash file 2>/dev/null; then
+if type -t command_not_found_handle >/dev/null && hash file 2>/dev/null; then
     eval "original_$(declare -f command_not_found_handle)"
     command_not_found_handle () {
         local FILE="$*"
