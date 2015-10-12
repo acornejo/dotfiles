@@ -11,6 +11,14 @@ if [[ ":$PATH:" != *":$HOME/.bin:"* ]]; then
     export PATH=$HOME/.bin:/usr/local/bin:$PATH
 fi
 
+# Ammend path for user pypi
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH="$PATH:$HOME/.local/bin"
+fi
+if ls -1d $HOME/Library/Python/*/bin >/dev/null 2>&1; then
+    export PATH="$PATH:$(ls -1d $HOME/Library/Python/*/bin 2>/dev/null | head -n1)"
+fi
+
 for bashrc in ~/.bash.pre.*; do
     test -f "$bashrc" && source "$bashrc"
 done
@@ -27,8 +35,10 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
         fi
     fi
     if [ "$SSH_NEED_AGENT" = "yes" ]; then
-        ssh-agent | sed "s/^echo/#echo/" > $SSH_AGENT_FILE
-        . $SSH_AGENT_FILE
+        if hash ssh-agent 2>/dev/null; then
+            ssh-agent | sed "s/^echo/#echo/" > $SSH_AGENT_FILE
+            . $SSH_AGENT_FILE
+        fi
     fi
     unset SSH_AGENT_FILE SSH_NEED_AGENT
 fi
@@ -103,7 +113,7 @@ if [ "$PS1" ]; then
         violet=""
         white=""
         yellow=""
-    elif tput setaf 1 &> /dev/null; then
+    elif hash tput 2>/dev/null && tput setaf 1 &> /dev/null; then
         reset=$(tput sgr0);
         # Solarized colors, taken from http://git.io/solarized-colors.
         black=$(tput setaf 0);
@@ -164,6 +174,12 @@ if [ "$PS1" ]; then
     export PS4="+ "
 
     unset reset black blue cyan green orange purple red violet white yellow titleString userColor promptColor promptString gitString
+
+    # customize bash completion
+    bind 'TAB:menu-complete'
+    bind 'set completion-ignore-case on'
+    bind 'set menu-complete-display-prefix on'
+    bind 'set show-all-if-ambiguous on'
 fi
 
 # for autojump
@@ -204,7 +220,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # History settings
-export HISTIGNORE="&:ls:ll:l:[bf]g:exit"
+export HISTIGNORE="&:?:??:???:exit:[ \t]*"
 export HISTCONTROL="ignoredups:erasedups"
 export HISTFILESIZE=50000
 export HISTSIZE=10000
@@ -213,7 +229,13 @@ shopt -s cmdhist      # allow multiline history cmds
 shopt -s histreedit   # edit history if cmd failed
 shopt -s histverify   # allow editing history command before executing
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-alias history_reload="history -c; history -r"
+history_reload () {
+    local TEMP=$(mktemp -t history.XXXXX)
+    awk '! x[$0]++' $HISTFILE > $TEMP
+    mv $TEMP $HISTFILE
+    history -c
+    history -r
+}
 
 # Use newer bash features
 if [ -n "$BASH_VERSINFO" ] && [ ${BASH_VERSINFO[0]} -eq 4 ]; then
