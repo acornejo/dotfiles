@@ -1,58 +1,55 @@
-Scientific-Python
-=================
+# Scientific-Python
 
-pip install -U pip
-pip install --user ipython
-pip install --user ipython[terminal]
-pip install --user ipython[notebook]
-python -m IPython.external.mathjax
-pip install --user numpy
-pip install --user scipy
-pip install --user sympy
-pip install --user matplotlib
+    pip install -U pip
+    pip install --user ipython
+    pip install --user ipython[terminal]
+    pip install --user ipython[notebook]
+    python -m IPython.external.mathjax
+    pip install --user numpy
+    pip install --user scipy
+    pip install --user sympy
+    pip install --user matplotlib
 
-prolog-CSP
-==========
+# prolog-CSP
 
-First install GNU prolog::
+First install GNU prolog:
 
     apt-get install gprolog
 
-To use CLP(FP) in gprolog::
+To use CLP(FP) in gprolog:
 
     X+1#=#Y,Y#>3,Y#=<5, fd_labeling([X,Y]).
 
 You can press ';' to see additional solutions.
 
-A different example using explicit domain restrictions is::
+A different example using explicit domain restrictions is:
 
     X*Y#=#X+Y, fd_domain([X,Y],1,100), fd_labeling([X,Y]).
 
-Alternatively, you can try to use the Clip_ extension to Prolog. The
-syntax is::
+Alternatively, you can try to use the Clip\_ extension to Prolog. The
+syntax is:
 
     {X+1=Y, Y>3,Y=<5}, print_clip(X).
 
-.. _Clip: http://interval.sourceforge.net/interval/index.html
+.. \_Clip: http://interval.sourceforge.net/interval/index.html
 
 Using the instructions "integer(X)" or "boolean(Y)" its possible to
 constraint the values of the variables to be integral or boolean
-([0,1]).
+(\[0,1\]).
 
 A good alternative to Prolog/Clip is RealPaver. A newer system is Ciao,
 which offers CLP(R) and CLP(Q) to do constraint programming over the
 reals and rationals respectively. Icos is similar to RealPaver but
 larger and with a more complex syntax.
 
-pianobar
-========
+# pianobar
 
-To configure it create a file in ~/.config/pianobar/config
+To configure it create a file in \~/.config/pianobar/config
 
 To prevent pianobar from asking for a password, you can use a keyring
-utility (pip install keyring; keyring set pandora ${YOUREMAIL})
+utility (pip install keyring; keyring set pandora \${YOUREMAIL})
 
-This is the contents of a simple config file::
+This is the contents of a simple config file:
 
     user = ${YOUREMAIL}
     password_command = keyring get pandora ${YOUREMAIL}
@@ -62,72 +59,67 @@ This is the contents of a simple config file::
     format_nowplaying_station = [35m%n[0m (id: %i)
     format_list_song = %i) %a - %t%r
 
-iodine
-======
-The purpose of this is to do DNS tunneling, to bypass some wifi security.
+# iodine
 
-On the server, run::
+The purpose of this is to do DNS tunneling, to bypass some wifi
+security.
+
+On the server, run:
 
     iodined -f -P password 10.7.0.1 tunnel.yourdomain.com
 
-To make it run automatically (assuming you used the debian package)
-edit /etc/default/iodined to reflect the following::
+To make it run automatically (assuming you used the debian package) edit
+/etc/default/iodined to reflect the following:
 
     START_IODINED = "true"
     IODINED_ARGS = "10.7.0.1 tunnel.yourdomain.com"
     IODINED_PASSWORD = "password"
 
-On the client run::
+On the client run:
 
     iodine -f tunnel.yourdomain.com
 
 Afterwards use an ssh tunnel to route traffic.
 
-GDM-userlist
-============
-Since Ubuntu Karmic (perhaps earlier) GDM displays a list
-of users in the login screen. This is inconvenient for several
-reasons, especially to those which use systems with more than a few
-users.
-To disable user list in GDM::
+# GDM-userlist
+
+Since Ubuntu Karmic (perhaps earlier) GDM displays a list of users in
+the login screen. This is inconvenient for several reasons, especially
+to those which use systems with more than a few users. To disable user
+list in GDM:
 
     sudo -u gdm gconftool-2 --set --type boolean /apps/gdm/simple-greeter/disable_user_list true
 
-Chrome-certificates
-===================
-Run the following in the command prompt::
+# Chrome-certificates
+
+Run the following in the command prompt:
 
     certutil -d sql:$HOME/.pki/nssdb -A -t C,, -n mit -i file.crt
     pk12util -d sql:$HOME/.pki/nssdb -i file.p12
 
-GPG
-===
-To generate a key::
-    gpg --gen-key
+# GPG
 
-To list your private keys::
-    gpg -K
+To generate a key: gpg --gen-key
 
-To output ascii version of key::
-    gpg -a --export "key name"
+To list your private keys: gpg -K
 
-Send to keyserver::
-    gpg --send-keys "key name" --keyserver hkp://subkeys.pgp.net
+To output ascii version of key: gpg -a --export "key name"
 
-Encrypt using public key::
-    gpg -e -r "recipient key name" file.txt
+Send to keyserver: gpg --send-keys "key name" --keyserver
+hkp://subkeys.pgp.net
 
-Symmetric Encryption (no keys)::
-    gpg -c file.txt
+Encrypt using public key: gpg -e -r "recipient key name" file.txt
 
-Decrypt::
-    gpg -d file.txt.gpg
+Symmetric Encryption (no keys): gpg -c file.txt
 
-Grub2-LiveUSB
-=============
+Decrypt: gpg -d file.txt.gpg
+
+# Grub2-LiveUSB
+
 It is now possible to install the grub bootloader in your USB drive.
 
-The following instructions will wipe your device, and create a new fat32 partition::
+The following instructions will wipe your device, and create a new fat32
+partition:
 
     FOLDER="/media/usb"
     DEVICE="/dev/usbdevice"
@@ -142,12 +134,12 @@ The following instructions will wipe your device, and create a new fat32 partiti
     parted $DEVICE set 1 boot on
     # install grub
 
-Now installing grub is easy::
+Now installing grub is easy:
 
     mount ${DEVICE}1 $FOLDER
     grub-install --no-floppy --root-directory=$FOLDER $DEVICE
 
-To configure grub to boot an ISO file in your usb stick::
+To configure grub to boot an ISO file in your usb stick:
 
     cat << EOF > $FOLDER/boot/grub/grub.cfg
     menuentry "LiveCD"
@@ -158,10 +150,9 @@ To configure grub to boot an ISO file in your usb stick::
     }
     EOF
 
-ubuntu-repositories
-===================
+# ubuntu-repositories
 
-To install the usual ubuntu repositories (media labe mirror)::
+To install the usual ubuntu repositories (media labe mirror):
 
     DIST="oneiric"
     cat << EOF > /etc/apt/sources.list
@@ -174,7 +165,7 @@ To install the usual ubuntu repositories (media labe mirror)::
     deb http://archive.canonical.com/ubuntu ${DIST} partner
     EOF
 
-To setup priorities on repositories::
+To setup priorities on repositories:
 
     DIST="oneiric"
     cat << EOF > /etc/apt/preferences
@@ -195,73 +186,74 @@ To setup priorities on repositories::
     Pin-Priority: -1
     EOF
 
-user-management
-===============
-To lock a user::
+# user-management
+
+To lock a user:
 
     usermod -L user
 
-To unlock a user::
+To unlock a user:
 
     usermod -U user
-    
-To add a user with a fixed password::
+
+To add a user with a fixed password:
 
     useradd -m user
     echo "user:passwd" | chpasswd
 
-To remove a user::
+To remove a user:
 
     userdel -r user
 
-To add an existing user to an existing group::
+To add an existing user to an existing group:
 
     usermod -G group -a user
 
-To copy the groups USER1 into USER2::
+To copy the groups USER1 into USER2:
 
     GROUPS=$(awk -F: "{ if (\$4 ~ /$USER1/) print \$1  }" ORS=',' /etc/group | sed 's/,$//')
     usermod -G $GROUPS -a $USER2
 
-Firefox-Tweaks
-==============
+# Firefox-Tweaks
 
 Extensions: Download Statusbar, AdBlock Plus, Vimperator.
 
+1.  Open Firefox, and type about:config in the address bar. Don’t worry
+    about the warning that comes out.
 
-1. Open Firefox, and type about:config in the address bar. Don’t worry about the warning that comes out.
+2.  Use the filter above to find network.http.pipelining and set it to
+    True by double clicking on it.
 
-2. Use the filter above to find network.http.pipelining and set it to True by double clicking on it.
+3.  Create a new boolean value named
+    network.http.pipelining.firstrequest and set that to True, as well.
 
-3. Create a new boolean value named network.http.pipelining.firstrequest and set that to True, as well.
+4.  Find network.http.pipelining.maxrequests, double click on it, and
+    change its value to 8.
 
-4. Find network.http.pipelining.maxrequests, double click on it, and change its value to 8.
+5.  Now look for network.http.proxy.pipelining and again set it to True.
 
-5. Now look for network.http.proxy.pipelining and again set it to True.
+6.  Create two new integers named nglayout.initialpaint.delay and
+    content.notify.interval, setting them to 0.
 
-6. Create two new integers named nglayout.initialpaint.delay and content.notify.interval, setting them to 0.
+# git-primer
 
-git-primer
-==========
-
-To convert directory to git repository::
+To convert directory to git repository:
 
     git init
     git add .
     git commit -a -m "First import"
 
-To create a tag, use::
+To create a tag, use:
 
     git tag -a $(tag_name)
     # or
     git tag -s $(tag_name)
 
-To push tags::
+To push tags:
 
     git push --tags
 
-git-advanced
-============
+# git-advanced
 
 To squash the last N commits together:
 
@@ -276,20 +268,17 @@ includes all previous commit messages:
 
 To delete a branch branchname, both locally and in the remote origin:
 
-   git branch -d branchname
-   git push origin :branchname
+git branch -d branchname git push origin :branchname
 
 Given a branch branchname and a remote upstream, if you want your local
 branch to be a mirror of the remote branch, do the following:
 
-   git checkout branchname
-   git fetch upstream
-   git reset --hard upstream/branchname
-   git clean -dfx
+git checkout branchname git fetch upstream git reset --hard
+upstream/branchname git clean -dfx
 
-git-submodules
-==============
-To add a submodule to an existing project::
+# git-submodules
+
+To add a submodule to an existing project:
 
     git submodule add git@${modulehost}:${modulepath} ${modulename}
 
@@ -298,16 +287,16 @@ To remove a submodule form a project:
     git submodule deinit ${modulename}
     git rm ${modulename}
 
-To pull the submodules of a project you checked out::
+To pull the submodules of a project you checked out:
 
     git submodule update --init
 
-To update the submodules in a project::
+To update the submodules in a project:
 
     git submodule foreach git pull origin master
 
-git-subtree
-===========
+# git-subtree
+
 To subtree-merge an existing repository to the cork/ directory
 
     git remote add -f cork git://github.com/${USER}/cork.git
@@ -327,33 +316,31 @@ Using git-subtree things are simpler:
 
     git subtree pull --prefix cork/ cork master [--squash]
 
+# git-svn
 
-git-svn
-=======
-Install git-svn::
+Install git-svn:
 
     apt-get install git-svn
 
-Checkout the SVN repository into your local git repo::
+Checkout the SVN repository into your local git repo:
 
     git svn clone http://repourl/project
     cd project
 
-Commit your changes using git (as usual)::
+Commit your changes using git (as usual):
 
     git ci -a -m "commit message."
 
-Update your local git repo from the remote SVN repository::
+Update your local git repo from the remote SVN repository:
 
     git svn rebase
 
-Send your git commits upstream to the SVN repository::
+Send your git commits upstream to the SVN repository:
 
     git svn dcommit
 
 Export your current git repo to a clean SVN (this assumes you are in a
-folder which is already a git repository with some non empty
-history)::
+folder which is already a git repository with some non empty history):
 
     git config svn-remote.svn.url svn-remote.svn.url https://repourl/project
     git config svn-remote.svn.fetch :refs/remotes/git-svn
@@ -361,22 +348,21 @@ history)::
     git rebase remotes/git-svn
     git svn dcommit
 
-Gitosis
-=======
+# Gitosis
 
-Install::
+Install:
 
     apt-get install gitosis
 
-Change gitosis location (optional)::
+Change gitosis location (optional):
 
     usermod -m -d /storage/gitosis gitosis
 
-Create gitosis repo::
+Create gitosis repo:
 
     sudo -H -u gitosis gitosis-init < ~/.ssh/id_rsa.pub
 
-Configure gitosis for a new repo called myproject::
+Configure gitosis for a new repo called myproject:
 
     git clone gitosis@localhost:gitosis-admin.git
     cd gitosis-admin
@@ -391,12 +377,12 @@ Configure gitosis for a new repo called myproject::
     writable = myproject
     EOF
 
-Save changes to gitosis-admin::
+Save changes to gitosis-admin:
 
     git commit -a -m "Added myproject to gitosis"
     git push
 
-Setup your (existing) to push to gitosis::
+Setup your (existing) to push to gitosis:
 
     cd myproject
     git init
@@ -407,7 +393,7 @@ Setup your (existing) to push to gitosis::
     git config branch.master.remote origin
     git config branch.master.merge refs/heads/master
 
-Give alice permission to your repo::
+Give alice permission to your repo:
 
     cd gitosis-admin
     cp ~/alice.pub keydir/
@@ -418,45 +404,41 @@ Give alice permission to your repo::
     - members = user@localhost
     + members = user@localhost alice
 
-Gitosis-Mirroring
-=================
+# Gitosis-Mirroring
 
-How to mirror the foo.git gitosis repository in github.com?
-(same thing works for bitbucket.org, gitorious.org, etc)
+How to mirror the foo.git gitosis repository in github.com? (same thing
+works for bitbucket.org, gitorious.org, etc)
 
-1. Create a passwordless ssh-key for your gitosis user::
+1.  Create a passwordless ssh-key for your gitosis user:
 
     sudo -u gitosis -H ssh-keygen -t rsa
 
-2. Add the new ssh key to your github account.
-3. Create an empty foo repository in github.
-4. Setup the mirror from gitosis -> github::
+2.  Add the new ssh key to your github account.
+3.  Create an empty foo repository in github.
+4.  Setup the mirror from gitosis -> github:
 
-    sudo -u gitosis -H -s
-    cd ~/repositories/foo.git
+    sudo -u gitosis -H -s cd \~/repositories/foo.git
     git remote add github git@github.com:$user/$(basename `pwd`)
-    echo -e '#!/bin/sh\nexec git push --mirror github >> ~/github.log 2>&1' > hooks/post-update
+    echo -e '\#!/bin/sh\nexec git push --mirror github >> \~/github.log 2>&1' > hooks/post-update
     chmod 755 hooks/post-update
     hooks/post-update
 
-Grub-password
-=============
-Generate password::
+# Grub-password
+
+Generate password:
 
     yes password | grub-md5-crypt 2>/dev/null | tail -n1
 
-Add password to grub::
+Add password to grub:
 
     # Add to thge top of /boot/grub/menu.lst
     password --md5 ${md5password}
 
-To hide the menu::
-    hiddenmenu
+To hide the menu: hiddenmenu
 
+# Customize-XSession
 
-Customize-XSession
-==================
-Create a startup script::
+Create a startup script:
 
     cat << EOF > /etc/X11/Xsession.d/15mystart
     #!/bin/bash
@@ -470,10 +452,9 @@ Create a startup script::
     fi
     EOF
 
-Terminal-Fonts-Size
-===================
+# Terminal-Fonts-Size
 
-To fix blurry fonts in gnome-terminal::
+To fix blurry fonts in gnome-terminal:
 
     cd /etc/fonts/conf.d
     rm 10-hinting-medium.conf
@@ -481,15 +462,15 @@ To fix blurry fonts in gnome-terminal::
     rm 10-no-sub-pixel.conf
     ln -s ../conf.avail/10-sub-pixel-rgb.conf
 
-To change the default size of the terminal::
+To change the default size of the terminal:
 
     vim /usr/share/vte/termcap/xterm
     # the line with the following describes an 80x24 term
-	:co#80:it#8:li#24:\
+    :co#80:it#8:li#24:\
 
-WPA
-===
-Configure wpa_supplicant::
+# WPA
+
+Configure wpa\_supplicant:
 
     cat << EOF > /etc/wpa_supplicant.conf
     ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -517,8 +498,8 @@ Configure wpa_supplicant::
     }
     EOF
 
-Edit /etc/network/interfaces and remove anything
-related to the wireless interface and add the following::
+Edit /etc/network/interfaces and remove anything related to the wireless
+interface and add the following:
 
     cat << EOF >> /etc/network/interfaces
     allow-hotplug wlan0
@@ -536,7 +517,7 @@ related to the wireless interface and add the following::
         gateway 192.168.1.1
     EOF
 
-network-config
+# network-config
 ==============
 
 To setup an interface to be managed through dhcp, edit
@@ -552,59 +533,56 @@ removed or turned-off (usually for laptops).
 To setup an interface to be managed statically, edit
 /etc/network/interfaces and add the following:
 
-   auto $iface
-   iface $iface inet static
-        address 10.10.100.100
-        gateway 10.10.1.1
-        netmask 255.255.0.0
-        dns-search example.com example.net
-        dns-nameservers 10.10.1.2 10.10.1.2
+    auto $iface
+    iface $iface inet static
+            address 10.10.100.100
+            gateway 10.10.1.1
+            netmask 255.255.0.0
+            dns-search example.com example.net
+            dns-nameservers 10.10.1.2 10.10.1.2
 
 See https://wiki.debian.org/NetworkConfiguration for more info.
 
+# Grub-windows
 
-Grub-windows
-============
-
-Add your windows partition in /boot/grub/menu.lst::
+Add your windows partition in /boot/grub/menu.lst:
 
     title WinXP
         rootnoverify (hd0,0)
         makeactive
         chainloader +1
 
-Debian-Favorite-Packages
-========================
-Console::
+# Debian-Favorite-Packages
+
+Console:
 
     vim-gtk htop git curl tmux g++ nodejs openssh-server
 
-GUI::
+GUI:
 
     inkscape gimp vlc pithos spotify
 
-Latex::
+Latex:
 
     latex-beamer texlive-fonts-recommended texlive-latex-extra
 
-Non-Free::
+Non-Free:
 
     skype acroread
 
-Programming::
+Programming:
 
     build-essential manpages-dev autoconf automake libtool manpages-posix manpages-posix-dev console-setup imagemagick librsvg2-bin
 
-Fonts::
+Fonts:
 
     msttcorefonts ttf-foss ttf-inconsolata lmodern ttf-bpg-geoergian-fonts ttf-breip ttf-dustin ttf-f500 ttf-essays1743 ttf-georgewilliams ttf-isabella ttf-liberation ttf-staypuft ttf-summersby ttf-tuffy ttf-ubuntu-title
 
-Remove::
+Remove:
 
     bluez ttf-arabeyes ttf-arphic-ukai ttf-arphic-uming ttf-baekmuk ttf-bengali-fonts ttf-devanagari-fonts ttf-gujarati-fonts ttf indic-fonts ttf-kannada-fonts ttf-kochi-gothic ttf-kochi-mincho ttf-lao ttf-malayalam-fonts ttf-oriya-fonts ttf-punjabi-fonts ttf-tamil-fonts ttf-telugu-fonts ttf-thai-tlwg cups
 
-Core-Dumps
-==========
+# Core-Dumps
 
 To enable once:
 
@@ -618,152 +596,154 @@ To persist across reboots:
     echo "kernel.core_pattern=/tmp/core.%e.%p.%h.%t" >> /etc/sysctl.conf
     echo "fs.suid_dumpable=1 >> /etc/sysctl.conf
 
-Recover-HD
-==========
-Go into server and dump your drive::
+# Recover-HD
+
+Go into server and dump your drive:
 
     ssh deadserver dd if=/dev/hda1 conv=noerror,sync > hda1.img
 
-Mount your drive image and try to recover::
+Mount your drive image and try to recover:
 
     losetup /dev/loop0 hda1.img
     reiserfsck --rebuilt-tree -S -l recover.log /dev/loop0
 
-Other options are --rebuild-sb and --check, also try::
+Other options are --rebuild-sb and --check, also try:
 
     mount /dev/loop0 /mnt/recovered
     look in /mnt/recovered or /mnt/recovered/lost+found
     umount /mnt/recovered
     losetup -d /dev/loop0
 
-Mounting dd image of drive (not partition)
-==========================================
+# Mounting dd image of drive (not partition)
 
-1. Use fdisk to determine the offset to the partition::
+1.  Use fdisk to determine the offset to the partition:
 
-    fdisk -u drive.img
-    # Command (m for help): p
-    # Disk drive.img: 1024 MB, 1024966656 bytes
-    # 32 heads, 62 sectors/track, 1009 cylinders, total 2001888 sectors
-    # Units = sectors of 1 * 512 = 512 bytes
-     
-    #   Device Boot      Start         End      Blocks   Id  System
-    #drive.img   *          62     2001855     1000897   83  Linux
+     fdisk -u drive.img
+     # Command (m for help): p
+     # Disk drive.img: 1024 MB, 1024966656 bytes
+     # 32 heads, 62 sectors/track, 1009 cylinders, total 2001888 sectors
+     # Units = sectors of 1 * 512 = 512 bytes
 
-    # Since the sectors are of size 512, and it starts at 62, the offset
-    # is 512*62=31744
+     #   Device Boot      Start         End      Blocks   Id  System
+     #drive.img   *          62     2001855     1000897   83  Linux
 
-2. Mount to examine the image::
+Since the sectors are of size 512, and it starts at 62, the offset is
+512\*62=31744
+
+2.  Mount to examine the image:
 
     mount -r -o loop,offset=31744 drive.img /media/drive
 
-DVD-Rip
-=======
+# DVD-Rip
 
-::
     mplayer dvd:/// -chapter 1-1  -dumpstream -dumpfile video.vob
     ffmpeg -i video.mp4 -f mp4 -vcodec mpeg4 -maxrate 1000 -b 700  -qmin 3 -qmax 5 -bufsize 4096 -g 300 -acodec aac -ab 96 -s 320x240 -aspect 4:3 video.mp4
     ffmpeg -i video -f mp4 -vcodec mpeg4 -maxrate 1000 -b 700  -qmin 3 -qmax 5 -bufsize 4096 -g 300 -acodec aac -ab 96 -s 320x240 -aspect 4:3 -map 0:0 -map 0:2 video.mp4
-    
-CD/DVD-burning
-==============
-Create an ISO from CD/DVD::
+
+
+# CD/DVD-burning
+
+Create an ISO from CD/DVD
 
     dd if=/dev/cdrom of=image.iso bs=1024
 
-Create a BIN/CUE from CD/DVD::
+Create a BIN/CUE from CD/DVD
 
     cdrdao read-cd --read-raw --datafile image.bin --device 0,0,0 --driver generic-mmc-raw image.cue
 
-Create an ISO from a folder (Use -RJ instead of -J to preserve permissions+links)::
+Create an ISO from a folder (Use -RJ instead of -J to preserve
+permissions+links)
 
     mkisofs -J -V 'title' -o image.iso /folder/
 
-Mount an ISO (assumes loop module is loaded)::
+Mount an ISO (assumes loop module is loaded)
 
     mount image.iso /media/iso/ -t iso9660 -o loop
 
-Burning ISO's::
+Burning ISO's
 
-    #    To get device first do
+To get device first do
+
     cdrecord -scanbus
-    #    Assuming device = 1,1,0
+
+Assuming device = 1,1,0
     cdrecord -v dev=1,1,0 speed=48 [-multi] image.iso
 
-Burning a cue/bin::
+Burning a cue/bin
 
     cdrdao write --device 0,0,0 --speed 48 somefile.cue
 
-Burning DVD image::
+Burning DVD image
 
     growisofs -speed=8 -dvd-compat -Z /dev/dvdrw=image.iso
 
-Duplicating a CD::
+Duplicating a CD
 
     cdrdao copy --source-device /dev/cdrom --device /dev/cdrw --on-the-fly
 
-Multisession burning:
+Multisession burning
 
-    1. create the first ISO
-    2. burn and add the -multi flag
-    3. cdrecord -msinfo /dev/cdrw to get offset, assume 0,12639
-    4. create the second ISO, append -C 0,12639 to the command line
-    5. burn and add the -multi flag
-    6. goto step 3
+1. create the first ISO
+2. burn and add the -multi flag
+3. cdrecord -msinfo /dev/cdrw to get offset, assume 0,12639
+4. create the second ISO, append -C 0,12639 to the command line
+5. burn and add the -multi flag
+6. goto step 3
 
-Debian-Replicating
-==================
-On existing system do::
+# Debian-Replicating
+
+On existing system do:
 
     dpkg --get-selections > /shared/selections
 
-On new system do::
+On new system do:
 
     dpkg --set-selections < /shared/selections
     apt-get dselect-upgrade
 
-As an alternative for a cleaner more manual upgrade (on existing system)::
+As an alternative for a cleaner more manual upgrade (on existing
+system):
 
     dpkg -l | awk '/^ii/{ print $2 }' | grep -v -e ^lib -e -dev -e $(uname -r) > installed.txt
 
-On the new system::
+On the new system
 
-    apt-get install `cat installed.txt | tr '\n' ' '`
+    apt-get install $(cat installed.txt | tr '\n' ' ')
 
-Debian-Repository
-=================
-To clean up your repository (remove old packages)::
+# Debian-Repository
+
+To clean up your repository (remove old packages):
 
     apt-get autoclean
 
-To create your own apt repository::
+To create your own apt repository:
 
     dpkg-scanpackages /var/cache/apt/archives/ /dev/null 2> /dev/null | gzip > /var/cache/apt/archives/Packages.gz
 
-Adding the apt a custom apt repository::
+Adding the apt a custom apt repository:
 
     echo deb ssh:remote: /var/cache/apt/archives/ >> /etc/apt/sources.list
 
-Debian-Package
-==============
-To build a package from source::
+# Debian-Package
+
+## To build a package from source
 
     apt-get build-dep packagename
     apt-get source -b packagename
 
-    # OR
+OR
 
     apt-get build-dep packagename
     apt-get source packagename
     dpkg-buildpackage -rfakeroot -us -uc
 
-    # OR
+OR
 
     apt-get build-dep packagename
     apt-get source packagename
     debuild -b -us -uc
 
-    # OR
+OR
 
     wget http://server/package.tbz2
     tar -xjvf package.tbz2
@@ -771,7 +751,7 @@ To build a package from source::
     make
     checkinstall -D make install
 
-    # OR
+OR
 
     wget http://server/package.orig.tar.gz
     wget http://server/package.diff.gz
@@ -781,49 +761,41 @@ To build a package from source::
     fakeroot debian/rules binary
     popd
 
-To install the package::
+## To install the package
 
     dpkg -i packagename.deb
 
-To list files in the package::
+## To list files in the package
 
     dpkg -L packagename
 
-To remove the package (use -P instead of -r to purge)::
+## To remove the package (use -P instead of -r to purge):
 
     dpkg -r packagename
 
-To see to which package a file belongs::
+## To see to which package a file belongs
 
     dpkg -S file
 
-To extract the files of a package
+## To extract the files of a package
 
     dpkg-deb -x packagename.deb outputdir
 
-To extract the control files of a package
+## To extract the control files of a package
 
     dpkg-deb -e packagename.deb outputdir
 
-rsync
-=====
-Copy from local to remote (use -avPz if files are compressible)::
+# rsync
+
+Copy from local to remote (use -avPz if files are compressible):
 
     rsync -avP Folder remotehost:
     rsync -avP ~/Folder/ remotehost:Folder
     rsync -avP --rsync-path=.bin/rsync --exclude .svn/ Site/ user@server:public_html
 
-Copy from remote to local
-rsync -avP remotehost:Folder/ ~/Folder
+Copy from remote to local rsync -avP remotehost:Folder/ \~/Folder
 
-Screen-Copy-Paste
-=================
-C-a [   Enter copy mode
-C-a ]   Paste contentes of copy buffer
-<space> Start/End copy markers
-
-Schroot
-=======
+# Schroot
 
 install sbuild:
 
@@ -862,48 +834,47 @@ modify your source schroot:
     do stuff
     exit
 
-SSH-proxy
-=========
-To setup a local socks proxy::
+# SSH-proxy
+
+To setup a local socks proxy:
 
     ssh -nNT -D 8080 remoteserver
     chrome --proxy-server="socks5://localhost:8080"
 
-To connect to host HostC, going through HostB, going through HostA::
+To connect to host HostC, going through HostB, going through HostA:
 
     ssh -At HostA ssh -At HostB ssh -A HostC
 
 Notice that the -t (create a pseudo-tty) is not required for the last
 hop. The -A is used to forward the ssh-agent.
 
+# SSH-nopass
 
-SSH-nopass
-==========
-Generate and copy key to remote host::
+Generate and copy key to remote host:
 
     ssh-keygen -t rsa (enter, enter)
     ssh-copy-id remotehost
 
-To create a public/private key pair for someone else do::
+To create a public/private key pair for someone else do:
 
     ssh-keygen -t rsa -C john@doe.net -f john_key
 
 You may have to use the IdentityFile option in .ssh/config to
 authenticate with a particular key.
 
-To convert to putty format install putty-tools and do::
+To convert to putty format install putty-tools and do:
 
     puttygen privatekeyfile -O private -o privatekeyfile.ppk
 
-SSH-Tunnel
-==========
+# SSH-Tunnel
+
 Consider two machines A and B, where A can ssh to machine B.
 
 Setting 1: Machine A and wants to access www.nytimes.com which is
 unreachable/blocked from A, but is reachable from B.
 
 To access www.nytimes.com from A (using a tunnel that goes through B)
-    you can execute the following in A:
+you can execute the following in A:
 
     ssh -nNT -L 1100:www.nytimes.com:80 B
 
@@ -919,44 +890,34 @@ can execute the following in A:
 
 Now B can access mail.local.net:80 by accessing instead localhost:1100.
 
+# SSH-Restrict
 
-SSH-Restrict
-============
-To restrict to a given set of users, first edit the file /etc/ssh/sshd_config and add the following line::
+To restrict to a given set of users, first edit the file
+/etc/ssh/sshd\_config and add the following line:
 
     AllowUsers user1 user2 .. usern
 
 For added security, disable all login methods except public key:
-    
+
     UsePAM no
     ChallengeResponseAuthentication no
     PasswordAuthentication no
 
+# Diff-Patches
 
-GVIM-instead-of-Gedit
-=====================
-Execute the following::
-
-    sudo sed -i.backup.gvim -e's@gedit.desktop@gvim.desktop@g' -e's@text/x-csrc=gvim.desktop@text/x-csrc=gvim.desktop\ntext/x-c++hdr=gvim.desktop\ntext/x-c++src=gvim.desktop\ntext/x-csharp=gvim.desktop\ntext/x-tex=gvim.desktop@g' /usr/share/applications/defaults.list
-    sudo sed -i.backup -e's@MimeType=text/plain;@MimeType=text/plain;text/html;text/css;text/xml;text/x-dtd;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;text/x-java;text/x-csharp;text/x-tex;text/x-bibtex;text/x-readme;@g' -e's@NoDisplay=true@NoDisplay=false@g' /usr/share/applications/gvim.desktop 
-
-Diff-Patches
-============
-Directories::
+Directories:
 
     diff -upr dir dir.fixed > changes.patch
     cp -a dir dir.patched
     cd dir.patched
     patch -p1 -i ../mychanges.patch
 
-Files::
+Files:
 
     diff -up file file.new > changes.patch
     patch -i changes.patch
 
-MySQL
-=====
-::
+# MySQL
 
     mysqladmin -u root password "newpass"
     mysql -u root -p
@@ -972,9 +933,7 @@ MySQL
     mysqldump -u username -ppassword database -tn > data.sql
     mysqldump --add-drop-table -u username -ppassword database > complete.sql
 
-CVS
-===
-::
+# CVS
 
     export CVSROOT=/usr/local/CVS
     cvs -d $CVSROOT init
@@ -983,9 +942,7 @@ CVS
     cvs checkout project
     cvs export -DNOW project
 
-SVN
-===
-::
+# SVN
 
     SVNROOT=/usr/local/SVN
     svnadmin create --fs-type=fsfs $SVNROOT
@@ -996,12 +953,12 @@ SVN
     svnadmin dump $SVNROOT > svn.backup
     svnadmin load $SVNROOT < svn.backup
 
-SVN-to-HG
-=========
-First create a directory to store your mercurial
-repository and make it your working directory.
+# SVN-to-HG
 
-Then execute the following to convert::
+First create a directory to store your mercurial repository and make it
+your working directory.
+
+Then execute the following to convert:
 
     source_repo=file://$HOME/PATH_TO_REPO
     repos=`svn ls $source_repo | tr -d \/ | tr '\n' ' '`
@@ -1014,19 +971,11 @@ Then execute the following to convert::
     done
     find . -name .svn -exec rm -fR {} \;
 
-In case you want to get rid of the default preferences::
+In case you want to get rid of the default preferences:
 
     find . -name .hgignore -exec rm -f {} \;
 
-MAC-list
-========
-1. Desktop (P4-2400mhz)  00:07:E9:CA:43:FE
-2. Auriga  (P3-866Mhz)   00:03:43:63:9E:BB
-3. Carmen  (P4-1800mhz)  00:07:95:A7:67:3C
-4. Casiopea  Wifi 00:04:75:FD:AC:7D Eth 08:00:46:A9:5D:DD
-
-OpenSSL
-=======
+# OpenSSL
 
 To generate a private/public key pairs with password:
 
@@ -1087,114 +1036,109 @@ Install in OSX:
     brew install Caskroom/cask/osxfuse
     brew install encfs
 
+# Encrypt-LOOPAES
 
-Encrypt-LOOPAES
-===============
-Create image::
+Create image:
 
     dd if=/dev/urandom bs=1M count=100 of=file
 
-Create device node with encryption::
+Create device node with encryption:
 
     losetup -e aes256 /dev/loop0 file
 
-Create filesystem::
+Create filesystem:
 
     mkfs.ext2 /dev/loop0
     tune2fs -c 0 -i 0 /dev/loop0
 
-Destroy device node::
+Destroy device node:
 
     losetup -d /dev/loop0
 
-To mount the encrypted filesystem::
+To mount the encrypted filesystem:
 
     mount -o loop,encryption=aes256 -t ext2 file /media/secret
 
-To unmount::
+To unmount:
 
     umount /media/secret
 
-Encrypt-LUKS
-============
-Create image::
+# Encrypt-LUKS
+
+Create image:
 
     dd if=/dev/urandom bs=1M count=100 of=file
 
-Create encrypted device node pointing to file::
+Create encrypted device node pointing to file:
 
     losetup /dev/loop0 file
     cryptsetup luksFormat /dev/loop0
 
-Make encrypted container avaialble in /dev/mapper/secret::
+Make encrypted container avaialble in /dev/mapper/secret:
 
     cryptsetup luksOpen /dev/loop0 secret
 
-Create filesystem::
+Create filesystem:
 
     mkfs.ext2 /dev/mapper/secret
     tune2fs -c 0 -i 0 /dev/mapper/secret
 
-Destroy device node::
+Destroy device node:
 
     cryptsetup luksClose secret
     losetup -d /dev/loop0
 
-In the future to mount the container again do::
-    losetup /dev/loop0 file
-    cryptsetup luksOpen /dev/loop0 secret
-    mount /dev/mapper/secret /media/secret
+In the future to mount the container again do: losetup /dev/loop0 file
+cryptsetup luksOpen /dev/loop0 secret mount /dev/mapper/secret
+/media/secret
 
-Unmount the filesystem::
+Unmount the filesystem:
 
     umount /media/secret
     cryptsetup luksClose secret
     losetup -d /dev/loop0
 
-Share-Internet
-==============
+# Share-Internet
 
-The internet connection is on wlan0 and it wants to share this connection with
-a computer (or group of computers) connected through eth0.
+The internet connection is on wlan0 and it wants to share this
+connection with a computer (or group of computers) connected through
+eth0.
 
 At the server the following commands should be executed.
 
-Enable ipv4 forwarding::
-    
-    sysctl net.ipv4.ip_forward=1 
+Enable ipv4 forwarding:
+
+    sysctl net.ipv4.ip_forward=1
     execute sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
 
-Setup forwarding rules::
+Setup forwarding rules:
 
     iptables -A FORWARD -o wlan0 -i eth0 -s 192.168.1.0/24 -m conntrack --ctstate NEW -j ACCEPT
     iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
     iptables -A POSTROUTING -t nat -j MASQUERADE
 
-Use forward (at client)::
+Use forward (at client):
 
     route add default gw 192.168.1.154
 
+# LAN-File-Transfer
 
-LAN-File-Transfer
-=================
-
-On the receiving end (omit -p in BSD)::
+On the receiving end (omit -p in BSD):
 
     PORT=${RANDOM}
     echo "listening on port ${PORT}"
     nc -l -p ${PORT} | tar xzvf -
 
-On the sending end::
+On the sending end:
 
     tar czvf -  /Some/Folder | nc {HOST} ${PORT}
 
-vim-ctags
-=========
+# vim-ctags
 
-Run:
-    ctags --c++-kinds=+p -R .
+Run: `ctags --c++-kinds=+p -R .`
 
-Shortcuts:
+Shortcuts
+
     C-] (go to tag definition)
     C-t (go back on tag stack)
     g]  (go to tag definition)
@@ -1203,15 +1147,13 @@ Shortcuts:
     C-d (see macro definition)
     C-I (see all macro definitions)
 
-sudo
-====
+# sudo
 
-To enable password-less sudo access to current user::
+To enable password-less sudo access to current user:
 
     echo "${USER} ALL=(ALL)NOPASSWD: ALL" | sudo tee /etc/sudoers.d/${USER}-sudo
 
-brew
-====
+# brew
 
 Console general tools:
 
@@ -1221,9 +1163,6 @@ Development:
 
     node mongodb
 
-Kilobots:
+AVR utils
 
-    avr-binutils avr-gcc avr-libc libftdi avrdude --with-usb
-    qt pkg-config
-
-===
+    avr-binutils avr-gcc avr-libc libftdi avrdude --with-usb qt pkg-config
