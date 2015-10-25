@@ -221,7 +221,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 
 # History settings
 export HISTIGNORE="&:?:??:???:exit:[ \t]*"
-export HISTCONTROL="ignoredups:erasedups"
+export HISTCONTROL="ignorespace:ignoredups:erasedups"
 export HISTFILESIZE=50000
 export HISTSIZE=10000
 shopt -s histappend   # append to history file
@@ -235,6 +235,33 @@ history_reload () {
     mv $TEMP $HISTFILE
     history -c
     history -r
+}
+
+# process listing aliases
+pa () {
+    local LIST=$($(which ps) axo pid,user,pcpu,pmem,command)
+    while [ -n "$1" ]; do
+        if [[ $1 == -* ]]; then
+            LIST=$(echo "$LIST" | grep -v ${1#-})
+        else
+            LIST=$(echo "$LIST" | grep $1)
+        fi
+        shift
+    done
+    echo "$LIST"
+}
+
+p () {
+    local LIST=$($(which ps) xo pid,user,pcpu,pmem,command)
+    while [ -n "$1" ]; do
+        if [[ $1 == -* ]]; then
+            LIST=$(echo "$LIST" | grep -v ${1#-})
+        else
+            LIST=$(echo "$LIST" | grep $1)
+        fi
+        shift
+    done
+    echo "$LIST"
 }
 
 # Use newer bash features
@@ -272,10 +299,6 @@ else
     alias ccopy="xclip -selection c"
     alias cpaste="xclip -selection c -o"
 fi
-
-# aliases: process management
-alias pa="/bin/ps axo user,pid,pcpu,pmem,command"
-alias p="/bin/ps xo user,pid,pcpu,pmem,command"
 
 # aliases: git
 alias g="git"
