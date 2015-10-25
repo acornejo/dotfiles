@@ -614,7 +614,9 @@ Other options are --rebuild-sb and --check, also try:
     umount /mnt/recovered
     losetup -d /dev/loop0
 
-# Mounting dd image of drive (not partition)
+# Mounting dd image of drive
+
+NOTE: This works for an entire drive, not a aprtition
 
 1.  Use fdisk to determine the offset to the partition:
 
