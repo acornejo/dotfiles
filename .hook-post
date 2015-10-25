@@ -64,11 +64,11 @@ select yn in "Yes" "No"; do
     case $yn in
         Yes )
             echo -n "Full name: "
-            read fullname
-            git config --global user.name "$fullname"
+            read name
             echo -n "Email: "
             read email
-            git config --global user.email $email
+            git config --file ~/.gitconfig.local user.name "$name"
+            git config --file ~/.gitconfig.local user.email $email
             break;;
         No )
             break;;

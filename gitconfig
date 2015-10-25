@@ -58,3 +58,6 @@
 [url "git@bitbucket.org:"]
 	insteadOf = "bb://"
 	pushInsteadOf = "bb://"
+
+[include]
+	path = ~/.gitconfig.local
