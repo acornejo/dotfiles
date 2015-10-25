@@ -291,6 +291,9 @@ alias netstat="netstat -n"
 alias bc="bc -q -l"
 alias du="du -h -s -c *"
 
+# aliases: useful extras
+alias trunc='cut -c -${COLUMNS:-80}'
+
 # aliases: clipboard
 if [[ "$OSTYPE" == "darwin"* ]]; then
     alias ccopy="pbcopy"
