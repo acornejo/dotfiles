@@ -33,6 +33,19 @@ function! s:Scratch()
 endfunction
 command! -nargs=? Scratch call s:Scratch()
 
+" http://vimcasts.org/episodes/project-wide-find-and-replace/
+function! s:QuickfixFilenames()
+  " Building a hash ensures we get each buffer only once
+  let buffer_numbers = {}
+  for quickfix_item in getqflist()
+    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+  endfor
+  return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
+endfunction
+
+command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
+command! -nargs=1 -complete=command -bang Qdo exec 'bufdo bd' | exe 'args ' . s:QuickfixFilenames() | argdo<bang> <args>
+
 function! s:SwitchSourceHeader()
   let source = ["cpp", "C", "c"]
   let header = ["h", "hpp"]
