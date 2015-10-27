@@ -57,6 +57,7 @@ function! s:ag_curword()
   if empty(pattern)
     echo "no word under cursor."
   else
+    let pattern = '\b' . pattern . '\b'
     let @/ = pattern
     execute 'Ag' pattern
   endif
