@@ -17,6 +17,10 @@ install_cask() {
     brew install brew-cask
 }
 
+if hash git 2>/dev/null; then
+    git config --global include.path "~/.gitconfig.common"
+fi
+
 trap onexit 1 2 3 15 ERR
 
 echo "Install basic packages? [git, tmux, vim, autojump, curl, wget]"
@@ -63,12 +67,13 @@ echo "Configure git?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
+            git config --global include.path "~/.gitconfig.common"
             echo -n "Full name: "
             read name
             echo -n "Email: "
             read email
-            git config --file ~/.gitconfig.local user.name "$name"
-            git config --file ~/.gitconfig.local user.email $email
+            git config --global user.name "$name"
+            git config --global user.email $email
             break;;
         No )
             break;;
