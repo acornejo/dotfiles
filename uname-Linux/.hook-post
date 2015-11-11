@@ -12,13 +12,6 @@ then
     gconftool-2 -s /apps/gnome-terminal/global/use_mnemonics -t bool false
 fi
 
-OPEN="$HOME/.bin/open"
-cat << EOF > "$OPEN"
-#!/bin/bash
-exec xdg-open \$*
-EOF
-chmod 755 "$OPEN"
-
 # -------------------
 # Fix tmux config
 # -------------------

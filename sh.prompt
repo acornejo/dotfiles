@@ -1,0 +1,77 @@
+#!/bin/sh
+
+__ssh_prompt() {
+  if [ -n "$SSH_CONNECTION" ] && [ -z "$STY" ]; then
+    echo -n "ssh@"
+  fi
+}
+
+__git_prompt() {
+   if type __git_ps1 | grep function >/dev/null 2>&1; then
+       local branch=$(__git_ps1 %s)
+       if [ -n "$branch" ]; then
+           echo -n "$1 on $2$branch"
+       fi
+   fi
+}
+
+sh_prompt() {
+    local reset=""
+    local black=""
+    local blue=""
+    local cyan=""
+    local green=""
+    local orange=""
+    local purple=""
+    local red=""
+    local violet=""
+    local white=""
+    local yellow=""
+    if [ "$TERM" != "dumb" ]; then
+        if hash tput 2>/dev/null && tput setaf 1 > /dev/null 2>&1; then
+            # Solarized colors, taken from http://git.io/solarized-colors.
+            reset=$(tput sgr0);
+            black=$(tput setaf 0);
+            blue=$(tput setaf 33);
+            cyan=$(tput setaf 37);
+            green=$(tput setaf 64);
+            orange=$(tput setaf 166);
+            purple=$(tput setaf 125);
+            red=$(tput setaf 124);
+            violet=$(tput setaf 61);
+            white=$(tput setaf 15);
+            yellow=$(tput setaf 136);
+        else
+            reset="\e[0m";
+            black="\e[1;30m";
+            blue="\e[1;34m";
+            cyan="\e[1;36m";
+            green="\e[1;32m";
+            orange="\e[1;33m";
+            purple="\e[1;35m";
+            red="\e[1;31m";
+            violet="\e[1;35m";
+            white="\e[1;37m";
+            yellow="\e[1;33m";
+        fi
+    fi
+
+    local gitString=""
+    local userColor="$orange"
+    local promptColor="$white"
+    local promptString="$"
+    local sshString="\$(__ssh_prompt)"
+    local gitString="\$(__git_prompt '$white' '$yellow')"
+
+    if [ "$USER" = "root" ]; then
+        userColor="$red"
+        promptColor="$red"
+        promptString="#"
+    fi
+
+    if [ -z "$ZSH_VERSION" ]; then
+        echo "\n\[$userColor\]\u\[$white\] at \[$white\]$sshString\[$blue\]\h\[$white\] in \[$green\]\w$gitString\n\[$promptColor\]$promptString\[$reset\] "
+    else
+        echo "\n%{$userColor%}%n%{$white%} at %{$white%}$sshString%{$blue%}%m%{$white%} in %{$green%}%~$gitString\n%{$promptColor%}$promptString%{$reset%} "
+    fi
+}

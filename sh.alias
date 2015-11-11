@@ -1,0 +1,144 @@
+#!/bin/sh
+
+# aliases: save typing
+alias ll="ls -l $LS_OPTIONS"
+alias l="ll -h"
+alias dir="ls -1"
+alias pk="pkill -9 -f"
+alias v="$EDITOR"
+alias vi="$EDITOR"
+alias vim="$EDITOR"
+alias g="git"
+
+# aliases: default options
+alias rm="rm -i"
+alias ping="ping -c4 -t4"
+alias route="route -n"
+alias netstat="netstat -n"
+alias bc="bc -q -l"
+alias du="du -h -s -c *"
+
+# aliases: useful extras
+alias trunc='cut -c -${COLUMNS:-80}'
+
+# aliases: clipboard
+if [ -z "${OSTYPE##*darwin*}" ]; then
+    alias ccopy="pbcopy"
+    alias cpaste="pbpaste"
+elif hash xclip 2>/dev/null; then
+    alias ccopy="xclip -selection c"
+    alias cpaste="xclip -selection c -o"
+elif hash xsel 2>/dev/null; then
+    alias ccopy="xsel --clipboard --input"
+    alias cpaste="xsel --clipboard --output"
+fi
+
+# aliases: ack/ag
+if hash ack-grep 2>/dev/null; then
+    alias ack="ack-grep"
+fi
+if hash ag 2>/dev/null; then
+    alias a="ag"
+else
+    alias a="ack"
+fi
+
+# aliases: genot
+if hash genot 2>/dev/null; then
+    alias tip='genot -c ~/.tips'
+fi
+
+# aliases: todo.sh
+if hash todo.sh 2>/dev/null; then
+    alias t='todo.sh'
+fi
+
+# custom defined functions
+
+# file browsing
+fv() {
+    if ! hash fzf 2>/dev/null; then
+        echo "fzf not found!"
+        return 1
+    fi
+    local dir=${1:-.}
+    local selected=$(ls "$dir" | fzf)
+    if [ -n "$selected" ]; then
+        if [ -d "$dir/$selected" ]; then
+            fv "$dir/$selected"
+        else
+            ${EDITOR:-vim} "$dir/$selected"
+        fi
+    fi
+}
+
+# directory browsing
+fcd() {
+    if ! hash fzf 2>/dev/null || ! hash autojump 2>/dev/null; then
+        echo "fzf or autojump not found!"
+        return 1
+    fi
+    local dir="$(autojump --stat | awk '/^[0-9]+.*\// {print $2}' | fzf --tac)"
+    test -t 1 && cd $dir || echo "cd $dir"
+}
+
+# branch browsing
+fbr() {
+    if ! hash fzf 2>/dev/null; then
+        echo "fzf not found!"
+        return 1
+    fi
+    local branches branch
+    branches=$(git branch | awk '{print $NF}' | sort -r) &&
+    branch=$(echo "$branches" | fzf +m) &&
+    test -t 1 && git checkout $branch || echo $branch
+}
+
+# process listing
+pa () {
+    local LIST="$($(which ps) axo pid,pcpu,pmem,user,command)"
+    while [ -n "$1" ]; do
+        if [ -z "${1##-*}" ]; then
+            LIST=$(echo "$LIST" | grep -vi ${1#-})
+        else
+            LIST=$(echo "$LIST" | grep -i $1)
+        fi
+        shift
+    done
+    echo "$LIST"
+}
+
+# process listing (current user)
+p () {
+    local LIST="$($(which ps) xo pid,pcpu,pmem,user,command)"
+    while [ -n "$1" ]; do
+        if [ -z "${1##-*}" ]; then
+            LIST=$(echo "$LIST" | grep -vi ${1#-})
+        else
+            LIST=$(echo "$LIST" | grep -i $1)
+        fi
+        shift
+    done
+    echo "$LIST"
+}
+
+# open files
+open() {
+    local open_cmd=""
+    case "$OSTYPE" in
+        darwin*)
+            open_cmd="open"
+            ;;
+        linux*)
+            open_cmd="xdg-open"
+            ;;
+        cygwin*)
+            open_cmd="cygstart"
+            ;;
+        *)
+            echo "Platform $OSTYPE unsupported"
+            return 1
+            ;;
+    esac
+    nohup $open_cmd "$@" >/dev/null 2>&1
+}
