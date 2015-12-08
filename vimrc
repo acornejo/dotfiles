@@ -49,8 +49,13 @@ else
     set clipboard+=unnamed
 endif
 
+" setup viminfo
+if has('nvim')
+    set viminfo='1000,\"100,:20,n~/.nviminfo
+else
+    set viminfo='1000,\"100,:20,n~/.viminfo
+endif
 " Storage of various files
-set viminfo='1000,\"100,:20,n~/.viminfo " save stuff to ~/.viminfo
 set spellfile=~/.vimspell.add           " save new words
 set spellsuggest=best,10
 set viewdir=~/.vim_view                 " save views
@@ -67,10 +72,7 @@ if has("gui_running")
     set guioptions-=T " remove toolbar
     set guioptions-=r " remove scrollbar
     set guioptions-=L " remove right scrollbar
-    set gfn=Menlo:h12
     set mousemodel=popup
-    set columns=110
-    set lines=67
 else
     hi SpellBad ctermfg=Red ctermbg=NONE guibg=NONE guifg=Red cterm=underline gui=underline term=reverse
     hi SpellCap ctermfg=Blue ctermbg=NONE guibg=NONE guifg=Blue cterm=underline gui=underline term=reverse
@@ -122,8 +124,12 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = {"mode": "passive" }
 let g:syntastic_cpp_config_file = '.vim_syntax'
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'javascript', 'cpp']
 let g:signify_vcs_list = [ 'git' ]
 let g:rsi_no_meta = 1
+let g:EasyClipShareYanks = 1
+let g:GPGPreferArmor = 1
+let g:GPGPreferSign = 1
 
 " Use silversearcher instead of grep
 if executable('ag')
@@ -162,12 +168,11 @@ augroup custom-cmds
     " Set tioa filetype
     autocmd BufNewFile,BufRead *.tioa setf tioa
     " Enable spell for text files
-    autocmd BufNewFile,BufRead *.txt,*.html,*.tex,*.md,README setlocal spell spelllang=en_us
+    autocmd BufNewFile,BufRead *.txt,*.html,*.tex,*.md,README if line2byte(line("$") + 1) < 10000 | setlocal spell spelllang=en | endif
     " set make prog
     autocmd FileType java setlocal makeprg=javac\ % efm=%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#
     autocmd FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\" efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
     autocmd FileType gnuplot setlocal makeprg=cat\ %\\\|gnuplot\ \-persist\ \&
-    autocmd FileType tioa setlocal makeprg=tempo.sh\ %
     " enable autocomplete
     autocmd Filetype java setlocal omnifunc=javacomplete#Complete
     autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
@@ -209,7 +214,5 @@ nnoremap <expr> <cr> (&buftype is# "" ? ":" : "<cr>")
 nnoremap Q <nop>
 
 
-for f in split(glob("~/.vimrc.pre.*"), "\n")
-    execute 'source ' . escape(f, '\ "')
-endfor
-au VimEnter * for f in split(glob("~/.vimrc.post.*"), "\n") | execute 'source ' . escape(f, '\ "') | endfor
+for f in split(glob("~/.vimrc.pre.*"), "\n") | execute 'source ' . fnameescape(f) | endfor
+au VimEnter * for f in split(glob("~/.vimrc.post.*"), "\n") | execute 'source ' . fnameescape(f) | endfor

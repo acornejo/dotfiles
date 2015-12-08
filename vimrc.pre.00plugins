@@ -20,6 +20,8 @@ Plug 'tomasr/molokai'
 " #### filetype support
 " Git
 Plug 'tpope/vim-git'
+" Markdown
+Plug 'tpope/vim-markdown', {'for': 'markdown'}
 " C/C++
 Plug 'octol/vim-cpp-enhanced-highlight'
 " LESS
@@ -34,15 +36,13 @@ Plug 'chrisbra/csv.vim', {'for': 'csv'}
 Plug 'sukima/xmledit'
 " Latex
 Plug 'acornejo/vim-texhelpers', {'for': 'tex'}
-" Markdown
-Plug 'tpope/vim-markdown', {'for': 'markdown'}
 " quick html generation
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 " go
 Plug 'fatih/vim-go'
 " gpg decryption
 if version >= 702
-Plug 'jamessan/vim-gnupg', {'for': 'gpg'}
+Plug 'jamessan/vim-gnupg'
 endif
 
 " #### general
@@ -67,16 +67,16 @@ if version >= 702
 Plug 'tomtom/tcomment_vim'
 endif
 " snippets
-if version >= 703 && s:python_ver >= 260
+if version >= 704 && s:python_ver >= 260
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 endif
 " close all but this buffer
 Plug 'duff/vim-bufonly'
+" tmux integration
+Plug 'tpope/vim-tbone'
 " git integration
 Plug 'tpope/vim-fugitive'
-" gitk emulation
-Plug 'gregsexton/gitv', {'on': ['Gitv']}
 " netrw improvements
 Plug 'tpope/vim-vinegar'
 " useful mappings
@@ -89,22 +89,30 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-eunuch'
 " repeat action for scripts
 Plug 'tpope/vim-repeat'
-" nice status bar
-Plug 'bling/vim-airline'
+" For autocorrect
+Plug 'tpope/vim-abolish'
+" gitk emulation
+Plug 'gregsexton/gitv', {'on': ['Gitv']}
+" nice status line
+Plug 'itchyny/lightline.vim'
 " quick jumping around file
 Plug 'Lokaltog/vim-easymotion'
 " camel case ,w ,e ,b motions
-Plug 'bkad/CamelCaseMotion'
+Plug 'bkad/CamelCaseMotion', {'commit': 'f3bdef'}
+if version >= 703 && s:python_ver >= 260
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
-" session management
-Plug 'tpope/vim-obsession'
+endif
 " Mark display/jump improvements
 Plug 'kshenoy/vim-signature'
-" For autocorrect
-Plug 'tpope/vim-abolish'
 " multiple cursors
 Plug 'terryma/vim-multiple-cursors'
+" Search for visual selection
+Plug 'bronson/vim-visual-star-search'"
+" sane vim clipboard behavior
+Plug 'svermeulen/vim-easyclip'
+" cx mapping for exchange
+Plug 'tommcdo/vim-exchange'
 
 " C/C++/Javascript completion
 if version > 703 || (version >= 703 && has('patch584'))
@@ -147,6 +155,8 @@ endif
 " endif
 " Yank register management
 " Plug 'vim-scripts/YankRing.vim'
+" nice status bar
+" Plug 'bling/vim-airline'
 
 call plug#end()
 

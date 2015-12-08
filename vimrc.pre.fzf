@@ -25,16 +25,27 @@ function! s:tag_handler(tag)
     endif
 endfunction
 
-function! s:reg_list()
-  return ['0: ' . @0, '1: ' . @1, '2: ' . @2, '3: ' . @3, '4: ' . @4, '5: ' . @5, '6: ' . @6, '7: ' . @7, '8: ' . @8, '9: ' . @9]
+function! s:yank_list()
+    if exists(":Yanks")
+        redir => ys
+        silent Yanks
+        redir END
+        return split(ys, '\n')[1:]
+    else
+        return reverse(['0 ' . @0, '1 ' . @1, '2 ' . @2, '3 ' . @3, '4 ' . @4, '5 ' . @5, '6 ' . @6, '7 ' . @7, '8 ' . @8, '9 ' . @9])
+    endif
 endfunction
 
-function! s:reg_handler(reg)
+function! s:yank_handler(reg)
   if empty(a:reg)
     echo "aborted register paste"
   else
-    let token = split(a:reg, '\: ')
-    execute 'normal! "' . token[0] . 'p'
+    let token = split(a:reg, ' ')
+    if exists(":Yanks")
+        execute 'Paste' . token[0]
+    else
+        execute 'normal! "' . token[0] . 'p'
+    endif
   endif
 endfunction
 
@@ -91,7 +102,10 @@ endfunction
 
 function! s:dir_handler(dir)
   execute 'lcd ~/src/'.a:dir
-  execute 'FZF'
+  execute 'FZF' . '~/src/'.a:dir
+  if has("nvim")
+      call feedkeys('i')
+  endif
 endfunction
 
 function! s:line_handler(l)
@@ -147,8 +161,8 @@ command! FZFBuf call fzf#run({
 \ })
 
 command! FZFYank call fzf#run({
-\ 'source': reverse(<sid>reg_list()),
-\ 'sink': function('<sid>reg_handler'),
+\ 'source': <sid>yank_list(),
+\ 'sink': function('<sid>yank_handler'),
 \ 'options': '-m',
 \ 'down': 12
 \ })
