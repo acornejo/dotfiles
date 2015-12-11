@@ -8,7 +8,8 @@ __ssh_prompt() {
 
 __git_prompt() {
    if type __git_ps1 | grep function >/dev/null 2>&1; then
-       local branch=$(__git_ps1 %s)
+       local branch
+       branch=$(__git_ps1 %s)
        if [ -n "$branch" ]; then
            echo -n "$1 on $2$branch"
        fi
