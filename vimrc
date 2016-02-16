@@ -11,7 +11,7 @@ set history=1024            " Remember command line history
 set sm                      " When a bracket is inserted briefly jump to the matching one
 set wildmode=longest,list,full " tab completion
 set wildmenu                " Enable wildmenu for completion with tab
-set wildignore+=*/tmp/*,*.so,*.swp  " Ignore in completion
+set wildignore+=*.so,*.swp  " Ignore in completion
 set autoread                " If file was changed outside, and no local changes, reload"
 set novb t_vb=              " No visual error
 set noeb                    " No sound for error (bell)
@@ -59,7 +59,6 @@ endif
 set spellfile=~/.vimspell.add           " save new words
 set spellsuggest=best,10
 set viewdir=~/.vim_view                 " save views
-set tags+=~/.vim_tags                   " set tags location
 try
     set undofile                        " save undo to file
     set undodir=~/.vim_undo             " set undo directory
@@ -109,10 +108,10 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_add_preview_to_completeopt = 1
-let g:UltiSnipsListSnippets="<c-q>"
-let g:UltiSnipsExpandTrigger="<c-s>"
-let g:UltiSnipsJumpForwardTrigger="<c-s>"
-let g:UltiSnipsJumpBackwardTrigger="<c-q>"
+let g:UltiSnipsListSnippets="<c-k>"
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:xmledit_enable_html = 1
 let g:sparkupExecuteMapping="<c-i>"
 let g:airline_powerline_fonts = 0
@@ -128,6 +127,7 @@ let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'javascript', 'c
 let g:signify_vcs_list = [ 'git' ]
 let g:rsi_no_meta = 1
 let g:EasyClipShareYanks = 1
+let g:EasyClipEnableBlackHoleRedirect = 0
 let g:GPGPreferArmor = 1
 let g:GPGPreferSign = 1
 
@@ -193,9 +193,6 @@ augroup END
 "************************************
 " Custom mappings
 "************************************
-" Run make in vmux
-nnoremap <leader>m :call VimuxRunCommand("cd " . getcwd() . "; m")<CR>
-nnoremap <leader>M :cfile /tmp/make.log<CR>:cw<CR>
 " Prompt for vmux command
 nnoremap <leader>v :call VimuxPromptCommand()<CR>
 " Switch between source and header
