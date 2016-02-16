@@ -111,9 +111,11 @@ Plug 'svermeulen/vim-easyclip'
 Plug 'tommcdo/vim-exchange'
 
 " C/C++/Javascript completion
+if !isdirectory('/usr/share/vim/google')
 if version > 703 || (version >= 703 && has('patch584'))
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' , 'on': [] }
 command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
+endif
 endif
 
 " #### disabled
