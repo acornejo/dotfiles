@@ -1,5 +1,6 @@
 function! s:recent_list()
-    return filter(map(copy(v:oldfiles), 'expand(v:val)'), 'filereadable(v:val)')
+    return map(filter(copy(v:oldfiles), 'v:val !~ "^/tmp/"'), 'substitute(v:val, "^\\~", $HOME, "")')
+    "return filter(map(copy(v:oldfiles), 'expand(v:val)'), 'filereadable(v:val)')
 endfunction
 
 function! s:buf_list()
