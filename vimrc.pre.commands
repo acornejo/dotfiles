@@ -81,3 +81,19 @@ command! Cd :cd %:p:h | :echo 'changed directory to '.getcwd()
 
 " run external command
 command! -nargs=1 -complete=shellcmd Run | execute ':silent !'.<q-args> | execute ':redraw!'
+
+" make * and # find word but not move cursor
+nnoremap * :let @/= '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
+nnoremap # :let @/= '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
+
+" make * and # work on visual mode too.
+function! s:VSetSearch(cmdtype)
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+  let @s = temp
+  set hlsearch
+endfunction
+
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>
