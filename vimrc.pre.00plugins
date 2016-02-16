@@ -105,10 +105,6 @@ Plug 'Valloric/MatchTagAlways'
 endif
 " Mark display/jump improvements
 Plug 'kshenoy/vim-signature'
-" multiple cursors
-Plug 'terryma/vim-multiple-cursors'
-" Search for visual selection
-Plug 'bronson/vim-visual-star-search'"
 " sane vim clipboard behavior
 Plug 'svermeulen/vim-easyclip'
 " cx mapping for exchange
@@ -157,6 +153,10 @@ endif
 " Plug 'vim-scripts/YankRing.vim'
 " nice status bar
 " Plug 'bling/vim-airline'
+" " Search for visual selection
+" Plug 'bronson/vim-visual-star-search'"
+" " multiple cursors
+" Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
 
