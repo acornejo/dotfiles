@@ -11,7 +11,7 @@ fi
 bind '"\C-g": " \C-e\C-u$(fcd)\e\C-e\er\C-m"'
 
 # set history options
-HISTIGNORE="&:?:??:???:exit:[ \t]*"
+HISTIGNORE="&:?:??:???:exit"
 HISTCONTROL="ignorespace:ignoredups:erasedups"
 HISTFILESIZE=50000
 HISTSIZE=10000
