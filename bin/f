@@ -1,2 +1,2 @@
 #!/bin/bash
-exec find . -iname "*$1*"
+exec find . -iname "*$1*" -not \( -path '*/.git' -o -path '*/.svn' -o -path '*/.hg' -prune \)
