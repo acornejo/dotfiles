@@ -5,6 +5,56 @@ if ! filereadable(expand("$HOME/.vim/autoload/plug.vim"))
     finish
 endif
 
+"************************************
+" Plugin settings
+"************************************
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " Hide .* files
+let g:netrw_browsex_viewer='open'     " Open files with viewer
+let g:netrw_fast_browse=2            " Use fast browsing
+let g:netrw_liststyle=1              " Display file details in browser
+let g:netrw_hide=1                   " show not-hidden files
+let g:python_failquietly=1           " Dont complain if there is no python
+let g:buftabs_marker_start=""        " marker around active buftab
+let g:buftabs_marker_end=""          " marker around active buftab
+let g:buftabs_separator=":"          " marker around active buftab
+let g:buftabs_marker_modified="+"    " Marker for modified buftabs
+let g:buftabs_only_basename=1        " Show short name in buftabs
+let g:buftabs_in_statusline=1        " Show buftabs in status line
+let g:buftabs_inactive_highlight_group="StatusLine" " Color for inactive tabs
+let g:buftabs_active_highlight_group="Title"   " Color for active tabs
+let g:yankring_history_file = ".vim_yankring"
+let g:yankring_min_element_length = 2
+let g:yankring_manage_numbered_reg = 1
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_always_populate_location_list = 1
+let g:UltiSnipsListSnippets="<c-k>"
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:xmledit_enable_html = 1
+let g:sparkupExecuteMapping="<c-i>"
+let g:airline_powerline_fonts = 0
+" let g:airline#extensions#tabline#enabled = 1   " Enable bufline
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:syntastic_html_tidy_ignore_errors=['trimming empty', 'lacks "alt" attribute', 'lacks "src" attribute']
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {"mode": "passive" }
+let g:syntastic_cpp_config_file = '.vim_syntax'
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'javascript', 'cpp']
+let g:signify_vcs_list = [ 'git' ]
+let g:rsi_no_meta = 1
+let g:EasyClipShareYanks = 1
+let g:EasyClipEnableBlackHoleRedirect = 0
+let g:tcommentMapLeader2 = ''  " Disable leader key maps
+let g:notes_unicode_enabled = 0
+let g:GPGPreferArmor = 1
+let g:GPGPreferSign = 1
+
 let s:python_ver = 0
 silent! python import sys, vim;
             \ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
@@ -12,7 +62,7 @@ silent! python import sys, vim;
 call plug#begin('~/.vim/plugged')
 
 " #### colorschemes
-" solarized color scheme
+" solarized
 Plug 'altercation/vim-colors-solarized'
 " molokai
 Plug 'tomasr/molokai'
@@ -48,6 +98,7 @@ endif
 " #### general
 " fzf integration
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
 " ack/ag integration
 Plug 'mileszs/ack.vim'
 " find and switch to project root
@@ -58,8 +109,8 @@ Plug 'benmills/vimux'
 Plug 'jiangmiao/auto-pairs'
 " mark changed lines in git
 Plug 'airblade/vim-gitgutter'
-" align blocks
-Plug 'godlygeek/tabular'
+" align blocks of things
+Plug 'junegunn/vim-easy-align'
 " syntax checker
 Plug 'scrooloose/syntastic'
 " (un)comment blocks
@@ -95,8 +146,6 @@ Plug 'tpope/vim-abolish'
 Plug 'gregsexton/gitv', {'on': ['Gitv']}
 " nice status line
 Plug 'itchyny/lightline.vim'
-" quick jumping around file
-Plug 'Lokaltog/vim-easymotion'
 " camel case ,w ,e ,b motions
 Plug 'bkad/CamelCaseMotion', {'commit': 'f3bdef'}
 if version >= 703 && s:python_ver >= 260
@@ -105,10 +154,13 @@ Plug 'Valloric/MatchTagAlways'
 endif
 " Mark display/jump improvements
 Plug 'kshenoy/vim-signature'
-" sane vim clipboard behavior
-Plug 'svermeulen/vim-easyclip'
 " cx mapping for exchange
 Plug 'tommcdo/vim-exchange'
+" sensible target motions
+Plug 'wellle/targets.vim'
+" Note taking
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
 
 " C/C++/Javascript completion
 if !isdirectory('/usr/share/vim/google')
@@ -159,6 +211,10 @@ endif
 " Plug 'bronson/vim-visual-star-search'"
 " " multiple cursors
 " Plug 'terryma/vim-multiple-cursors'
+" " quick jumping around file
+" Plug 'Lokaltog/vim-easymotion'
+" " sane vim clipboard behavior
+" Plug 'svermeulen/vim-easyclip'
 
 call plug#end()
 
@@ -166,3 +222,8 @@ call plug#end()
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object ()"
+nmap ga <Plug>(EasyAlign)

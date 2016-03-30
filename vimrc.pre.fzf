@@ -1,19 +1,3 @@
-function! s:recent_list()
-    return map(filter(copy(v:oldfiles), 'v:val !~ "^/tmp/"'), 'substitute(v:val, "^\\~", $HOME, "")')
-    "return filter(map(copy(v:oldfiles), 'expand(v:val)'), 'filereadable(v:val)')
-endfunction
-
-function! s:buf_list()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:buf_handler(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
 function! s:tag_handler(tag)
     if !empty(a:tag)
         let token = split(split(a:tag, '\t')[2],';"')[0]
@@ -75,32 +59,6 @@ function! s:ag_curword()
   endif
 endfunction
 
-function! s:ag_to_qf(line)
-    let parts = split(a:line, ':')
-    return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
-            \ 'text': join(parts[3:], ':')}
-endfunction
-
-function! s:ag_handler(lines)
-  if len(a:lines) < 2 | return | endif
-
-  let cmd = get({'ctrl-x': 'split',
-               \ 'ctrl-v': 'vertical split',
-               \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
-  let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
-
-  let first = list[0]
-  execute cmd escape(first.filename, ' %#\')
-  execute first.lnum
-  execute 'normal!' first.col.'|zz'
-
-  if len(list) > 1
-    call setqflist(list)
-    copen
-    wincmd p
-  endif
-endfunction
-
 function! s:dir_handler(dir)
   execute 'lcd ~/src/'.a:dir
   execute 'FZF' . '~/src/'.a:dir
@@ -108,37 +66,6 @@ function! s:dir_handler(dir)
       call feedkeys('i')
   endif
 endfunction
-
-function! s:line_handler(l)
-  let keys = split(a:l, ':\t')
-  exec 'buf' keys[0]
-  exec keys[1]
-  normal! ^zz
-endfunction
-
-function! s:line_source()
-  let res = []
-  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
-    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" . (v:key + 1) . ":\t" . v:val '))
-  endfor
-  return res
-endfunction
-
-command! FZFLines call fzf#run({
-\   'source':  <sid>line_source(),
-\   'sink':    function('<sid>line_handler'),
-\   'options': '--extended -d : --with-nth=3..',
-\   'down':    '50%'
-\})
-
-command! -nargs=1 Ag call fzf#run({
-\ 'source': 'ag --nogroup --column --color "'.escape(<q-args>, '"\').'"',
-\ 'sink*': function('<sid>ag_handler'),
-\ 'dir': getcwd(),
-\ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x '.
-\            '--multi --bind ctrl-a:select-all,ctrl-d:deselect-all ',
-\ 'down': '50%'
-\ })
 
 command! FZFTag if !empty(tagfiles()) | call fzf#run({
 \ 'source': "sed '/^\\!/d;s/\t.*//' " . join(tagfiles()) . ' | uniq',
@@ -154,25 +81,11 @@ command! FZFTagFile if !empty(tagfiles()) | call fzf#run({
 \ 'down': '50%'
 \ }) | else | echo 'No tags' | endif
 
-command! FZFBuf call fzf#run({
-\ 'source': reverse(<sid>buf_list()),
-\ 'sink': function('<sid>buf_handler'),
-\ 'options': '-m',
-\ 'down': len(<sid>buf_list()) + 2
-\ })
-
 command! FZFYank call fzf#run({
 \ 'source': <sid>yank_list(),
 \ 'sink': function('<sid>yank_handler'),
 \ 'options': '-m',
 \ 'down': 12
-\ })
-
-command! FZFRecent call fzf#run({
-\ 'source': <sid>recent_list(),
-\ 'sink': 'e',
-\ 'options': '-m',
-\ 'down': '50%'
 \ })
 
 command! FZFProjects call fzf#run({
@@ -188,7 +101,7 @@ nnoremap <silent> <Leader>f :FZF<CR>
 nnoremap <silent> <Leader>a :call <sid>ag_prompt()<CR>
 nnoremap <silent> <Leader>A :call <sid>ag_curword()<CR>
 nnoremap <silent> <Leader>y :FZFYank<CR>
-nnoremap <silent> <Leader>b :FZFBuf<CR>
-nnoremap <silent> <Leader>r :FZFRecent<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>r :History<CR>
 nnoremap <silent> <Leader>p :FZFProjects<CR>
-nnoremap <silent> <Leader>j :FZFLines<CR>
+nnoremap <silent> <Leader>j :BLines<CR>
