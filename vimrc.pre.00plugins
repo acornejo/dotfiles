@@ -68,18 +68,8 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 
 " #### filetype support
-" Git
-Plug 'tpope/vim-git'
-" Markdown
-Plug 'tpope/vim-markdown', {'for': 'markdown'}
-" C/C++
-Plug 'octol/vim-cpp-enhanced-highlight'
-" LESS
-Plug 'groenewege/vim-less', {'for': 'less'}
-" Javascript
-Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-" jsx
-Plug 'mxw/vim-jsx', {'for': 'jsx'}
+" Language support
+Plug 'sheerun/vim-polyglot'
 " CSV
 Plug 'chrisbra/csv.vim', {'for': 'csv'}
 " XML
@@ -88,8 +78,6 @@ Plug 'sukima/xmledit'
 Plug 'acornejo/vim-texhelpers', {'for': 'tex'}
 " quick html generation
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
-" go
-Plug 'fatih/vim-go'
 " gpg decryption
 if version >= 702
 Plug 'jamessan/vim-gnupg'
