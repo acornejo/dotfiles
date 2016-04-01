@@ -146,9 +146,6 @@ Plug 'kshenoy/vim-signature'
 Plug 'tommcdo/vim-exchange'
 " sensible target motions
 Plug 'wellle/targets.vim'
-" Note taking
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
 
 " C/C++/Javascript completion
 if !isdirectory('/usr/share/vim/google')
