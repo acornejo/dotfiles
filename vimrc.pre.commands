@@ -33,6 +33,46 @@ function! s:Scratch()
 endfunction
 command! -nargs=? Scratch call s:Scratch()
 
+
+function! s:Pipe(command)
+  let switchbuf_saved = &switchbuf
+  set switchbuf=useopen
+
+  let cur_buffer = bufnr("%")
+  let pipe_name = "[Pipe] " . bufname(cur_buffer)
+  let pipe_buffer = bufnr(pipe_name)
+
+  if pipe_buffer == -1
+    let pipe_buffer = bufnr(pipe_name, 1)
+
+    if &splitright
+      silent execute "vert sbuffer " . pipe_buffer
+    else
+      silent execute "sbuffer " . pipe_buffer
+    endif
+
+    setlocal buftype=nofile bufhidden=wipe noswapfile
+  else
+    silent execute "sbuffer" pipe_buffer
+  endif
+
+  " copy old buffer to new buffer
+  execute ":%d _"
+  call append(line('0'), getbufline(cur_buffer, 1, "$"))
+
+  echo "running '" . a:command . "'. this may take some time..."
+  let l:start = reltime()
+  silent execute ":%!" . a:command
+  redraw
+  echo "ran '" . a:command . "' in" . reltimestr(reltime(start)) . "s"
+
+  " Go back to the last window.
+  silent execute "sbuffer" cur_buffer
+
+  let &switchbuf = switchbuf_saved
+endfunction
+command! -nargs=1 -complete=shellcmd Pipe call s:Pipe(<q-args>)
+
 " http://vimcasts.org/episodes/project-wide-find-and-replace/
 function! s:QuickfixFilenames()
   " Building a hash ensures we get each buffer only once
