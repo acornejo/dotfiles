@@ -87,7 +87,7 @@ command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
 command! -nargs=1 -complete=command -bang Qdo exec 'bufdo bd' | exe 'args ' . s:QuickfixFilenames() | argdo<bang> <args>
 
 function! s:SwitchSourceHeader()
-  let source = ["cpp", "C", "c"]
+  let source = ["cpp", "C", "c", "cc"]
   let header = ["h", "hpp"]
   let candidates = []
 
