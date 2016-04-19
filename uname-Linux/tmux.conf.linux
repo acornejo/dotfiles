@@ -1,5 +1,6 @@
 source-file ~/.tmux.conf.main
 
-# For os x clipboard
-bind-key -t vi-copy y copy-pipe "xclip -sel clip -i"
-bind-key -t vi-copy Enter copy-pipe "xclip -sel clip -i"
+# For x clipboard
+if-shell '[[ -n $DISPLAY ]] && which xclip >/dev/null' 'bind-key -t vi-copy y copy-pipe "xclip -sel clip -i"'
+if-shell '[[ -n $DISPLAY ]] && which xclip >/dev/null' 'bind-key -t vi-copy Enter copy-pipe "xclip -sel clip -i"'
+if-shell '[[ -n $DISPLAY ]] && which xclip >/dev/null' 'bind-key ] run "xclip -sel -clip -o | tmux load-buffer - ; tmux paste-buffer"'
