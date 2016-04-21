@@ -212,3 +212,6 @@ endif
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object ()"
 nmap ga <Plug>(EasyAlign)
+
+" Prompt for vmux command
+nnoremap <expr> <leader>v exists("g:VimuxRunnerIndex") ? ":VimuxRunLastCommand<CR>" : ":VimuxPromptCommand<CR>"

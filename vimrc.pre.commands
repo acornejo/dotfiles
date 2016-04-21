@@ -86,6 +86,7 @@ endfunction
 command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
 command! -nargs=1 -complete=command -bang Qdo exec 'bufdo bd' | exe 'args ' . s:QuickfixFilenames() | argdo<bang> <args>
 
+" Switch between source and header
 function! s:SwitchSourceHeader()
   let source = ["cpp", "C", "c", "cc"]
   let header = ["h", "hpp"]
@@ -115,6 +116,8 @@ function! s:SwitchSourceHeader()
   endfor
 endfunction
 command! SwitchSourceHeader call s:SwitchSourceHeader()
+
+nnoremap <leader>s :SwitchSourceHeader<CR>
 
 function! s:CloseHiddenBuffers()
   " list of *all* buffer numbers

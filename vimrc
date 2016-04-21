@@ -142,10 +142,6 @@ augroup END
 "************************************
 " remap leader
 let mapleader = " "
-" Prompt for vmux command
-nnoremap <leader>v :call VimuxPromptCommand()<CR>
-" Switch between source and header
-nnoremap <leader>s :SwitchSourceHeader<CR>
 " Split line
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>$
 " close buffer not window
