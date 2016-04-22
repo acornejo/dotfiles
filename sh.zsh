@@ -11,6 +11,11 @@ setopt hist_ignore_dups
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt hist_save_no_dups
+setopt inc_append_history
+
+history_reload() {
+    fc -RI
+}
 
 # set general options
 unsetopt flowcontrol     # turn off ^S and ^Q tty suspend/resume commands
