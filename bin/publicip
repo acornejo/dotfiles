@@ -1,2 +1,2 @@
 #!/bin/bash
-curl -k -s http://checkip.dyndns.org:8245 | awk '{print $6;}' | cut -f1 -d\<
+curl -k -s https://api.ipify.org
