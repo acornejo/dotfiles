@@ -131,7 +131,7 @@ Plug 'tpope/vim-repeat'
 " For autocorrect
 Plug 'tpope/vim-abolish'
 " gitk emulation
-Plug 'gregsexton/gitv', {'on': ['Gitv']}
+Plug 'junegunn/gv.vim'
 " nice status line
 Plug 'itchyny/lightline.vim'
 " camel case ,w ,e ,b motions
@@ -140,8 +140,6 @@ if version >= 703 && s:python_ver >= 260
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
 endif
-" Mark display/jump improvements
-Plug 'kshenoy/vim-signature'
 " cx mapping for exchange
 Plug 'tommcdo/vim-exchange'
 " sensible target motions
@@ -200,6 +198,11 @@ endif
 " Plug 'Lokaltog/vim-easymotion'
 " " sane vim clipboard behavior
 " Plug 'svermeulen/vim-easyclip'
+" " gitk emulation
+" Plug 'gregsexton/gitv', {'on': ['Gitv']}
+" " Mark display/jump improvements
+" (not used and causes whitespace highlight problems on Gitv or GV)
+" Plug 'kshenoy/vim-signature'
 
 call plug#end()
 
