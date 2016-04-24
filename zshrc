@@ -13,9 +13,8 @@
 # git prompt function
 [ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
 
-# autojump
-[ -f /usr/share/autojump/autojump.zsh ] && source /usr/share/autojump/autojump.zsh
-[ -f /usr/local/share/autojump/autojump.zsh ] && source /usr/local/share/autojump/autojump.zsh
+# z
+[ -f ~/.bin/z.sh ] && source ~/.bin/z.sh
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

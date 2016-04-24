@@ -74,11 +74,11 @@ fv() {
 
 # directory browsing
 fcd() {
-    if ! hash fzf 2>/dev/null || ! hash autojump 2>/dev/null; then
-        echo "fzf or autojump not found!"
+    if ! hash fzf 2>/dev/null || (type z | grep 'not found' >/dev/null 2>&1); then
+        echo "fzf not found!"
         return 1
     fi
-    local dir="$(autojump --stat | awk '/^[0-9]+.*\// {print $2}' | fzf --tac)"
+    local dir="$(z -l | awk '/^[0-9]+.*\// {print $2}' | fzf --tac)"
     test -t 1 && cd $dir || echo "cd $dir"
 }
 
