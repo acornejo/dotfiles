@@ -40,6 +40,13 @@ fcd-widget() {
 zle     -N   fcd-widget
 bindkey '^G' fcd-widget
 
+# make alt-backspace useful (i.e. different from ctrl-w)
+x-bash-backward-kill-word() {
+    WORDCHARS='' zle backward-kill-word
+}
+zle     -N     x-bash-backward-kill-word
+bindkey '\e^?' x-bash-backward-kill-word
+
 # zsh completion
 autoload -Uz compinit && compinit
 zstyle ':completion:*:*:*:*:*' menu select
