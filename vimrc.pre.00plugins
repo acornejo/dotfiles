@@ -134,8 +134,6 @@ Plug 'tpope/vim-abolish'
 Plug 'junegunn/gv.vim'
 " nice status line
 Plug 'itchyny/lightline.vim'
-" camel case ,w ,e ,b motions
-Plug 'bkad/CamelCaseMotion', {'commit': 'f3bdef'}
 if version >= 703 && s:python_ver >= 260
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
@@ -144,6 +142,8 @@ endif
 Plug 'tommcdo/vim-exchange'
 " sensible target motions
 Plug 'wellle/targets.vim'
+" custom textobjects
+Plug 'kana/vim-textobj-user'
 
 " C/C++/Javascript completion
 if !isdirectory('/usr/share/vim/google')
@@ -203,7 +203,8 @@ endif
 " " Mark display/jump improvements
 " (not used and causes whitespace highlight problems on Gitv or GV)
 " Plug 'kshenoy/vim-signature'
-
+" " camel case ,w ,e ,b motions
+" Plug 'bkad/CamelCaseMotion'
 call plug#end()
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
@@ -218,3 +219,10 @@ nmap ga <Plug>(EasyAlign)
 
 " Prompt for vmux command
 nnoremap <expr> <leader>v exists("g:VimuxRunnerIndex") ? ":VimuxRunLastCommand<CR>" : ":VimuxPromptCommand<CR>"
+
+call textobj#user#plugin('camelcase', {
+\  'camel': {
+\        'pattern': '_\{0,1\}[A-Za-z][a-z0-9]\+',
+\        'select': ['ac', 'ic']
+\       }
+\})
