@@ -20,6 +20,7 @@ alias du="du -h -s -c *"
 
 # aliases: useful extras
 alias trunc='cut -c -${COLUMNS:-80}'
+alias sidebyside='diff -W ${COLUMNS:-80} -y'
 
 # aliases: clipboard
 if [ -z "${OSTYPE##*darwin*}" ]; then
