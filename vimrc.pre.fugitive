@@ -12,3 +12,5 @@ autocmd FileType gitrebase nnoremap <buffer> <silent> S :Squash<CR>
 autocmd FileType gitrebase nnoremap <buffer> <silent> E :Edit<CR>
 autocmd FileType gitrebase nnoremap <buffer> <silent> R :Reword<CR>
 autocmd FileType gitrebase nnoremap <buffer> <silent> F :Fixup<CR>
+
+nnoremap <leader>g :echo fugitive#head()<CR>
