@@ -12,6 +12,7 @@ setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt hist_save_no_dups
 setopt inc_append_history
+setopt histnofunctions
 
 history_reload() {
     fc -RI
@@ -26,6 +27,8 @@ setopt complete_in_word  # complete in the middle of the word
 setopt always_to_end     # go to end of word after completion
 setopt null_glob         # don't complain about empty globs (be bash/sh compat)
 setopt prompt_subst      # use functions inside prompt
+setopt sh_word_split     # for compatibility with sh/bash loops
+setopt glob_subst        # for compatibility with sh/bash var expansion
 
 # choose emacs-like bindings
 bindkey -e
@@ -46,6 +49,9 @@ x-bash-backward-kill-word() {
 }
 zle     -N     x-bash-backward-kill-word
 bindkey '\e^?' x-bash-backward-kill-word
+
+# make C-u behave like in bash
+bindkey '^U' backward-kill-line
 
 # zsh completion
 autoload -Uz compinit && compinit
