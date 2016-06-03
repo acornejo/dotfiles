@@ -1,6 +1,3 @@
-"***********************************
-"General Settings
-"***********************************
 syntax on
 filetype plugin indent on
 set nocompatible            " no compatibility mode
@@ -81,8 +78,6 @@ if has("gui_running")
     set guioptions-=L " remove right scrollbar
     set mousemodel=popup
 else
-    hi SpellBad ctermfg=Red ctermbg=NONE guibg=NONE guifg=Red cterm=underline gui=underline term=reverse
-    hi SpellCap ctermfg=Blue ctermbg=NONE guibg=NONE guifg=Blue cterm=underline gui=underline term=reverse
     if &term == "xterm" || &term == "screen-bce"
         set term=xterm
         set t_Co=256
@@ -101,14 +96,13 @@ if executable('ag')
     let g:ackprg = 'ag --nogroup --nocolor --column'
 endif
 
-"************************************
-" Autocommands
-"************************************
 augroup custom-cmds
+    " Clear current autocommand group
+    autocmd!
     " Reload vimrc when modified
-    autocmd! BufWritePost .vimrc source ~/.vimrc
+    autocmd BufWritePost .vimrc source ~/.vimrc
     " Unset paste on InsertLeave
-    au InsertLeave * silent! set nopaste
+    autocmd InsertLeave * silent! set nopaste
     " change directory
     autocmd VimEnter * if isdirectory(expand('%:p:h')) | cd %:p:h | endif
     " Go to last position when reopening file
@@ -133,16 +127,13 @@ augroup custom-cmds
     " close unused netrw buffers
     autocmd FileType netrw setl bufhidden=wipe
     " show trailing spaces http://vim.wikia.com/wiki/Highlight_unwanted_spaces
-    au ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-    au BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
-    au InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
+    autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+    autocmd BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
+    autocmd InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
     " disable syntax highlight on big ruby files
     " autocmd FileType ruby if line2byte(line("$") + 1) > 10000 | syntax clear | endif
 augroup END
 
-"************************************
-" Custom mappings
-"************************************
 " remap leader
 let mapleader = " "
 " Split line
@@ -158,7 +149,5 @@ nnoremap <expr> <cr> (&buftype is# "" ? ":" : "<cr>")
 " disable Ex mode key
 nnoremap Q <nop>
 
-"************************************
 " Load other vim settings
-"************************************
 for f in split(glob("~/.vimrc.*"), "\n") | execute 'source ' . fnameescape(f) | endfor
