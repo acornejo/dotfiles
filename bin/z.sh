@@ -28,6 +28,7 @@
 }
 
 _z() {
+    [ -n "$ZSH_VERSION" ] && setopt localoptions noglobsubst
 
     local datafile="${_Z_DATA:-$HOME/.z}"
 
