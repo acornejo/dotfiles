@@ -53,6 +53,11 @@ bindkey '\e^?' x-bash-backward-kill-word
 # make C-u behave like in bash
 bindkey '^U' backward-kill-line
 
+# Make C-x C-e behave like in bash
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
 # zsh completion
 autoload -Uz compinit && compinit
 zstyle ':completion:*:*:*:*:*' menu select
