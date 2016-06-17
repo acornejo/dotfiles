@@ -125,6 +125,9 @@ augroup custom-cmds
     autocmd BufNewFile,BufRead *.plt,*.gnuplot setf gnuplot
     " Set tioa filetype
     autocmd BufNewFile,BufRead *.tioa setf tioa
+    " Set log filetype
+    autocmd BufNewFile,BufRead *.log setlocal ft=log
+    autocmd FileType log setlocal nowrap colorcolumn=
     " Enable spell for text files
     autocmd BufNewFile,BufRead *.txt,*.html,*.tex,*.md,README,COMMIT_EDIT_MSG if line2byte(line("$") + 1) < 10000 | setlocal spell spelllang=en | endif
     " close unused netrw buffers
