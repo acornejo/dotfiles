@@ -62,14 +62,21 @@ fv() {
         echo "fzf not found!"
         return 1
     fi
-    local dir=${1:-.}
-    local selected=$(ls "$dir" | fzf)
-    if [ -n "$selected" ]; then
-        if [ -d "$dir/$selected" ]; then
-            fv "$dir/$selected"
-        else
-            ${EDITOR:-vim} "$dir/$selected"
-        fi
+    if [ -z "$FV_PER_DIR" ]; then
+      local selected=$(fzf)
+      if [ -f "$selected" ]; then
+        ${EDITOR} $selected
+      fi
+    else
+      local dir=${1:-.}
+      local selected=$(ls "$dir" | fzf)
+      if [ -n "$selected" ]; then
+          if [ -d "$dir/$selected" ]; then
+              fv "$dir/$selected"
+          else
+              ${EDITOR:-vim} "$dir/$selected"
+          fi
+      fi
     fi
 }
 
