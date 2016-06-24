@@ -27,11 +27,11 @@ endfunction
 command! Strip call s:Strip()
 
 " open scratch buffer
-function! s:Scratch()
+function! s:TempScratch()
   silent! execute ':enew'
   setlocal buftype=nofile bufhidden=hide noswapfile buflisted modifiable
 endfunction
-command! -nargs=? Scratch call s:Scratch()
+command! -nargs=? TempScratch call s:TempScratch()
 
 
 function! s:Pipe(command)

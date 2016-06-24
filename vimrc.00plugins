@@ -54,6 +54,9 @@ let g:tcommentMapLeader2 = ''  " Disable leader key maps
 let g:notes_unicode_enabled = 0
 let g:GPGPreferArmor = 1
 let g:GPGPreferSign = 1
+let g:scratch_persistence_file = expand("$HOME/.vim_scratch")
+let g:scratch_horizontal = 0
+let g:scratch_top = 0
 
 let s:python_ver = 0
 silent! python import sys, vim;
@@ -110,6 +113,8 @@ if version >= 704 && s:python_ver >= 260
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 endif
+" scratch buffer
+Plug 'mtth/scratch.vim'
 " close all but this buffer
 Plug 'duff/vim-bufonly'
 " tmux integration
@@ -211,6 +216,13 @@ call plug#end()
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
+
+" define HasPlugin helper function
+function! HasPlugin(name)
+  let al = 'autoload/'.a:name.'.vim'
+  let pl = 'plugin/'.a:name.'.vim'
+  return !empty(globpath(&rtp, al)) || !empty(globpath(&rtp, pl))
+endfunction
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)

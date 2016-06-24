@@ -161,5 +161,4 @@ nnoremap Q <nop>
 "************************************
 " Load other vim settings
 "************************************
-for f in split(glob("~/.vimrc.pre.*"), "\n") | execute 'source ' . fnameescape(f) | endfor
-au VimEnter * for f in split(glob("~/.vimrc.post.*"), "\n") | execute 'source ' . fnameescape(f) | endfor
+for f in split(glob("~/.vimrc.*"), "\n") | execute 'source ' . fnameescape(f) | endfor

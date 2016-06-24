@@ -1,3 +1,7 @@
+if !HasPlugin("fugitive")
+  finish
+endif
+
 " define diftab command
 command! -nargs=* GdiffTab tabedit %|Gdiff <q-args>
 

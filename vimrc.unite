@@ -1,12 +1,5 @@
-" define plugin function
-function! HasPlugin(name)
-    let al = 'autoload/'.a:name.'.vim'
-    let pl = 'plugin/'.a:name.'.vim'
-    return !empty(globpath(&rtp, al)) || !empty(globpath(&rtp, pl))
-endfunction
-
 if !HasPlugin("unite")
-    finish
+  finish
 endif
 
 " generalte unite options
