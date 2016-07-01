@@ -22,6 +22,7 @@ history_reload() {
 unsetopt flowcontrol     # turn off ^S and ^Q tty suspend/resume commands
 unsetopt hashcmds        # prevent unecessary directory listings
 unsetopt menu_complete   # do not autoselect the first completion entry
+setopt ksh_arrays        # use 0 based arrays like bash
 setopt auto_menu         # show completion menu on succesive tab press
 setopt complete_in_word  # complete in the middle of the word
 setopt always_to_end     # go to end of word after completion
