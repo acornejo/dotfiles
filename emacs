@@ -1,14 +1,11 @@
-(add-to-list 'load-path (expand-file-name "~/.emacs.d"))
-;; disable splash sceen
+:;; disable splash sceen
 (setq inhibit-splash-screen t)
-;; set size
-;; (if (window-system) (set-frame-height (selected-frame) 82) (set-frame-width (selected-frame) 82))
 ;; Hide menu bar
-(menu-bar-mode nil)
+(menu-bar-mode -1)
 ;; Hide toolbar
-;; (tool-bar-mode nil)
+(tool-bar-mode -1)
 ;; Hide scrollbar
-;; (scroll-bar-mode nil)
+(scroll-bar-mode -1)
 ;; use y/n instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; delete whole line when at beginning
@@ -16,15 +13,15 @@
 ;; convert tabs to spaces
 (setq-default indent-tabs-mode nil)
 ;; use 4 spaces per tab
-(setq-default tab-width 4)
+(setq-default tab-width 2)
 ;; Switch to use for directory listings
 (setq dired-listing-switches "-l")
 (setq list-directory-brief-switches "-l")
-;; Show line and column numbers
-(line-number-mode 1)
-(column-number-mode 1)
+;; Show line numbers
+(global-linum-mode t)
+(setq linum-format "%4d \u2502 ")
 ;; Highlight current line
-(global-hl-line-mode 0)
+(global-hl-line-mode 1)
 ;; Turn on auto-fill for text files
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 ;; Set column size
@@ -40,8 +37,6 @@
 (setq show-paren-style 'parentheses)
 ;; Show colors in shell
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-;; Change ugly font
-;;(set-default-font "9x15")
 ;; recentf stuff
 (require 'recentf)
 (recentf-mode 1)
