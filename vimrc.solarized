@@ -22,3 +22,6 @@ if !empty($LIGHTTERM)
 else
     set background=dark
 endif
+
+set fillchars+=vert:│
+hi VertSplit ctermbg=bg ctermfg=fg
