@@ -1,6 +1,6 @@
 # term title
-if [ -z "${TERM##*xterm*}" ]; then
-    precmd() { print -Pn "\e]0;%n@%m: %~\a" }
+if [ -z "${TERM##*xterm*}" ] || [ -z "${TERM##*screen*}" ]; then
+    precmd() { print -Pn "\e]0;$(shortpwd)$(__git_prompt)\a" }
 fi
 
 # set history options

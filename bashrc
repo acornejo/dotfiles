@@ -4,6 +4,10 @@
 # skip rest if non-interactive
 [ -n "${-##*i*}" ] && return
 
+# pretty prompt
+[ -f ~/.sh.prompt ] && source ~/.sh.prompt
+PS1="$(sh_prompt)"
+
 # bash options
 [ -f ~/.sh.bash ] && source ~/.sh.bash
 
@@ -24,10 +28,6 @@
 
 # fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-# pretty prompt
-[ -f ~/.sh.prompt ] && source ~/.sh.prompt
-PS1="$(sh_prompt)"
 
 # local settings
 for rc in ~/.sh.local.*; do
