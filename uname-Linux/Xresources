@@ -9,7 +9,6 @@ Xft.rgba: none
 ! ****** X Term *********
 !enable xclipboard
 XTerm*disallowedWindowOps: 20,21,SetXprop
-XTerm*cursorColor: firebrick
 !XTerm*loginShell: true
 XTerm*jumpScroll: true
 XTerm*limitResize: 0
@@ -17,15 +16,16 @@ XTerm*faceName: monospace
 XTerm*faceSize: 12
 XTerm*geometry: 44x13
 XTerm*VT100.Translations: #override \
-Ctrl <Key>V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
-Ctrl <Key>X: select-set(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Ctrl Shift<Key>V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Ctrl Shift<Key>C: select-set(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 
 ! ******* URXVT *********
 URxvt.font: xft:monospace-12:antialias=false
 URxvt.termName: xterm-256color
 URxvt.scrollBar: false
 URxvt.saveLines: 400
-URxvt.fullCursor: true
+URxvt.fullCursor: false
+URxvt.cursorBlink: true
 ! choose perl extensions
 URxvt.perl-ext-common: default,matcher,clipboard,keyboard-select,font-size
 ! configure matcher extension
