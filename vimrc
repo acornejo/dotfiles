@@ -126,6 +126,7 @@ augroup custom-cmds
     autocmd BufNewFile,BufRead *.txt,*.html,*.tex,*.md,README,COMMIT_EDIT_MSG if line2byte(line("$") + 1) < 10000 | setlocal spell spelllang=en | endif
     " close unused netrw buffers
     autocmd FileType netrw setl bufhidden=wipe
+    autocmd FileType netrw nnoremap <buffer> Q :Rexplore<CR>
     " show trailing spaces http://vim.wikia.com/wiki/Highlight_unwanted_spaces
     autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
     autocmd BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/

@@ -121,8 +121,8 @@ Plug 'duff/vim-bufonly'
 Plug 'tpope/vim-tbone'
 " git integration
 Plug 'tpope/vim-fugitive'
-" netrw improvements
-Plug 'tpope/vim-vinegar'
+" netrw replacement
+Plug 'justinmk/vim-dirvish'
 " useful mappings
 Plug 'tpope/vim-unimpaired'
 " surround text with anything
@@ -210,6 +210,8 @@ endif
 " Plug 'kshenoy/vim-signature'
 " " camel case ,w ,e ,b motions
 " Plug 'bkad/CamelCaseMotion'
+" " netrw improvements
+" Plug 'tpope/vim-vinegar'
 call plug#end()
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
