@@ -24,4 +24,4 @@ else
 endif
 
 set fillchars+=vert:│
-hi VertSplit ctermbg=bg ctermfg=fg
+hi VertSplit guibg=NONE ctermbg=NONE
