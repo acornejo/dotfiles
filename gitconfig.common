@@ -40,6 +40,9 @@
 [push]
 	default = matching
 
+[pull]
+	rebase = preserve
+
 [merge]
 	tool = vimdiff
 
@@ -57,3 +60,6 @@
 [url "git@bitbucket.org:"]
 	insteadOf = "bb://"
 	pushInsteadOf = "bb://"
+
+[branch "master"]
+    mergeoptions = --ff-only
