@@ -72,7 +72,7 @@ fv() {
     if [ -z "$FV_PER_DIR" ]; then
       local selected=$(fzf)
       if [ -f "$selected" ]; then
-        ${EDITOR} $selected
+        ${EDITOR:-echo} $selected
       fi
     else
       local dir=${1:-.}
@@ -81,7 +81,7 @@ fv() {
           if [ -d "$dir/$selected" ]; then
               fv "$dir/$selected"
           else
-              ${EDITOR:-vim} "$dir/$selected"
+              ${EDITOR:-echo} "$dir/$selected"
           fi
       fi
     fi
@@ -107,6 +107,36 @@ fbr() {
     branches=$(git branch | awk '{print $NF}' | sort -r) &&
     branch=$(echo "$branches" | fzf +m) &&
     test -t 1 && git checkout $branch || echo $branch
+}
+
+# diff browsing
+fdiff() {
+    if ! hash fzf 2>/dev/null; then
+        echo "fzf not found!"
+        return 1
+    fi
+    (
+      cd $(git rev-parse --show-toplevel)
+      git status --porcelain | awk '$1 == "M" {print $2}' | \
+      fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+          --preview "git diff --color=always -- {} | head -$LINES" \
+          --bind "ctrl-m:execute:(clear; git diff -- {})"
+    )
+}
+
+# log browser
+flog() {
+  if ! hash fzf 2>/dev/null; then
+      echo "fzf not found!"
+      return 1
+  fi
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+                 xargs -I % sh -c 'git show --color=always % | head -$LINES '" \
+      --bind "enter:execute:echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+              xargs -I % sh -c 'clear; git show --color=always %'"
 }
 
 # process listing
