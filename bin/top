@@ -2,7 +2,7 @@
 TOP=`which htop`
 if [ -n "$TOP" ]; then
     echo -ne "\033]0;top\007"
-    exec $TOP -u $USER
+    exec $TOP -u $USER $*
 else
     exec /usr/bin/top
 fi
