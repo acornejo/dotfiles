@@ -103,6 +103,8 @@ augroup custom-cmds
     autocmd BufWritePost .vimrc source ~/.vimrc
     " Unset paste on InsertLeave
     autocmd InsertLeave * silent! set nopaste
+    " make quickfix windows span full width
+    autocmd FileType qf wincmd J
     " change directory
     autocmd VimEnter * if isdirectory(expand('%:p:h')) | cd %:p:h | endif
     " Go to last position when reopening file
