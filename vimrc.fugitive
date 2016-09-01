@@ -2,11 +2,22 @@ if !HasPlugin("fugitive")
   finish
 endif
 
+function! GStatusTabDiff()
+  if has('multi_byte_encoding')
+    let colon = '\%(:\|\%uff1a\)'
+  else
+    let colon = ':'
+  endif
+  let filename = matchstr(matchstr(getline(line('.')),'^#\t\zs.\{-\}\ze\%( ([^()[:digit:]]\+)\)\=$'), colon.' *\zs.*')
+  tabedit %
+  execute 'Gedit ' . filename
+  Gvdiff
+endfunction
+command! GStatusTabDiff call GStatusTabDiff()
+autocmd FileType gitcommit noremap <buffer> dt :GStatusTabDiff<CR>
+
 " define diftab command
 command! -nargs=* GdiffTab tabedit %|Gdiff <q-args>
-
-" add difftab binding to commit/status window
-autocmd FileType gitcommit noremap <buffer> dt :GdiffTab<cr>
 
 " delete fugitive buffers when inactive
 autocmd BufReadPost fugitive://* set bufhidden=delete
