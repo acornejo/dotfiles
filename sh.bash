@@ -16,7 +16,7 @@ bind '"\C-g": " \C-e\C-u$(fcd)\e\C-e\er\C-m"'
 HISTIGNORE="&:?:??:???:exit"
 HISTCONTROL="ignorespace:ignoredups:erasedups"
 HISTFILESIZE=50000
-HISTSIZE=10000
+HISTSIZE=50000
 shopt -s histappend   # append to history file
 shopt -s cmdhist      # allow multiline history cmds
 shopt -s histreedit   # edit history if cmd failed
