@@ -24,34 +24,34 @@ alias sidebyside='diff -W ${COLUMNS:-80} -y'
 
 # aliases: clipboard
 if [ -z "${OSTYPE##*darwin*}" ]; then
-    alias ccopy="pbcopy"
-    alias cpaste="pbpaste"
+  alias ccopy="pbcopy"
+  alias cpaste="pbpaste"
 elif hash xclip 2>/dev/null; then
-    alias ccopy="xclip -selection c"
-    alias cpaste="xclip -selection c -o"
+  alias ccopy="xclip -selection c"
+  alias cpaste="xclip -selection c -o"
 elif hash xsel 2>/dev/null; then
-    alias ccopy="xsel --clipboard --input"
-    alias cpaste="xsel --clipboard --output"
+  alias ccopy="xsel --clipboard --input"
+  alias cpaste="xsel --clipboard --output"
 fi
 
 # aliases: ack/ag
 if hash ack-grep 2>/dev/null; then
-    alias ack="ack-grep"
+  alias ack="ack-grep"
 fi
 if hash ag 2>/dev/null; then
-    alias a="ag"
+  alias a="ag"
 else
-    alias a="ack"
+  alias a="ack"
 fi
 
 # aliases: genot
 if hash genot 2>/dev/null; then
-    alias tip='genot -c ~/.tips'
+  alias tip='genot -c ~/.tips'
 fi
 
 # aliases: todo.sh
 if hash todo.sh 2>/dev/null; then
-    alias t='todo.sh'
+  alias t='todo.sh'
 fi
 
 # display short pwd
@@ -63,127 +63,156 @@ shortpwd() {
   echo "$PRE$NAME"
 }
 
+check_fzf() {
+  if ! hash fzf 2>/dev/null; then
+    echo "fzf not found!"
+    return 1
+  else
+    return 0
+  fi
+}
+
+check_z() {
+  if (type z | grep 'not found' >/dev/null 2>&1); then
+    echo "z not found!"
+    return 1
+  else
+    return 0
+  fi
+}
+
+check_in_git_repo() {
+  if ! git rev-parse HEAD > /dev/null 2>&1; then
+    echo "not in git repo!"
+    return 1
+  else
+    return 0
+  fi
+}
+
+# file finder
+f() {
+  if hash ag 2>/dev/null; then
+    local match=$1
+    shift
+    ag -l -i --nocolor -g "$match" $@
+  else
+    find . -iname "*$1*" -not \( -path '*/.git' -o -path '*/.svn' -o -path '*/.hg' -prune \)
+  fi
+}
+
 # file browsing
 fv() {
-    if ! hash fzf 2>/dev/null; then
-        echo "fzf not found!"
-        return 1
+  check_fzf || return 1
+  if [ -z "$FV_PER_DIR" ]; then
+    local selected=$(fzf)
+    if [ -f "$selected" ]; then
+      ${EDITOR:-echo} $selected
     fi
-    if [ -z "$FV_PER_DIR" ]; then
-      local selected=$(fzf)
-      if [ -f "$selected" ]; then
-        ${EDITOR:-echo} $selected
-      fi
-    else
-      local dir=${1:-.}
-      local selected=$(ls "$dir" | fzf)
-      if [ -n "$selected" ]; then
-          if [ -d "$dir/$selected" ]; then
-              fv "$dir/$selected"
-          else
-              ${EDITOR:-echo} "$dir/$selected"
-          fi
-      fi
+  else
+    local dir=${1:-.}
+    local selected=$(ls "$dir" | fzf)
+    if [ -n "$selected" ]; then
+        if [ -d "$dir/$selected" ]; then
+            fv "$dir/$selected"
+        else
+            ${EDITOR:-echo} "$dir/$selected"
+        fi
     fi
+  fi
 }
 
 # directory browsing
 fcd() {
-    if ! hash fzf 2>/dev/null || (type z | grep 'not found' >/dev/null 2>&1); then
-        echo "fzf not found!"
-        return 1
-    fi
-    local dir="$(z -l | awk '/^[0-9]+.*\// {print $2}' | fzf --tac)"
-    test -t 1 && cd $dir || echo "cd $dir"
+  check_fzf && check_z || return 1
+  local dir="$(z -l | awk '/^[0-9]+.*\// {print $2}' | fzf --tac)"
+  test -t 1 && cd $dir || echo "cd $dir"
 }
 
-# branch browsing
-fbr() {
-    if ! hash fzf 2>/dev/null; then
-        echo "fzf not found!"
-        return 1
-    fi
-    local branches branch
-    branches=$(git branch | awk '{print $NF}' | sort -r) &&
-    branch=$(echo "$branches" | fzf +m) &&
-    test -t 1 && git checkout $branch || echo $branch
-}
-
-# diff browsing
-fdiff() {
-    if ! hash fzf 2>/dev/null; then
-        echo "fzf not found!"
-        return 1
-    fi
-    (
-      cd $(git rev-parse --show-toplevel)
-      git status --porcelain | awk '$1 == "M" {print $2}' | \
-      fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-          --preview "git diff --color=always -- {} | head -$LINES" \
-          --bind "ctrl-m:execute:(clear; git diff -- {})"
-    )
-}
-
-# log browser
-flog() {
-  if ! hash fzf 2>/dev/null; then
-      echo "fzf not found!"
-      return 1
+# git branch browser
+gbr() {
+  check_fzf && check_in_git_repo || return 1
+  local branches=$(git branch -a --color=always | awk '{print $NF}' | sort -r)
+  local branch=$(echo "$branches" | \
+    fzf --ansi --no-sort --reverse --tiebreak=index \
+        --preview "git log --graph --date=short --format='%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)' {} | head -$LINES")
+  if [ $? -ne 0 ]; then
+    return
   fi
-  git log --graph --color=always \
-      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  if [ -t 1 ]; then
+    git checkout $branch
+  else
+    echo $branch
+  fi
+}
+
+# git diff browser
+gd() {
+  check_fzf && check_in_git_repo || return 1
+  (
+    cd $(git rev-parse --show-toplevel)
+    while true; do
+      local RES=$(git -c color.status=always status -s | \
+      fzf --ansi --nth 2 --no-sort --reverse --tiebreak=index
+          --bind=ctrl-s:toggle-sort \
+          --header "branch: $(git rev-parse --abbrev-ref HEAD)" \
+          --preview 'git diff --color=always -- $(echo {} | grep -o "[^ ]*$")' \
+          --expect 'ctrl-m,ctrl-a,ctrl-d' | tail -n2)
+      local KEY=$(echo "$RES" | head -n1)
+      local STATUS=$(echo "$RES" | tail -n1 | awk '{print $1}')
+      local FILE=$(echo "$RES" | tail -n1 | awk '{print $NF}')
+      case $KEY in
+        ctrl-m)
+          if [ "$STATUS" == "M" ]; then
+            git diff -- $FILE
+          else
+            less $FILE
+          fi
+          ;;
+        ctrl-a)
+          git add -- $FILE
+          ;;
+        ctrl-d)
+          git reset -q -- $FILE
+          ;;
+        *)
+          exit
+      esac
+    done
+  )
+}
+
+# git log browser
+gl() {
+  check_fzf && check_in_git_repo || return 1
+  local HEADER="branch: $(git rev-parse --abbrev-ref HEAD) args: $(echo $@)"
+  git log --graph --color=always --date=short \
+      --format="%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)" "$@" |
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --header "$HEADER" \
       --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
                  xargs -I % sh -c 'git show --color=always % | head -$LINES '" \
       --bind "enter:execute:echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
-              xargs -I % sh -c 'clear; git show --color=always %'"
-}
-
-# process listing
-pa () {
-    local LIST="$($(which ps) axo pid,pcpu,pmem,user,command)"
-    while [ -n "$1" ]; do
-        if [ -z "${1##-*}" ]; then
-            LIST=$(echo "$LIST" | grep -vi ${1#-})
-        else
-            LIST=$(echo "$LIST" | grep -i $1)
-        fi
-        shift
-    done
-    echo "$LIST"
-}
-
-# process listing (current user)
-p () {
-    local LIST="$($(which ps) xo pid,pcpu,pmem,user,command)"
-    while [ -n "$1" ]; do
-        if [ -z "${1##-*}" ]; then
-            LIST=$(echo "$LIST" | grep -vi ${1#-})
-        else
-            LIST=$(echo "$LIST" | grep -i $1)
-        fi
-        shift
-    done
-    echo "$LIST"
+              xargs -I % sh -c 'git show --color=always %'"
 }
 
 # open files
 open() {
-    local open_cmd=""
-    case "$OSTYPE" in
-        darwin*)
-            open_cmd="open"
-            ;;
-        linux*)
-            open_cmd="xdg-open"
-            ;;
-        cygwin*)
-            open_cmd="cygstart"
-            ;;
-        *)
-            echo "Platform $OSTYPE unsupported"
-            return 1
-            ;;
-    esac
-    nohup $open_cmd "$@" >/dev/null 2>&1
+  local open_cmd=""
+  case "$OSTYPE" in
+    darwin*)
+      open_cmd="open"
+      ;;
+    linux*)
+      open_cmd="xdg-open"
+      ;;
+    cygwin*)
+      open_cmd="cygstart"
+      ;;
+    *)
+      echo "Platform $OSTYPE unsupported"
+      return 1
+      ;;
+  esac
+  nohup $open_cmd "$@" >/dev/null 2>&1
 }
