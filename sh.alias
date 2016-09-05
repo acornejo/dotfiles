@@ -153,7 +153,7 @@ gd() {
     cd $(git rev-parse --show-toplevel)
     while true; do
       local RES=$(git -c color.status=always status -s | \
-      fzf --ansi --nth 2 --no-sort --reverse --tiebreak=index
+      fzf --ansi --nth 2 --no-sort --reverse --tiebreak=index \
           --bind=ctrl-s:toggle-sort \
           --header "branch: $(git rev-parse --abbrev-ref HEAD)" \
           --preview 'git diff --color=always -- $(echo {} | grep -o "[^ ]*$")' \
