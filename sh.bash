@@ -4,7 +4,9 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 if [ -z "${TERM##*xterm*}" ] || [ -z "${TERM##*screen*}" ]; then
   # set prompt color to green
-  echo -ne '\e]12;#00ff00\a'
+  if [ "$(uname)" != "Darwin" ]; then
+    echo -ne '\e]12;#00ff00\a'
+  fi
   # set term title
   PROMPT_COMMAND="echo -ne \"\033]0;\$(shortpwd)\$(__git_prompt)\007\"; $PROMPT_COMMAND"
 fi
