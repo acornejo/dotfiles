@@ -132,10 +132,12 @@ fcd() {
 # git branch browser
 gbr() {
   check_fzf && check_in_git_repo || return 1
-  local branches=$(git branch -a --color=always | awk '{print $NF}' | sort -r)
-  local branch=$(echo "$branches" | \
-    fzf --ansi --no-sort --reverse --tiebreak=index \
-        --preview "git log --graph --date=short --format='%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)' {} | head -$LINES")
+  local FMT="%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)"
+  local branches=$(git branch --sort=-committerdate | awk '{print $NF}')
+  local branch=$(echo "$branches" | fzf --ansi --no-sort --reverse \
+    --header "current branch: $(git rev-parse --abbrev-ref HEAD)" \
+    --tiebreak=index \
+    --preview "git log --graph --date=short --format='$FMT' {} | head -$LINES")
   if [ $? -ne 0 ]; then
     return
   fi
@@ -185,15 +187,24 @@ gd() {
 # git log browser
 gl() {
   check_fzf && check_in_git_repo || return 1
+  local FMT="%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)"
+  local LN=$LINES
   local HEADER="branch: $(git rev-parse --abbrev-ref HEAD) args: $(echo $@)"
-  git log --graph --color=always --date=short \
-      --format="%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)" "$@" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --header "$HEADER" \
-      --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
-                 xargs -I % sh -c 'git show --color=always % | head -$LINES '" \
-      --bind "enter:execute:echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
-              xargs -I % sh -c 'git show --color=always %'"
+  git log --graph --color=always --date=short --format="$FMT" "$@" | \
+  if [ -t 1 ]; then
+    fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+        --header "$HEADER" \
+        --preview "echo {} | grep -o '[a-f0-9]\{7\}' -m 1 |
+                   xargs -I % sh -c 'git show --color=always % | head -$LN '" \
+        --bind "enter:execute:echo {} | grep -o '[a-f0-9]\{7\}' -m 1 |
+                xargs -I % sh -c 'git show --color=always %'"
+  else
+    fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+        --header "$HEADER" \
+        --preview "echo {} | grep -o '[a-f0-9]\{7\}' -m 1 |
+                   xargs -I % sh -c 'git show --color=always % | head -$LN '" \
+                     | grep -o '[a-f0-9]\{7\}' -m 1
+  fi
 }
 
 # open files
