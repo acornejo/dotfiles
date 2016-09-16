@@ -2,6 +2,7 @@
 /* Make bc into a usable calculator */
 e=e(1)
 pi=4*a(1)
+base10=10
 define sin(x) { return s(x); }
 define cos(x) { return c(x); }
 define tan(x) { return s(x)/c(x); }
@@ -131,4 +132,11 @@ define ceil(x) {
 /* largest integer <= arg */
 define floor(x) {
     return -ceil(-x);
+}
+
+/* reset ibase and obase */
+define reset() {
+    ibase=base10
+    obase=base10
+    print "ibase=10, obase=10\n"
 }
