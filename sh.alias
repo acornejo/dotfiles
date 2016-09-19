@@ -133,7 +133,7 @@ fcd() {
 gbr() {
   check_fzf && check_in_git_repo || return 1
   local FMT="%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)"
-  local branches=$(git branch --sort=-committerdate | awk '{print $NF}')
+  local branches=$(git for-each-ref refs/heads --sort=-authordate | cut -d/ -f3)
   local branch=$(echo "$branches" | fzf --ansi --no-sort --reverse \
     --header "current branch: $(git rev-parse --abbrev-ref HEAD)" \
     --tiebreak=index \
@@ -154,7 +154,7 @@ gd() {
   (
     cd $(git rev-parse --show-toplevel)
     while true; do
-      local RES=$(git -c color.status=always status -s | \
+      local RES=$(git status --porcelain | \
       fzf --ansi --nth 2 --no-sort --reverse --tiebreak=index \
           --bind=ctrl-s:toggle-sort \
           --header "branch: $(git rev-parse --abbrev-ref HEAD)" \
