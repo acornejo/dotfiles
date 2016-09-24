@@ -22,18 +22,6 @@ alias du="du -h -s -c *"
 alias trunc='cut -c -${COLUMNS:-80}'
 alias sidebyside='diff -W ${COLUMNS:-80} -y'
 
-# aliases: clipboard
-if [ -z "${OSTYPE##*darwin*}" ]; then
-  alias ccopy="pbcopy"
-  alias cpaste="pbpaste"
-elif hash xclip 2>/dev/null; then
-  alias ccopy="xclip -selection c"
-  alias cpaste="xclip -selection c -o"
-elif hash xsel 2>/dev/null; then
-  alias ccopy="xsel --clipboard --input"
-  alias cpaste="xsel --clipboard --output"
-fi
-
 # aliases: ack/ag
 if hash ack-grep 2>/dev/null; then
   alias ack="ack-grep"

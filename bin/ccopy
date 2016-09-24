@@ -1,0 +1,12 @@
+#!/bin/bash
+if [[ -z "${OSTYPE##*darwin*}" ]] && hash pbcopy 2>/dev/null; then
+    exec pbcopy
+elif [[ -n "$DISPLAY" ]] && hash xclip 2>/dev/null; then
+    exec xclip -selection c
+elif [[ -n "$DISPLAY" ]] && hash xsel 2>/dev/null; then
+    exec xsel --clipboard --input
+elif [ -n "$TMUX" ]; then
+    exec tmux load-buffer -
+else
+    exec cat> ~/.clip
+fi
