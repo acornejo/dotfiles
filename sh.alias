@@ -118,7 +118,7 @@ fcd() {
 }
 
 # git branch browser
-gbr() {
+gb() {
   check_fzf && check_in_git_repo || return 1
   local FMT="%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)"
   local branches=$(git for-each-ref refs/heads --sort=-authordate | cut -d/ -f3)

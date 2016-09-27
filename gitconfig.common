@@ -12,6 +12,7 @@
 	cl = clone
 	d = diff
 	l = log --graph --date=short --pretty='format:%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)'
+	b = branch
 	s = status -s
 	p = push
 	u = pull
