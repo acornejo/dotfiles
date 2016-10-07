@@ -26,7 +26,9 @@ alias sidebyside='diff -W ${COLUMNS:-80} -y'
 if hash ack-grep 2>/dev/null; then
   alias ack="ack-grep"
 fi
-if hash ag 2>/dev/null; then
+if hash rg 2>/dev/null; then
+  alias a="rg"
+elif hash ag 2>/dev/null; then
   alias a="ag"
 else
   alias a="ack"
