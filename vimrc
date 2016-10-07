@@ -88,12 +88,17 @@ else
 endif
 
 " use silversearcher instead of grep
-if executable('ag')
-    set grepprg=ag\ --nogroup\ --nocolor\ --column
-    if &grepformat !~# '%c'
-        set grepformat^=%f:%l:%c:%m
-    endif
-    let g:ackprg = 'ag --nogroup --nocolor --column'
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+    set grepformat=%f:%l:%c:%m
+    let g:ackprg = 'rg --vimgrep'
+elseif executable('ag')
+    set grepprg=ag\ --vimgrep
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+    let g:ackprg = 'ag --vimgrep'
+elseif executable('ack')
+    set grepprg=ack\ --nogroup\ --nocolor\ --column
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
 augroup custom-cmds
@@ -151,6 +156,8 @@ nnoremap <silent> <backspace> :noh<CR>
 nnoremap <expr> <cr> (&buftype is# "" ? ":" : "<cr>")
 " disable Ex mode key
 nnoremap Q <nop>
+" make Y's behavior sane
+nnoremap Y y$
 
 " Load other vim settings
 for f in split(glob("~/.vimrc.*"), "\n") | execute 'source ' . fnameescape(f) | endfor
