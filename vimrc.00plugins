@@ -234,11 +234,15 @@ nmap ga <Plug>(EasyAlign)
 " Prompt for vmux command
 nnoremap <expr> <leader>v exists("g:VimuxRunnerIndex") ? ":VimuxRunLastCommand<CR>" : ":VimuxPromptCommand<CR>"
 
-if exists("*textobj#user#plugin")
+if HasPlugin('textobj/user')
     call textobj#user#plugin('camelcase', {
     \  'camel': {
     \        'pattern': '_\{0,1\}[A-Za-z][a-z0-9]\+',
     \        'select': ['ac', 'ic']
     \       }
     \})
+endif
+
+if !empty($NOCD)
+  let g:rooter_manual_only = 1
 endif
