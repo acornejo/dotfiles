@@ -20,9 +20,6 @@ if hash aspell 2>/dev/null && hash awk 2>/dev/null; then
         done
         exit_status=1
     fi
-else
-    echo "error: need aspell and awk to check spelling of commit messages."
-    exit_status=1
 fi
 
 if [ ${#TITLE} -gt 50 ]; then
