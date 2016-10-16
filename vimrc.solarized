@@ -1,9 +1,4 @@
-function! s:hascolorscheme(name)
-    let pat = 'colors/'.a:name.'.vim'
-    return !empty(globpath(&rtp, pat))
-endfunction
-
-if ! s:hascolorscheme('solarized')
+if !has_key(g:plugs, 'vim-colors-solarized')
     finish
 endif
 

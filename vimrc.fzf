@@ -48,17 +48,6 @@ function! s:ag_prompt()
   endif
 endfunction
 
-function! s:ag_curword()
-  let pattern = expand('<cword>')
-  if empty(pattern)
-    echo "no word under cursor."
-  else
-    let pattern = '\b' . pattern . '\b'
-    let @/ = pattern
-    execute 'Ag' pattern
-  endif
-endfunction
-
 function! s:dir_handler(dir)
   execute 'lcd ~/src/'.a:dir
   execute 'FZF' . '~/src/'.a:dir
@@ -97,9 +86,9 @@ command! FZFProjects call fzf#run({
 
 nnoremap <silent> <Leader>t :FZFTagFile<CR>
 nnoremap <silent> <Leader>T :FZFTag<CR>
-nnoremap <silent> <Leader>f :FZF<CR>
+nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>a :call <sid>ag_prompt()<CR>
-nnoremap <silent> <Leader>A :call <sid>ag_curword()<CR>
+nnoremap <silent> <Leader>A :Ag <C-R><C-W><CR>
 nnoremap <silent> <Leader>y :FZFYank<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <Leader>r :History<CR>

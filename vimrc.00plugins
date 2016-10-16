@@ -219,27 +219,23 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
 
-" define HasPlugin helper function
-function! HasPlugin(name)
-  let al = 'autoload/'.a:name.'.vim'
-  let pl = 'plugin/'.a:name.'.vim'
-  return !empty(globpath(&rtp, al)) || !empty(globpath(&rtp, pl))
-endfunction
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object ()"
-nmap ga <Plug>(EasyAlign)
 
 " Prompt for vmux command
 nnoremap <expr> <leader>v exists("g:VimuxRunnerIndex") ? ":VimuxRunLastCommand<CR>" : ":VimuxPromptCommand<CR>"
 
-if HasPlugin('textobj/user')
+if has_key(g:plugs, 'vim-easy-align')
+    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    xmap ga <Plug>(EasyAlign)
+    " Start interactive EasyAlign for a motion/text object ()"
+    nmap ga <Plug>(EasyAlign)
+endif
+
+if has_key(g:plugs, 'vim-textobj-user')
     call textobj#user#plugin('camelcase', {
     \  'camel': {
-    \        'pattern': '_\{0,1\}[A-Za-z][a-z0-9]\+',
-    \        'select': ['ac', 'ic']
-    \       }
+    \     'pattern': '_\{0,1\}[A-Za-z][a-z0-9]\+',
+    \     'select': ['ac', 'ic']
+    \  }
     \})
 endif
 
