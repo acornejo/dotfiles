@@ -87,6 +87,7 @@ command! FZFProjects call fzf#run({
 nnoremap <silent> <Leader>t :FZFTagFile<CR>
 nnoremap <silent> <Leader>T :FZFTag<CR>
 nnoremap <silent> <Leader>f :Files<CR>
+nnoremap <silent> <Leader>m :Marks<CR>
 nnoremap <silent> <Leader>a :call <sid>ag_prompt()<CR>
 nnoremap <silent> <Leader>A :Ag <C-R><C-W><CR>
 nnoremap <silent> <Leader>y :FZFYank<CR>

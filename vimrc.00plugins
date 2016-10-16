@@ -54,6 +54,7 @@ let g:tcommentMapLeader2 = ''  " Disable leader key maps
 let g:notes_unicode_enabled = 0
 let g:GPGPreferArmor = 1
 let g:GPGPreferSign = 1
+let g:scratch_no_mappings = 1
 let g:scratch_persistence_file = expand("$HOME/.vim_scratch")
 let g:scratch_horizontal = 0
 let g:scratch_top = 0
@@ -64,13 +65,29 @@ silent! python import sys, vim;
 
 call plug#begin('~/.vim/plugged')
 
-" #### colorschemes
+" =========================================================
+" Colorschemes
+" =========================================================
 " solarized
 Plug 'altercation/vim-colors-solarized'
 " molokai
 Plug 'tomasr/molokai'
 
-" #### filetype support
+" =========================================================
+" UI improvements
+" =========================================================
+" mark changed lines in git
+Plug 'airblade/vim-gitgutter'
+" syntax checker
+Plug 'scrooloose/syntastic'
+" nice status line
+Plug 'itchyny/lightline.vim'
+" Mark display/jump improvements (whitespace problems on GV)
+Plug 'acornejo/vim-signature'
+
+" =========================================================
+" Filetype support
+" =========================================================
 " Language support
 Plug 'sheerun/vim-polyglot'
 " CSV
@@ -86,43 +103,27 @@ if version >= 702
 Plug 'jamessan/vim-gnupg'
 endif
 
-" #### general
-" fzf integration
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-Plug 'junegunn/fzf.vim'
-" ack/ag integration
-Plug 'mileszs/ack.vim'
-" find and switch to project root
-Plug 'airblade/vim-rooter'
-" tmux integration
-Plug 'benmills/vimux'
+" =========================================================
+" Editor motions
+" =========================================================
+" cx mapping for exchange
+Plug 'tommcdo/vim-exchange'
+" sensible target motions
+Plug 'wellle/targets.vim'
+" custom textobjects
+Plug 'kana/vim-textobj-user'
 " insert closing bracket, paren, etc
 Plug 'jiangmiao/auto-pairs'
-" mark changed lines in git
-Plug 'airblade/vim-gitgutter'
 " align blocks of things
 Plug 'junegunn/vim-easy-align'
-" syntax checker
-Plug 'scrooloose/syntastic'
-" (un)comment blocks
-if version >= 702
-Plug 'tomtom/tcomment_vim'
-endif
-" snippets
-if version >= 704 && s:python_ver >= 260
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-endif
-" scratch buffer
-Plug 'mtth/scratch.vim'
-" close all but this buffer
-Plug 'duff/vim-bufonly'
+
+" =========================================================
+" TPOPE goodness
+" =========================================================
 " tmux integration
 Plug 'tpope/vim-tbone'
 " git integration
 Plug 'tpope/vim-fugitive'
-" netrw replacement
-Plug 'justinmk/vim-dirvish'
 " useful mappings
 Plug 'tpope/vim-unimpaired'
 " surround text with anything
@@ -135,20 +136,40 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-repeat'
 " For autocorrect
 Plug 'tpope/vim-abolish'
-" gitk emulation
+" (un)comment blocks
+Plug 'tpope/vim-commentary'
+
+" =========================================================
+" Misc Productivity
+" =========================================================
+" fzf integration
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
+" git browser
 Plug 'junegunn/gv.vim'
-" nice status line
-Plug 'itchyny/lightline.vim'
+" ack/ag integration
+Plug 'mileszs/ack.vim'
+" find and switch to project root
+Plug 'airblade/vim-rooter'
+" tmux integration
+Plug 'benmills/vimux'
+" snippets
+if version >= 704 && s:python_ver >= 260
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+endif
+" scratch buffer
+Plug 'mtth/scratch.vim'
+" close all but this buffer
+Plug 'duff/vim-bufonly'
+" netrw replacement
+Plug 'justinmk/vim-dirvish'
 if version >= 703 && s:python_ver >= 260
 " highlight closing tag
 Plug 'Valloric/MatchTagAlways'
 endif
-" cx mapping for exchange
-Plug 'tommcdo/vim-exchange'
-" sensible target motions
-Plug 'wellle/targets.vim'
-" custom textobjects
-Plug 'kana/vim-textobj-user'
+" search and replace
+Plug 'gabesoft/vim-ags'
 
 " C/C++/Javascript completion
 if !isdirectory('/usr/share/vim/google')
@@ -158,7 +179,9 @@ command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
 endif
 endif
 
-" #### disabled
+" =========================================================
+" Disabled
+" =========================================================
 " Hex editor
 " Plug 'vim-scripts/hexman.vim'
 " Javascript completion (with youcompleteme)
@@ -205,13 +228,14 @@ endif
 " Plug 'svermeulen/vim-easyclip'
 " " gitk emulation
 " Plug 'gregsexton/gitv', {'on': ['Gitv']}
-" " Mark display/jump improvements
-" (not used and causes whitespace highlight problems on Gitv or GV)
-" Plug 'kshenoy/vim-signature'
 " " camel case ,w ,e ,b motions
 " Plug 'bkad/CamelCaseMotion'
 " " netrw improvements
 " Plug 'tpope/vim-vinegar'
+" " (un)comment blocks
+" if version >= 702
+" Plug 'tomtom/tcomment_vim'
+" endif
 call plug#end()
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
