@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export SSH_AUTH_SOCK=$HOME/.ssh/ssh-agent.sock
+
+ssh-add -l &>/dev/null
+if [ "$?" == 2 ]; then
+  exec ssh-agent -a "$SSH_AUTH_SOCK" $SHELL
+fi

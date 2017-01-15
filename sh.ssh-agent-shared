@@ -1,0 +1,18 @@
+#!/bin/bash
+
+SSHENV=$HOME/.ssh/ssh-agent
+
+ssh-add -l &>/dev/null
+if [ "$?" == 2 ]; then
+  test -r "$SSHENV" && source "$SSHENV" > /dev/null
+
+  ssh-add -l &>/dev/null
+  if [ "$?" == 2 ]; then
+    exec ssh-agent $SHELL
+  fi
+else
+    cat << EOF > "$SSHENV"
+export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+export SSH_AGENT_PID=$SSH_AGENT_PID
+EOF
+fi
