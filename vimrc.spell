@@ -1,4 +1,4 @@
-if !has_key(g:plugs, 'vim-abolish')
+if !exists('g:plugs') || !has_key(g:plugs, 'vim-abolish')
   finish
 endif
 

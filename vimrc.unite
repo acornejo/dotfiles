@@ -1,4 +1,4 @@
-if !has_key(g:plugs, 'unite.vim')
+if !exists('g:plugs') || !has_key(g:plugs, 'unite.vim')
   finish
 endif
 

@@ -1,4 +1,4 @@
-if !has_key(g:plugs, 'vim-colors-solarized')
+if !exists('g:plugs') || !has_key(g:plugs, 'vim-colors-solarized')
     finish
 endif
 
@@ -18,5 +18,5 @@ else
     set background=dark
 endif
 
-set fillchars+=vert:│
+" set fillchars+=vert:│
 hi VertSplit guibg=NONE ctermbg=NONE
