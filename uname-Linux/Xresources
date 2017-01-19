@@ -36,7 +36,9 @@ URxvt.matcher.pattern.2: \\bb/[0-9]+
 URxvt.matcher.pattern.3: \\bcl/[0-9]+
 URxvt.matcher.pattern.4: \\bbns/[A-z0-9-_/.]+
 URxvt.matcher.pattern.5: \\b(depot/[A-z0-9-_/.]+)
+URxvt.matcher.pattern.6: \\b(cns/[^ *]+)
 URxvt.matcher.launcher.5: google-chrome cs.corp.google.com/piper/\/\/$1
+URxvt.matcher.launcher.6: google-chrome cnsviewer.corp.google.com/$1
 URxvt.url-select.underline: true
 ! configure clipboard extension (ctrl-shift-c/v to copy & paste)
 URxvt.keysym.C-C: perl:clipboard:copy
