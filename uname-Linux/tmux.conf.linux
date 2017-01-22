@@ -1,4 +1,5 @@
 source-file ~/.tmux.conf.main
+source-file ~/.tmux.fancy-theme.conf
 
 # For x clipboard
 if-shell 'test -n "$DISPLAY" && which xclip >/dev/null' 'bind-key -t vi-copy y copy-pipe "xclip -sel clip -i"'
