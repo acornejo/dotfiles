@@ -1,7 +1,0 @@
-source-file ~/.tmux.conf.main
-source-file ~/.tmux.fancy-theme.conf
-
-# For x clipboard
-if-shell 'test -n "$DISPLAY" && which xclip >/dev/null' 'bind-key -t vi-copy y copy-pipe "xclip -sel clip -i"'
-if-shell 'test -n "$DISPLAY" && which xclip >/dev/null' 'bind-key -t vi-copy Enter copy-pipe "xclip -sel clip -i"'
-if-shell 'test -n "$DISPLAY" && which xclip >/dev/null' 'bind-key ] run "xclip -sel clip -o | tmux load-buffer - ; tmux paste-buffer"'

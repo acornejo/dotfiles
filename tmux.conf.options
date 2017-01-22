@@ -1,0 +1,47 @@
+# do not wait for escape sequences
+set -s escape-time 0
+
+# set history size
+set -g history-limit 50000
+
+# show messages for 4 seconds
+set -g display-time 4000
+
+# enable focus events for terminal
+set -g focus-events on
+
+# use readline bindings in :command mode
+set -g status-keys emacs
+
+# start windows and panes at 1
+set -g base-index 1
+set -g pane-base-index 1
+
+# renumber windows to avoid gaps
+set -g renumber-windows on
+
+# disable copy to clipboard extension, which causes garbage on terminals
+set -s set-clipboard off
+
+# Change the way windows are sized
+setw -g aggressive-resize on
+
+# Monitor window activity
+set -g monitor-activity off
+set -g visual-activity off
+
+# Screen lock
+set -g lock-after-time 0
+set -g lock-command "bashlock"
+
+# allow window titles
+set -g set-titles on
+set -g set-titles-string ' #I:#W'
+# setw -g automatic-rename on
+
+# set terminal for colors
+set -g default-terminal "screen-256color"
+
+# enable mouse to select panes
+# setw -g mode-mouse on
+# set -g mouse-select-pane on

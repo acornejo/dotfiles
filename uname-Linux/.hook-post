@@ -11,11 +11,3 @@ if hash gconftool-2 2>/dev/null
 then
     gconftool-2 -s /apps/gnome-terminal/global/use_mnemonics -t bool false
 fi
-
-# -------------------
-# Fix tmux config
-# -------------------
-if [ -f "$HOME/.tmux.conf" -a -f "$HOME/.tmux.conf.linux" ]; then
-    mv "$HOME/.tmux.conf" "$HOME/.tmux.conf.main"
-    mv "$HOME/.tmux.conf.linux" "$HOME/.tmux.conf"
-fi

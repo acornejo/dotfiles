@@ -20,14 +20,6 @@ EOF
 fi
 
 # -------------------
-# Fix tmux config
-# -------------------
-if [ -f "$HOME/.tmux.conf" -a -f "$HOME/.tmux.conf.osx" ]; then
-    mv "$HOME/.tmux.conf" "$HOME/.tmux.conf.main"
-    mv "$HOME/.tmux.conf.osx" "$HOME/.tmux.conf"
-fi
-
-# -------------------
 # Config Terminal.app
 # -------------------
 
