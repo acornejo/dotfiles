@@ -5,6 +5,8 @@ elif [[ -n "$DISPLAY" ]] && hash xclip 2>/dev/null; then
     exec xclip -selection c
 elif [[ -n "$DISPLAY" ]] && hash xsel 2>/dev/null; then
     exec xsel --clipboard --input
+elif hash croshclip 2>/dev/null && nc -z localhost 30001; then
+    exec croshclip -copy
 elif [ -n "$TMUX" ]; then
     exec tmux load-buffer -
 else
