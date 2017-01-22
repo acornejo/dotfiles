@@ -18,5 +18,5 @@ else
     set background=dark
 endif
 
-" set fillchars+=vert:│
-hi VertSplit guibg=NONE ctermbg=NONE
+set fillchars+=vert:\ 
+hi VertSplit guibg=Black ctermbg=Black
