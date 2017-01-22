@@ -1,0 +1,48 @@
+#!/bin/bash
+declare -A patterns
+patterns['(https?://[^[:space:]:]+)']='\1'
+patterns['(ftp://[^[:space:]:]+)']='\1'
+patterns['(go/[[:alnum:]_-]+)']='\1'
+patterns['(b/[0-9]+)']='\1'
+patterns['(cl/[0-9]+)']='\1'
+patterns['(cr/[0-9]+)']='\1'
+patterns['(depot/[^[:space:]]+)']='cs.corp.google.com/piper///\1'
+patterns['(/cns/[^ \*]+)']='cnsviewer.corp.google.com\1'
+
+translate() {
+    local match=$1
+    if [ -n "$match" ]; then
+        for pattern in "${!patterns[@]}"; do
+            if echo "$match" | grep -E "$pattern" >/dev/null 2>&1; then
+                echo $(echo $match | sed -r "s#.*${pattern}.*#${patterns[$pattern]}#")
+                return
+            fi
+        done
+        exit 1
+    else
+        exit 1
+    fi
+}
+
+if [ "$1" == "--browser" ]; then
+    if [ -z "$BROWSER" ]; then
+        exit 1
+    fi
+    $BROWSER $(translate $(cat -)) >/dev/null 2>&1
+    exit 0
+fi
+
+input=-
+if [ $# -ge 1 -a -f "$1" ]; then
+  input="$1"
+fi
+
+IFS='|' eval 'matchall=${!patterns[*]}'
+matches=$(cat $input | grep -oE "$matchall" | uniq)
+if [ -z "$matches" ]; then
+  exit 0
+fi
+
+match=$(echo "$matches" | fzf --tac --header 'Ctrl-O open in browser' --bind "ctrl-o:execute:(echo {} | urlpick --browser)")
+translate "$match"
+exit 0

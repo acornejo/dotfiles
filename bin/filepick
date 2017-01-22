@@ -1,0 +1,32 @@
+#!/bin/bash
+
+input=-
+if [ $# -ge 1 -a -f "$1" ]; then
+  input="$1"
+fi
+
+# These are just a collection of heuristics, nothing more. We take
+# advantage of the fact that we are usually interested in copying
+# complex filenames, so missing filenames like 'aa' is not a problem.
+
+# grep -Ev "^(total|create|delete|mode|${USER}|${HOST})$" | \
+
+matches=$(cat $input | \
+        grep -Eo "[^[:space:]!@#$%^&*():;<>?\"']{4,80}" | \
+        grep '^[/[:alpha:]]' | \
+        grep -Ev '^[[:digit:]]+$' | \
+        grep -Ev '\.$' | \
+        grep "\.\|/" | \
+        sort | uniq -c | sort | awk '$1 < 10 {print $2}')
+
+if [ -z "$matches" ]; then
+    exit 1
+fi
+
+match=$(echo "$matches" | fzf --tac)
+if [ -n "$match" ]; then
+    echo "$match"
+    exit 0
+else
+    exit 1
+fi
