@@ -4,8 +4,8 @@ set -g message-style 'bg=black fg=white,bold'
 # panes
 set -g pane-active-border-style 'fg=blue,bold'
 set -g pane-border-style 'fg=black'
-if-shell "[[ $(tmux -V | cut -d' ' -f2) | -ge 2.3 ]]" 'set -g pane-border-status top'
-if-shell "[[ $(tmux -V | cut -d' ' -f2) | -ge 2.3 ]]" 'set -g pane-border-format " #{pane_title} "'
+if-shell "tmux -V | awk '{exit !($2 >= 2.3)}'" 'set -g pane-border-status top'
+if-shell "tmux -V | awk '{exit !($2 >= 2.3)}'" 'set -g pane-border-format " #{pane_title} "'
 
 # window list
 setw -g window-status-current-format ' #I#[fg=colour250] #[fg=colour255]#W#[fg=colour50]#F '
