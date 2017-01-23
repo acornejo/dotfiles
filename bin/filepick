@@ -12,7 +12,7 @@ fi
 # grep -Ev "^(total|create|delete|mode|${USER}|${HOST})$" | \
 
 matches=$(cat $input | \
-        grep -Eo "[^[:space:],!=@#$%^&*():;<>?\"']{4,80}" | \
+        grep -Eo "[^[:space:],!=@#$%^&*\(\):;<>?\"']{4,80}" | \
         grep '^[/[:alpha:]]' | \
         grep -Ev '^[[:digit:]]+$' | \
         grep -Ev '\.$' | \
