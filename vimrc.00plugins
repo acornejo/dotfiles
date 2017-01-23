@@ -60,7 +60,9 @@ let g:GPGPreferSign = 1
 let g:scratch_no_mappings = 1
 let g:scratch_persistence_file = expand("$HOME/.vim_scratch")
 let g:scratch_horizontal = 0
+let g:scratch_height = 80
 let g:scratch_top = 0
+let g:AutoPairsMapBS = 0
 
 let s:python_ver = 0
 silent! python import sys, vim;
@@ -173,6 +175,8 @@ Plug 'Valloric/MatchTagAlways'
 endif
 " search and replace
 Plug 'gabesoft/vim-ags'
+" word highlight
+Plug 'neitanod/vim-ondemandhighlight'
 
 " =========================================================
 " Disabled
