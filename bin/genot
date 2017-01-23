@@ -1,0 +1,293 @@
+#!/bin/bash
+
+set -e
+
+DIRECTORY="$HOME/.genot"
+EXTENSION="md"
+EDITOR=${EDITOR}
+
+if git config --get genot.directory >/dev/null; then
+    DIRECTORY=$(git config --get genot.directory)
+fi
+
+if [ "$1" == "-c" ]; then
+    DIRECTORY=$2
+    shift
+    shift
+fi
+
+ask_confirmation() {
+    echo "$@"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes )
+                break;;
+            No )
+                exit 1
+        esac
+    done
+}
+
+print_error() {
+    echo >&2 "error: $@"
+}
+
+require_editor() {
+    if [ -z "$EDITOR" ]; then
+        print_error "you must set your editor first, i.e. '$(basename $0) config genot.editor nano'"
+        exit 1
+    fi
+}
+
+require_note() {
+    if [ -z "$1" ]; then
+        print_error "missing <note> parameter"
+        exit 1
+    fi
+    local NOTE=$(echo ${DIRECTORY}/$1*)
+    if [ -f "$NOTE" ]; then
+        echo "$NOTE"
+    else
+        print_error "note $1 not found!"
+        exit 1
+    fi
+}
+
+require_clean_work_tree() {
+    # Update the index
+    git update-index -q --ignore-submodules --refresh
+    local err=0
+
+    # Disallow unstaged changes in the working tree
+    if ! git diff-files --quiet --ignore-submodules --
+    then
+        print_error "cannot $1 with unstaged changes."
+        git diff-files --name-status -r --ignore-submodules -- >&2
+        err=1
+    fi
+
+    # Disallow uncommitted changes in the index
+    if ! git diff-index --cached --quiet HEAD --ignore-submodules --
+    then
+        print_error "cannot $1 with uncommitted changes."
+        git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2
+        err=1
+    fi
+
+    if [ $err = 1 ]
+    then
+        echo >&2 "Please commit or stash them."
+        exit 1
+    fi
+}
+
+require_branch() {
+    if [ "$(git rev-parse --abbrev-ref HEAD)" != "$1" ]; then
+        print_error "$DIRECTORY is not in $1 branch."
+        exit 1
+    fi
+}
+
+require_directory() {
+    export GIT_WORK_TREE="$DIRECTORY"
+    export GIT_DIR="${GIT_WORK_TREE}/.git"
+    if [ ! -d "$DIRECTORY" ]; then
+        ask_confirmation "$DIRECTORY does not exist yet, create it?"
+        mkdir -p "$DIRECTORY"
+        git init $DIRECTORY
+        git commit --allow-empty -m "initial commit"
+        git checkout -b scratch
+    elif ! git rev-parse >/dev/null 2>&1; then
+        ask_confirmation "$DIRECTORY exists but is uninitialized, initialize it?"
+        git init $DIRECTORY
+        git commit --allow-empty -m "initial commit"
+        git checkout -b scratch
+    fi
+
+    if git config --get genot.editor; then
+        EDITOR=$(git config --get genot.editor)
+    fi
+
+    if git config --get genot.extension; then
+        EXTENSION=$(git config --get genot.extension)
+    fi
+
+}
+
+get_title() {
+    local TITLE=$(grep -m 1 . "$1" | \
+        iconv -f utf-8 -t ascii//translit | \
+        tr 'A-Z' 'a-z' | \
+        sed 's/[^a-z0-9]/-/g' | \
+        tr -s - - | \
+        sed -e 's/^-*//' -e 's/-*$//' | \
+        cut -c -50)
+    if [ -n "$TITLE" ]; then
+        echo $TITLE
+    fi
+}
+
+do_config() {
+    if [ "$1" == directory ]; then
+        shift
+        git config --global directory "$@"
+    else
+        require_directory
+        git config "$@"
+    fi
+}
+
+do_list() {
+    git ls-files "$@"
+}
+
+do_grep() {
+    git grep "$@"
+}
+
+do_show() {
+    require_branch "scratch"
+    local NOTE=$(require_note "$1")
+    NOTE=${NOTE#$DIRECTORY/}
+    if hash pandoc 2>/dev/null 2>&1 && hash man 2>/dev/null 2>&1; then
+        git show "scratch:$NOTE" | pandoc -s -f markdown -t man | man -l -
+    else
+        git show "scratch:$NOTE"
+    fi
+}
+
+do_edit() {
+    require_editor
+    require_branch "scratch"
+    local NOTE=$(require_note "$1")
+    local TITLE=$(get_title $NOTE)
+    $EDITOR $NOTE
+    if ! git diff --quiet --exit-code; then
+        local NEW_TITLE=$(get_title $NOTE)
+        if [ "$TITLE" != "$NEW_TITLE" ]; then
+            local NEW_NOTE=${DIRECTORY}/${NEW_TITLE}.${EXTENSION}
+            if [ -f "$NEW_NOTE" ]; then
+                print_error "can't rename to $NEW_TITLE, note already exists."
+            else
+                git mv $NOTE ${NEW_NOTE}
+                git commit -m "renamed $TITLE -> $NEW_TITLE"
+                NOTE=${NEW_NOTE}
+                TITLE=${NEW_TITLE}
+            fi
+        fi
+        git add $NOTE
+        git commit -m "modified $TITLE"
+    fi
+}
+
+do_new() {
+    require_editor
+    require_branch "scratch"
+    TMPDIR=${TMPDIR:-/tmp}
+    TMPDIR=${TMPDIR%/}
+    local TMPFILE=$(mktemp -u ${TMPDIR}/new-note-XXXXXXXX.md)
+    $EDITOR $TMPFILE
+    if [ -f "$TMPFILE" ]; then
+        local TITLE=$(get_title $TMPFILE)
+        if [ -n "$TITLE" ]; then
+            local NOTE=${TITLE}.${EXTENSION}
+            if [ -f "$DIRECTORY/$NOTE" ]; then
+                NOTE=${TITLE}$(mktemp XXXXXX).${EXTENSION}
+            fi
+            mv $TMPFILE ${DIRECTORY}/$NOTE
+            git add ${DIRECTORY}/$NOTE
+            git commit -m "added $TITLE"
+        fi
+    fi
+}
+
+do_rm() {
+    require_branch "scratch"
+    local NOTE=$(require_note "$1")
+    local TITLE=$(get_title $NOTE)
+    git rm -f ${NOTE}
+    git commit -m "removed $TITLE"
+}
+
+do_sync() {
+    local CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    if git ls-remote origin --exit-code >/dev/null 2>&1; then
+        local HAS_REMOTE=1
+    fi
+    if [ "$CUR_BRANCH" == "scratch" ]; then
+        require_clean_work_tree "sync"
+        git checkout master
+        if [ -n "$HAS_REMOTE" ]; then
+            git pull origin master
+            git merge --no-ff scratch -m "syncing"
+            git push origin master
+        else
+            git merge --no-ff scratch -m "syncing"
+        fi
+        git branch -f scratch
+        git checkout scratch
+    elif [ "$CUR_BRANCH" == "master" ]; then
+        if [ -n "$HAS_REMOTE" ]; then
+            git pull origin master
+            git merge --no-ff scratch -m "syncing"
+            git push origin master
+        else
+            git merge --no-ff scratch -m "syncing"
+        fi
+        git branch -f scratch
+        git checkout scratch
+    else
+        print_error "repo in unknown branch '$CUR_BRANCH'"
+        exit 1
+    fi
+}
+
+do_usage() {
+    echo "usage: $(basename $0) {config|list|grep|show|edit|new|rm|sync}"
+}
+
+case $1 in
+    c*)
+        shift
+        do_config "$@"
+        ;;
+    l*)
+        shift
+        require_directory
+        do_list "$@"
+        ;;
+    g*)
+        shift
+        require_directory
+        do_grep "$@"
+        ;;
+    s*)
+        shift
+        require_directory
+        do_show "$@"
+        ;;
+    e*)
+        shift
+        require_directory
+        do_edit "$@"
+        ;;
+    n*)
+        shift
+        require_directory
+        do_new "$@"
+        ;;
+    rm|delete)
+        shift
+        require_directory
+        do_rm "$@"
+        ;;
+    s*)
+        shift
+        require_directory
+        do_sync "$@"
+        ;;
+    *)
+        test -n "$1" && echo "unknown command $1" || true
+        do_usage
+        ;;
+esac
