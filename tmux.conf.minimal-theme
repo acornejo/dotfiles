@@ -1,7 +1,10 @@
-# Command line
+# command line
 set -g message-style 'bg=black fg=white,bold'
 
-# Window list
+# window selection
+setw -g mode-style reverse
+
+# window list
 setw -g window-status-format " #I  #W#F "
 setw -g window-status-current-format " #I #[reverse] #W#F "
 setw -g window-status-fg blue
@@ -11,7 +14,7 @@ setw -g window-status-bell-bg white
 setw -g window-status-activity-fg cyan
 setw -g window-status-activity-bg white
 
-# Status bar
+# status
 set -g status-bg default
 set -g status-fg white
 set -g status-right-length 60

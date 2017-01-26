@@ -7,6 +7,9 @@ set -g pane-border-style 'fg=black'
 if-shell "tmux -V | awk '{exit !($2 >= 2.3)}'" 'set -g pane-border-status top'
 if-shell "tmux -V | awk '{exit !($2 >= 2.3)}'" 'set -g pane-border-format " #{pane_title} "'
 
+# window selection
+setw -g mode-style reverse
+
 # window list
 setw -g window-status-current-format ' #I#[fg=colour250] #[fg=colour255]#W#[fg=colour50]#F '
 setw -g window-status-format ' #I#[fg=colour237] #[fg=colour250]#W#[fg=colour244]#F '
