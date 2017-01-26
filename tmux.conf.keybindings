@@ -2,25 +2,24 @@
 set-option -g   prefix C-space
 bind-key C-space    send-prefix
 
+# vim mode keys
+setw -g mode-keys vi
+
 # choose session
 bind S choose-session
 
 # create new window, use current path
 bind c new-window -c "#{pane_current_path}"
 
-# vim mode keys
-setw -g mode-keys vi
-
-# vim-like split window
+# vim-like create split panes
 bind s split-window -v -c "#{pane_current_path}"
 bind v split-window -h -c "#{pane_current_path}"
 
 # vim-like pane selection
-is_vim='echo "#{pane_current_command}" | grep -iqE "(^|\/)g?(view|n?vim?x?)(diff)?$"'
-bind h if-shell "$is_vim" "send-keys C-w h" "select-pane -L"
-bind j if-shell "$is_vim" "send-keys C-w j" "select-pane -D"
-bind k if-shell "$is_vim" "send-keys C-w k" "select-pane -U"
-bind l if-shell "$is_vim" "send-keys C-w l" "select-pane -R"
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
 
 # vim-like pane resizing
 bind -r C-H resize-pane -L 5

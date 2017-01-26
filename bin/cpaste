@@ -5,10 +5,6 @@ elif [[ -n "$DISPLAY" ]] && hash xclip 2>/dev/null; then
     exec xclip -selection c -o
 elif [[ -n "$DISPLAY" ]] && hash xsel 2>/dev/null; then
     exec xsel --clipboard --output
-elif hash croshclip 2>/dev/null && nc -z localhost 30001; then
-    exec croshclip -paste
 elif [ -n "$TMUX" ]; then
     exec tmux show-buffer
-else
-    exec cat ~/.clip
 fi
