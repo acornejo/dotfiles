@@ -1,7 +1,10 @@
-if ! filereadable(expand("$HOME/.vim/autoload/plug.vim"))
-    echo "Must install plug.vim to handle plugins."
-    echo ""
-    echo "curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+if !empty($VIM_NOPLUGINS)
+    finish
+endif
+
+if !filereadable(expand("$HOME/.vim/autoload/plug.vim"))
+    echo "Install plug.vim to handle vim plugins."
+    call system(expand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"))
     finish
 endif
 
@@ -171,14 +174,6 @@ endif
 " search and replace
 Plug 'gabesoft/vim-ags'
 
-" C/C++/Javascript completion
-if !isdirectory('/usr/share/vim/google')
-if version > 703 || (version >= 703 && has('patch584'))
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' , 'on': [] }
-command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
-endif
-endif
-
 " =========================================================
 " Disabled
 " =========================================================
@@ -236,12 +231,18 @@ endif
 " if version >= 702
 " Plug 'tomtom/tcomment_vim'
 " endif
+" C/C++/Javascript completion
+" if version > 703 || (version >= 703 && has('patch584'))
+" Plug 'Valloric/YouCompleteMe'
+" command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
+" endif
 call plug#end()
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
+
 
 
 " Prompt for vmux command
