@@ -1,3 +1,7 @@
+if !exists('g:plugs') || !has_key(g:plugs, 'fzf.vim')
+  finish
+endif
+
 function! s:tag_handler(tag)
     if !empty(a:tag)
         let token = split(split(a:tag, '\t')[2],';"')[0]
