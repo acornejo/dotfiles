@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ -z "$1" ]; then
+  name=$(basename $0)
+  echo "Usage: $name {sed_replace_expression} {files}"
+  echo
+  echo "   examples: $name 's/old/new/' *old*"
+  echo "             $name 's/^(.*)$/\1.backup' *"
+fi
+
 EXPR=$1
 shift
 
@@ -10,7 +18,7 @@ declare -A CONFLICTS
 while [ -n "$1" ]; do
   OLDFILE=$1
   shift
-  NEWFILE=$(echo $OLDFILE | sed "${EXPR}")
+  NEWFILE=$(echo $OLDFILE | sed -r "${EXPR}")
   if [ "$NEWFILE" != "$OLDFILE" ]; then
     if [ ${COLLISIONS[$NEWFILE]+exists} ]; then
       CONFLICTS[$OLDFILE]=$NEWFILE
