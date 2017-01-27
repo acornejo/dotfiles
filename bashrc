@@ -1,21 +1,21 @@
 # common shell settings
-[ -f ~/.sh.env ] && source ~/.sh.env
+[ -f ~/.sh/environ ] && source ~/.sh/environ
 
 # skip rest if non-interactive
 [ -n "${-##*i*}" ] && return
 
 # pretty prompt
-[ -f ~/.sh.prompt ] && source ~/.sh.prompt
+[ -f ~/.sh/prompt ] && source ~/.sh/prompt
 PS1="$(sh_prompt)"
 
 # bash options
-[ -f ~/.sh.bash ] && source ~/.sh.bash
+[ -f ~/.sh/bash-options ] && source ~/.sh/bash-options
 
 # aliases
-[ -f ~/.sh.alias ] && source ~/.sh.alias
+[ -f ~/.sh/aliases ] && source ~/.sh/aliases
 
 # git prompt function
-[ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
+[ -f ~/.sh/git-prompt.sh ] && source ~/.sh/git-prompt.sh
 
 # z
 [ -f ~/.bin/z.sh ] && source ~/.bin/z.sh
@@ -24,7 +24,7 @@ PS1="$(sh_prompt)"
 [ -f ~/.bash_completion ] && source ~/.bash_completion
 
 # git completion
-[ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
+[ -f ~/.sh/git-completion.bash ] && source ~/.sh/git-completion.bash
 
 # fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

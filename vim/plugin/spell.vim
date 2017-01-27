@@ -3,6 +3,9 @@ if !exists('g:plugs') || !has_key(g:plugs, 'vim-abolish')
 endif
 
 function! s:ConfigAbolish()
+  if !exists(':Abolish')
+    return
+  endif
   " our -> or
   Abolish {col,behavi,fav,flav,hon,neighb,rum,lab}our{,s,ed,less,able,ing} {}or{}
 

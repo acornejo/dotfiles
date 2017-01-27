@@ -1,14 +1,14 @@
 # environment variables
-[ -f ~/.sh.env ] && source ~/.sh.env
+[ -f ~/.sh/environ ] && source ~/.sh/environ
 
 # skip rest if non-interactive
 [ -n "${-##*i*}" ] && return
 
 # zsh options
-[ -f ~/.sh.zsh ] && source ~/.sh.zsh
+[ -f ~/.sh/zsh-options ] && source ~/.sh/zsh-options
 
 # aliases
-[ -f ~/.sh.alias ] && source ~/.sh.alias
+[ -f ~/.sh/aliases ] && source ~/.sh/aliases
 
 # git prompt function
 [ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
@@ -20,7 +20,7 @@
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # pretty prompt
-[ -f ~/.sh.prompt ] && source ~/.sh.prompt
+[ -f ~/.sh/prompt ] && source ~/.sh/prompt
 PROMPT="$(sh_prompt)"
 
 # local settings

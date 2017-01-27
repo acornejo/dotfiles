@@ -1,6 +1,7 @@
-if !empty($VIM_NOPLUGINS)
+if !empty($VIM_NOPLUGINS) || exists('g:loaded_plugins')
     finish
 endif
+let g:loaded_plugins = 1
 
 if !filereadable(expand("$HOME/.vim/autoload/plug.vim"))
     echo "Install plug.vim to handle vim plugins."
