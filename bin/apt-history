@@ -1,0 +1,21 @@
+#!/bin/bash
+# Modified from apt-removable by Suraj N. Kurapati
+
+ls -tr /var/log/apt/history.log* | while read log; do
+  case "$log" in
+    (*.gz) zcat "$log" ;;
+    (*)     cat "$log" ;;
+  esac
+done | sed -n '
+/^Start-Date/{
+    s/^Start-Date: /\nDate: /
+    p
+}
+/^\(Install\|Remove\):/{
+    s/^\(Install\|Remove\):/\1/
+    s/([^)]*)//g
+    s/, //g
+    s/:[^ ]*//g
+    p
+}
+'
