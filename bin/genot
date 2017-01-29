@@ -261,7 +261,7 @@ case $1 in
         require_directory
         do_grep "$@"
         ;;
-    s*)
+    sh*)
         shift
         require_directory
         do_show "$@"
@@ -281,7 +281,7 @@ case $1 in
         require_directory
         do_rm "$@"
         ;;
-    s*)
+    sy*)
         shift
         require_directory
         do_sync "$@"
