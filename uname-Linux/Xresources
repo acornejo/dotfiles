@@ -27,7 +27,7 @@ URxvt.saveLines: 400
 URxvt.fullCursor: false
 URxvt.cursorBlink: true
 ! choose perl extensions
-URxvt.perl-ext-common: default,matcher,clipboard,keyboard-select,font-size
+URxvt.perl-ext-common: default,matcher,clipboard,keyboard-select,font-size,osc-clipboard
 ! configure matcher extension
 URxvt.matcher.launcher:  google-chrome
 URxvt.matcher.button: 1
