@@ -51,9 +51,9 @@ endif
 
 " configure viminfo
 if has('nvim')
-    set viminfo='1000,\"100,:20,n~/.nviminfo
+    set viminfo='1000,\"100,:1000,n~/.nviminfo
 else
-    set viminfo='1000,\"100,:20,n~/.viminfo
+    set viminfo='1000,\"100,:1000,n~/.viminfo
 endif
 
 " configure spellchecking
