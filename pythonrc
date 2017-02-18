@@ -1,35 +1,54 @@
 # Save as ~/.pythonrc and add 'export PYTHONSTARTUP=~/.pythonrc' to ~/.bashrc
-# from http://www.digitalprognosis.com/opensource/scripts/pythonrc
 
-import atexit
+def setup_history():
+    import os
+    import atexit
+    import readline
+
+    historyPath = os.path.expanduser("~/.python_history")
+
+    if not os.path.exists(historyPath) and not os.path.isdir(historyPath):
+        try:
+            open(historyPath, 'w').close()
+        except IOError:
+            pass
+
+    if os.access(historyPath, os.W_OK):
+        atexit.register(readline.write_history_file, historyPath)
+
+    if os.access(historyPath, os.R_OK):
+        readline.read_history_file(historyPath)
+
+def setup_prompt():
+    import sys
+    import os
+
+    if os.environ.get("TERM", "").count("256") > 0:
+        sys.ps1 = '\001\033[1;36m\002>>> \001\033[0m\002'
+        sys.ps2 = '\001\033[1;31m\002... \001\033[0m\002'
+
+def setup_completion():
+    import readline
+    import rlcompleter
+
+    old_complete = readline.get_completer()
+    def complete(text, state):
+        if not text:
+            return ('\t', None)[state]
+        return old_complete(text, state)
+
+    readline.parse_and_bind("tab: complete")
+    readline.set_completer(complete)
+
+setup_prompt()
+setup_history()
+setup_completion()
+
+# cleanup symbols
+del setup_prompt, setup_history, setup_completion
+
+# import things we want in the global scope of our shell
 import os
-import readline
-import rlcompleter
+import re
 import sys
-
 from math import *
-
-# Restore our command-line history, and save it when Python exits.
-historyPath = os.path.expanduser("~/.python_history")
-
-# Create a blank history file if it doesn't exist already
-if not os.path.exists(historyPath) and not os.path.isdir(historyPath):
-    try:
-        open(historyPath, 'w').close()
-    except IOError:
-        pass
-
-# Read the history file in for autocompletion and save it on exit
-if os.access(historyPath, os.W_OK):
-    atexit.register(lambda x=historyPath: readline.write_history_file(x))
-
-if os.access(historyPath, os.R_OK):
-    readline.read_history_file(historyPath)
-
-# set color prompt
-if os.environ.get("TERM", "").count("256") > 0:
-    sys.ps1 = '\001\033[1;36m\002>>> \001\033[0m\002'
-    sys.ps2 = '\001\033[1;31m\002... \001\033[0m\002'
-
-readline.parse_and_bind("tab: complete")
-readline.set_completer(rlcompleter.Completer().complete)
