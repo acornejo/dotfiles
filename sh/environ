@@ -105,6 +105,6 @@ if hash rg 2>/dev/null; then
   export FZF_DEFAULT_COMMAND='rg --files'
   export FZF_CTRL_T_COMMAND='rg --files'
 elif hash ag 2>/dev/null; then
-  export FZF_DEFAULT_COMMAND='ag -l -g ""'
+  export FZF_DEFAULT_COMMAND='ag -l'
   export FZF_CTRL_T_COMMAND='ag -l -g ""'
 fi
