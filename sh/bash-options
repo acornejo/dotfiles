@@ -15,6 +15,7 @@ fi
 bind '"\C-g": " \C-e\C-u$(fcd)\e\C-e\er\C-m"'
 
 # set history options
+HISTTIMEFORMAT='%F %T '
 HISTIGNORE="&:?:??:???:exit"
 HISTCONTROL="ignorespace:ignoredups:erasedups"
 HISTFILESIZE=50000
@@ -35,3 +36,4 @@ history_reload () {
 bind 'set completion-ignore-case on'
 bind 'set menu-complete-display-prefix on'
 bind 'set show-all-if-ambiguous on'
+bind 'set mark-symlinked-directories on'
