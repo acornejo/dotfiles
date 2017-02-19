@@ -3,6 +3,11 @@ if !empty($VIM_NOPLUGINS) || exists('g:loaded_plugins')
 endif
 let g:loaded_plugins = 1
 
+" Load matchit.vim, but only if the user hasn't installed a newer version.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+  runtime! macros/matchit.vim
+endif
+
 if !filereadable(expand("$HOME/.vim/autoload/plug.vim"))
     echo "Install plug.vim to handle vim plugins."
     call system(expand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"))
@@ -64,6 +69,12 @@ let g:scratch_horizontal = 0
 let g:scratch_height = 80
 let g:scratch_top = 0
 let g:AutoPairsMapBS = 0
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 
 let s:python_ver = 0
 silent! python import sys, vim;
@@ -96,6 +107,8 @@ Plug 'acornejo/vim-signature'
 " =========================================================
 " Language support
 Plug 'sheerun/vim-polyglot'
+" Golang
+Plug 'fatih/vim-go'
 " CSV
 Plug 'chrisbra/csv.vim', {'for': 'csv'}
 " XML
@@ -242,13 +255,6 @@ Plug 'neitanod/vim-ondemandhighlight'
 " command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
 " endif
 call plug#end()
-
-" Load matchit.vim, but only if the user hasn't installed a newer version.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-  runtime! macros/matchit.vim
-endif
-
-autocmd FileType cpp setlocal commentstring=//\ %s
 
 " Prompt for vmux command
 nnoremap <expr> <leader>v exists("g:VimuxRunnerIndex") ? ":VimuxRunLastCommand<CR>" : ":VimuxPromptCommand<CR>"

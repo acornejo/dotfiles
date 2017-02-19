@@ -19,7 +19,7 @@ set nojoinspaces            " prevents double spaces when joining lines
 set fileformat=unix         " default file format
 set cindent ai si           " cindent, auto indent, smart indent
 set tabstop=4               " set number of spaces used for tab
-set shiftwidth=0            " use tabstop as number of spaces when autoindenting
+set shiftwidth=0            " use tabstop as number of spaces with autoindent
 set expandtab               " expand tab to spaces
 set smarttab                " replace tab with spaces
 set shiftround              " round indents to multiples of shiftwidth
@@ -57,37 +57,41 @@ else
 endif
 
 " configure spellchecking
-set spellfile=~/.vimspell.add           " save new words
+set spellfile=~/.vimspell.add
 set spellsuggest=best,10
 
 " configure views
-set viewdir=~/.vim_view                 " save views
+set viewdir=~/.vim_view
 
 " configure undos
 try
-    set undofile                        " save undo to file
-    set undodir=~/.vim_undo             " set undo directory
+    set undofile
+    set undodir=~/.vim_undo
 catch
 endtry
 
 " change settings depending on mode
-if has("gui_running")
+if has('gui_running')
     set guioptions-=m " remove menubar
     set guioptions-=T " remove toolbar
     set guioptions-=r " remove scrollbar
     set guioptions-=L " remove right scrollbar
     set mousemodel=popup
 else
-    if &term == "xterm" || &term == "screen-bce"
+    if &term == 'xterm' || &term == 'screen-bce'
         set term=xterm
         set t_Co=256
     endif
-    if &term =~ "256color"
-        set t_ut=                   " disable background color erase
+    " disable background color erase
+    if &term =~ '256color'
+        set t_ut=
+    endif
+    if has('termguicolors')
+        set termguicolors
     endif
 endif
 
-" use silversearcher instead of grep
+" set grep program
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat=%f:%l:%c:%m
@@ -122,6 +126,6 @@ nnoremap Y y$
 if filereadable(expand('~/.vim/plugin/plugins.vim'))
     source ~/.vim/plugin/plugins.vim
 endif
-for f in split(glob("~/.vimrc.local.*"), "\n")
+for f in split(glob('~/.vimrc.local.*'), '\n')
     execute 'source ' . fnameescape(f)
 endfor
