@@ -9,6 +9,7 @@
 [alias]
 	a = add
 	c = commit -m
+    find = log --all --
 	d = diff
 	l = log --graph --date=short --pretty='format:%C(reset)%C(blue)%cd %C(green)%h %C(reset)%s %C(yellow)(%cn)'
 	b = branch
