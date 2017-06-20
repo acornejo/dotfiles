@@ -4,17 +4,8 @@ if ! git rev-parse HEAD > /dev/null 2>&1; then
     exit 1
 fi
 
-echo "About to merge these two commits:"
-git rev-list --oneline --max-count=2 HEAD
-read -p "Are you sure (y/n)? " yn
-case "$yn" in
-  [Yy]*)
-    git reset --soft HEAD^
+if git diff --cached --exit-code > /dev/null 2>&1; then
+    echo "No staged changes to amend."
+else
     git commit --amend --no-edit
-    exit 0
-    ;;
-  *)
-    echo "aborted."
-    exit 1
-    ;;
-esac
+fi
