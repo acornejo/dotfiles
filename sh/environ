@@ -82,9 +82,6 @@ fi
 # color in terminal
 export CLICOLOR="Yes"
 
-# color in grep
-export GREP_OPTIONS="--color=auto"
-
 # color in ack
 export ACK_MATCH_COLOR="bold red"
 

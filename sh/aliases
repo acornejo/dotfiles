@@ -17,6 +17,7 @@ alias route="route -n"
 alias netstat="netstat -n"
 alias bc="bc -q -l"
 alias du="du -h -s -c *"
+alias grep="grep --color=auto"
 
 # aliases: useful extras
 alias trunc='cut -c -${COLUMNS:-80}'
