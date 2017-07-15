@@ -45,6 +45,16 @@ if hash todo.sh 2>/dev/null; then
   alias t='todo.sh'
 fi
 
+# get parent pid
+ppid () {
+    ps -p ${1:-$$} -o ppid=
+}
+
+# get the user of the process
+puser() {
+    ps -p ${1:-$$} -o user=
+}
+
 # display short pwd
 shortpwd() {
  local PRE= NAME="$PWD" LENGTH=${1:-20}
