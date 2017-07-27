@@ -86,9 +86,6 @@ else
     if &term =~ '256color'
         set t_ut=
     endif
-    if has('termguicolors')
-        set termguicolors
-    endif
 endif
 
 " set grep program
