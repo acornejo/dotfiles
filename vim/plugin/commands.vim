@@ -33,7 +33,7 @@ function! s:TempScratch()
 endfunction
 command! -nargs=? TempScratch call s:TempScratch()
 
-
+" pipe current buffer through external command and open in new buffer
 function! s:Pipe(command)
   let switchbuf_saved = &switchbuf
   set switchbuf=useopen
@@ -86,7 +86,7 @@ endfunction
 command! -nargs=0 -bar Qargs execute 'args ' . s:QuickfixFilenames()
 command! -nargs=1 -complete=command -bang Qdo exec 'bufdo bd' | exe 'args ' . s:QuickfixFilenames() | argdo<bang> <args>
 
-" Switch between source and header
+" switch between source and header
 function! s:SwitchSourceHeader()
   let source = ["cpp", "C", "c", "cc"]
   let header = ["h", "hpp"]
@@ -117,8 +117,7 @@ function! s:SwitchSourceHeader()
 endfunction
 command! SwitchSourceHeader call s:SwitchSourceHeader()
 
-nnoremap <leader>s :SwitchSourceHeader<CR>
-
+" close all hiden buffers.
 function! s:CloseHiddenBuffers()
   " list of *all* buffer numbers
   let l:buffers = range(1, bufnr('$'))
@@ -159,13 +158,10 @@ command! Cd :cd! %:p:h
 " run external command
 command! -nargs=1 -complete=shellcmd Run | execute ':silent !'.<q-args> | execute ':redraw!'
 
+" count all matches of last search
 command! CountMatches execute ':%s///gn'
 
-" make * and # find word but not move cursor
-nnoremap <silent> * :let @/= '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
-nnoremap <silent> # :let @/= '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
-
-" make * and # work on visual mode too.
+" Visual search
 function! s:VSetSearch(cmdtype)
   let temp = @s
   norm! gv"sy
@@ -173,5 +169,13 @@ function! s:VSetSearch(cmdtype)
   let @s = temp
 endfunction
 
+" make * and # find word but not move cursor
+nnoremap <silent> * :let @/= '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
+nnoremap <silent> # :let @/= '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
+
+" make * and # work on visual mode too.
 xnoremap <silent> * :<C-u>call <SID>VSetSearch('/')\|set hlsearch<CR>
 xnoremap <silent> # :<C-u>call <SID>VSetSearch('?')\|set hlsearch<CR>
+
+" switch between source and header
+nnoremap <leader>s :SwitchSourceHeader<CR>

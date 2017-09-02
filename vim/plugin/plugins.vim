@@ -75,6 +75,9 @@ let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+" for matching curlys for target arguments
+let g:targets_argOpening = '[({[]'
+let g:targets_argClosing = '[]})]'
 
 let s:python_ver = 0
 silent! python import sys, vim;
@@ -255,9 +258,6 @@ Plug 'neitanod/vim-ondemandhighlight'
 " command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
 " endif
 call plug#end()
-
-" Prompt for vmux command
-nnoremap <expr> <leader>v exists("g:VimuxRunnerIndex") ? ":VimuxRunLastCommand<CR>" : ":VimuxPromptCommand<CR>"
 
 if has_key(g:plugs, 'vim-easy-align')
     " Start interactive EasyAlign in visual mode (e.g. vipga)
