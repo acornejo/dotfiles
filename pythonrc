@@ -43,12 +43,25 @@ def setup_completion():
         readline.parse_and_bind("tab: complete")
     readline.set_completer(complete)
 
+def setup_local():
+  import os
+  import sys
+  import glob
+  pythonPath = os.path.join(os.path.expanduser("~"), ".python")
+  sys.path.insert(0, pythonPath)
+  for f in glob.glob(os.path.join(pythonPath, "*.py")):
+      modulename = os.path.basename(f[:-3])
+      module = __import__(modulename, globals(), locals(), ['*'])
+      for k in dir(module):
+        globals()[k] = module.__dict__[k]
+
 setup_prompt()
 setup_history()
 setup_completion()
+setup_local()
 
 # cleanup symbols
-del setup_prompt, setup_history, setup_completion
+del setup_prompt, setup_history, setup_completion, setup_local
 
 # import things we want in the global scope of our shell
 import os
