@@ -42,6 +42,9 @@ set -g set-titles-string ' #I:#W'
 # set terminal for colors
 set -g default-terminal "screen-256color"
 
+# switch session instead of exiting when closing last window
+set -g detach-on-destroy off
+
 # enable mouse to select panes
 # setw -g mode-mouse on
 # set -g mouse-select-pane on
