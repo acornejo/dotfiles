@@ -6,8 +6,8 @@ bind k if-shell "$is_vim" "send-keys C-w k" "select-pane -U"
 bind l if-shell "$is_vim" "send-keys C-w l" "select-pane -R"
 
 # use ccopy/cpaste for clipboard
-bind -t vi-copy y copy-pipe "ccopy > #{pane_tty}"
-bind -t vi-copy Enter copy-pipe "ccopy > #{pane_tty}"
+bind -T copy-mode-vi y send -X copy-pipe-and-cancel "ccopy > #{pane_tty}" \; display-message "copied to clipboard"
+bind -T copy-mode-vi Enter send -X copy-pipe-and-cancel "ccopy > #{pane_tty}" \; display-message "copied to clipboard"
 bind ] run cpaste
 
 # url picker
