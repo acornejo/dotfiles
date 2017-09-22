@@ -1,9 +1,22 @@
 #!/bin/bash
 if [[ -z "${OSTYPE##*darwin*}" ]] && hash pbpaste 2>/dev/null; then
+  if [ -z "$TMUX" ]; then
     exec pbpaste
+  else
+    pbpaste | tmux load-buffer - | tmux paste-buffer
+  fi
 elif [[ -n "$DISPLAY" ]] && hash xclip 2>/dev/null; then
+  if [ -z "$TMUX" ]; then
     exec xclip -selection -c -o
+  else
+    xclip -selection -c -o | tmux load-buffer - | tmux paste-buffer
+  fi
 elif [[ -n "$DISPLAY" ]] && hash xsel 2>/dev/null; then
+  if [ -z "$TMUX" ]; then
+    exec xsel --clipboard --output
+  else
+    xsel --clipboard --output | tmux load-buffer - | tmux paste-buffer
+  fi
     exec xsel --clipboard --output
 elif [ -n "$TMUX" ]; then
     exec tmux paste-buffer
