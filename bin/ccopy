@@ -5,6 +5,10 @@ if [ -z "$buf" ]; then
     exit 0
 fi
 
+if [ "$1" == "-t" ]; then
+    buf=$(echo "$buf" | sed 's/[[:blank:]]*$//')
+fi
+
 if [ -n "$TMUX" ] && hash tmux 2>/dev/null; then
     tmux set-buffer "$buf"
 fi
