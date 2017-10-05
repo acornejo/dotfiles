@@ -177,5 +177,9 @@ nnoremap <silent> # :let @/= '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
 xnoremap <silent> * :<C-u>call <SID>VSetSearch('/')\|set hlsearch<CR>
 xnoremap <silent> # :<C-u>call <SID>VSetSearch('?')\|set hlsearch<CR>
 
+" clipboard integration
+vnoremap <silent> <C-y> :w !ccopy<CR><CR>
+nnoremap <silent> <C-p> :r!cpaste<CR><CR>
+
 " switch between source and header
 nnoremap <leader>s :SwitchSourceHeader<CR>
