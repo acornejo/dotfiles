@@ -1,0 +1,78 @@
+#!/bin/bash
+
+query_yn() {
+    local res=""
+    echo -n "$1: [y,n] "
+    while [ "$res" != "n" -a "$res" != "y" ]; do
+        read -s -n 1 res
+    done
+    if [ "$res" != "n" ]; then
+        echo
+        return 0
+    else
+        echo
+        return 1
+    fi
+}
+
+
+check_dependency() {
+    local dep
+    for dep in "$@"; do
+        if !hash "$dep" 2>/dev/null; then
+            echo "Missing $dep dependency."
+            return 1
+        fi
+    done
+    return 0
+}
+
+check_git_repo() {
+    if git rev-parse --git-dir >&/dev/null; then
+        return 0;
+    else
+        return 1
+    fi
+}
+
+
+main() {
+    echo "Creating bitbucket repository..."
+    echo
+
+    if ! check_dependency git curl; then
+        echo "aborting."
+        exit 1
+    fi
+
+    local origrepo=${PWD##*/}
+    local repo=${PWD##*/}
+    local login=$(git config user.email)
+
+    read -e -p "Username: " -i "$login" login
+    read -e -p "Repository name: " -i "$repo" repo
+    if [ -z "$repo" -o -z "$login" ]; then
+        echo
+        echo "  aborted."
+        exit 1
+    fi
+
+    local json=$(curl --user $login \
+                 https://api.bitbucket.org/1.0/repositories/ --data "name=$repo")
+    local owner=$(echo "$json"| grep -Po '(?<="owner":).*?[^\\]",' | tr -d '" ,')
+    local url="${owner}@bitbucket.org:${owner}/${repo}.git"
+
+    if check_git_repo && query_yn "Push local repo to remote"; then
+        git remote add origin ${url}
+        git push -u origin master
+    elif query_yn "Clone remote repo to local"; then
+        if [ "$origrepo" == "$repo" ]; then
+            git clone ${url} .
+        else
+            git clone ${url}
+        fi
+    fi
+}
+
+
+main
