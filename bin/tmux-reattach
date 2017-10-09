@@ -1,9 +1,14 @@
 #!/bin/bash
 SESSION_NAME=${1:-0}
-if tmux has-session -t ${SESSION_NAME} &>/dev/null; then
-    exec tmux attach-session -d -t ${SESSION_NAME}
+if hash tmx 2>/dev/null; then
+  TMUX=$(which tmx)
 else
-    exec tmux new-session -s ${SESSION_NAME}
+  TMUX=$(which tmux)
+fi
+if ${TMUX} has-session -t ${SESSION_NAME} &>/dev/null; then
+    exec ${TMUX} attach-session -d -t ${SESSION_NAME}
+else
+    exec ${TMUX} new-session -s ${SESSION_NAME}
 fi
 
 
