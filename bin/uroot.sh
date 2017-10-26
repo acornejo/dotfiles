@@ -2,9 +2,18 @@
 set -e
 
 readonly folders='proc sys dev etc lib bin sbin home usr/lib usr/bin usr/sbin var/run var/log'
-readonly busybox_version='1.21.1'
+readonly busybox_version='1.26.1-defconfig-multiarch'
 readonly busybox_arch=$(uname -p)
 readonly busybox_url="http://busybox.net/downloads/binaries/${busybox_version}/busybox-${busybox_arch}"
+
+download_busybox() {
+  local out=$1
+  if hash wget 2>/dev/null; then
+    wget -q ${busybox_url} -O ${out}
+  else
+    curl ${busybox_url} -o ${out}
+  fi
+}
 
 create_chroot() {
     for folder in ${folders}; do
@@ -56,10 +65,10 @@ EOF
     touch var/log/lastlog
 
     # download and install busybox
-    wget -q ${busybox_url} -O bin/busybox
+    download_busybox bin/busybox
     chmod 0755 bin/busybox
-    unshare -mUiu -r --mount-proc -p -f \
-        chroot . /bin/busybox --install -s /bin
+    bin/busybox unshare -mUiu -r  -p -f \
+      bin/busybox chroot . /bin/busybox --install -s /bin
 }
 
 create_user() {
@@ -94,10 +103,13 @@ create_user() {
 }
 
 enter_chroot() {
-    local chroot=$(which chroot)
+    local mount="bin/busybox mount"
+    local chroot="bin/busybox chroot"
+    local unshare="bin/busybox unshare"
+    local sh="bin/busybox sh"
     env -i USER=root SHELL=/bin/sh TERM=${TERM} HOME=/home/root \
-        unshare --map-root-user -pimfun --user \
-        bash -c "mount --rbind /dev dev; mount -t sysfs sys sys; mount -t proc proc proc; exec ${chroot} . /bin/sh -l"
+        ${unshare} -r -pimfunU \
+        ${sh} -c "${mount} --rbind /dev dev; ${mount} -t sysfs sys sys; ${mount} -t proc proc proc; exec ${chroot} . /bin/sh -l"
 }
 
 usage() {
