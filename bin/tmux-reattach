@@ -1,10 +1,16 @@
 #!/bin/bash
 SESSION_NAME=${1:-0}
+TMUX=$(which tmux)
+
+# START: Google-hacks - to keeping my session authenticated.
+if hash prodcerstatus 2>/dev/null; then
+  prodcertstatus || prodaccess -s
+fi
 if hash tmx 2>/dev/null; then
   TMUX=$(which tmx)
-else
-  TMUX=$(which tmux)
 fi
+# END: Google-hacks
+
 if ${TMUX} has-session -t ${SESSION_NAME} &>/dev/null; then
     exec ${TMUX} attach-session -d -t ${SESSION_NAME}
 else
