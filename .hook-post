@@ -17,6 +17,32 @@ install_cask() {
     brew install brew-cask
 }
 
+github_pickrelease() {
+    local REPO=$1
+    local RELEASES="$(curl -L -s https://github.com/$REPO/releases/latest | grep releases/download | cut -d\" -f2)"
+
+    if [ "$UNAME" == 'Darwin' ]; then
+        local RELEASE=$(echo "$RELEASES" | grep -i darwin | tail -n1)
+    else
+        local RELEASE=$(echo "$RELEASES" | grep -i linux | tail -n1)
+    fi
+    echo "https://github.com${RELEASE}"
+}
+
+github_install() {
+    local REPO=$1
+    local BINARY=$2
+    local ARCHIVE=$(mktemp)
+    local FOLDER=$(mktemp -d)
+    curl -L -s "$(github_pickrelease $REPO)" -o "$ARCHIVE"
+    mkdir -p "$FOLDER"
+    cd "$FOLDER"
+    tar xzvf "$ARCHIVE"
+    find "$FOLDER" -name "$BINARY" -exec cp {} ~/.bin/${BINARY} \;
+    rm -fr "$FOLDER"
+    rm -f "$ARCHIVE"
+}
+
 if hash git 2>/dev/null; then
     git config --global include.path "~/.gitconfig.common"
 fi
@@ -54,9 +80,21 @@ select yn in "Yes" "No"; do
                 brew cask install google-chrome google-hangouts dropbox gimp vlc basictex
                 echo Inkscape must be installed manually.
             else
-                apt-get install google-chrome latex-beamer inkscape gimp vlc texlive-latex-extra
+                sudo apt-get install google-chrome latex-beamer inkscape gimp vlc texlive-latex-extra
                 echo Dropbox and google-talk plugin must be installed manually.
             fi
+            break;;
+        No )
+            break;;
+    esac
+done
+
+echo "Install fd and ripgrep from github?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes )
+            github_install sharkdp/fd fd
+            github_install burntsushi/ripgrep rg
             break;;
         No )
             break;;
