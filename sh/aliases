@@ -94,15 +94,19 @@ check_in_git_repo() {
 # file inspector
 iz() {
     check_fzf || return 1
-    local infile=$1
+    local infile=${1:-$out}
     if [ ! -r "$infile" ]; then
-        echo "Unable to inspect '$infile'."
+        echo "Unable to inspect file '$infile'"
         return 1
     fi
     local outfile=$(mktemp --suffix=.iz)
     fzf -e -m --tac --no-sort --bind 'enter:select-all+accept' < $infile > $outfile
-    echo "Wrote results to \$out='$outfile'"
-    out=$outfile
+    if [ $? -eq 0 ]; then
+        echo "Wrote results to \$out='$outfile'"
+        out=$outfile
+    else
+        rm -f "$outfile"
+    fi
 }
 
 # file finder
