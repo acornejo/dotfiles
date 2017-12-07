@@ -91,16 +91,32 @@ check_in_git_repo() {
   fi
 }
 
-# file finder
-f() {
-  if hash ag 2>/dev/null; then
-    local match=$1
-    shift
-    ag -l -i --nocolor -g "$match" $@
-  else
-    find . -iname "*$1*" -not \( -path '*/.git' -o -path '*/.svn' -o -path '*/.hg' -prune \)
-  fi
+# file inspector
+iz() {
+    check_fzf || return 1
+    local infile=$1
+    if [ ! -r "$infile" ]; then
+        echo "Unable to inspect '$infile'."
+        return 1
+    fi
+    local outfile=$(mktemp --suffix=.iz)
+    fzf -e -m --tac --no-sort --bind 'enter:select-all+accept' < $infile > $outfile
+    echo "Wrote results to \$out='$outfile'"
+    out=$outfile
 }
+
+# file finder
+if ! hash fd 2>/dev/null; then
+    fd() {
+    if hash ag 2>/dev/null; then
+        local match=$1
+        shift
+        ag -l -i --nocolor -g "$match" $@
+    else
+        find . -iname "*$1*" -not \( -path '*/.git' -o -path '*/.svn' -o -path '*/.hg' -o -path '*/node_modules' -prune \)
+    fi
+    }
+fi
 
 # file browsing
 fv() {
