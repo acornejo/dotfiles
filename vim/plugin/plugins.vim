@@ -11,7 +11,7 @@ endif
 if !filereadable(expand("$HOME/.vim/autoload/plug.vim"))
     echo "Install plug.vim to handle vim plugins."
     call system(expand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"))
-    finish
+    exit
 endif
 
 "************************************
@@ -43,7 +43,8 @@ let g:UltiSnipsListSnippets="<c-k>"
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-let g:xmledit_enable_html = 1
+let g:closetag_filenames = '*.html,*.xhtml,*.jsx'
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
 let g:sparkupExecuteMapping="<c-i>"
 let g:airline_powerline_fonts = 0
 " let g:airline#extensions#tabline#enabled = 1   " Enable bufline
@@ -106,31 +107,15 @@ Plug 'tomasr/molokai'
 " =========================================================
 " mark changed lines in git
 Plug 'airblade/vim-gitgutter'
-" syntax checker
-Plug 'scrooloose/syntastic'
 " nice status line
 Plug 'itchyny/lightline.vim'
-" Mark display/jump improvements (whitespace problems on GV)
-Plug 'acornejo/vim-signature'
-
-" =========================================================
-" Filetype support
-" =========================================================
-" Language support
-Plug 'sheerun/vim-polyglot'
-" Golang
-Plug 'fatih/vim-go'
-" CSV
-Plug 'chrisbra/csv.vim', {'for': 'csv'}
-" XML
-Plug 'sukima/xmledit'
-" Latex
-Plug 'acornejo/vim-texhelpers', {'for': 'tex'}
-" quick html generation
-Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
-" gpg decryption
-if version >= 702
-Plug 'jamessan/vim-gnupg'
+" Mark display/jump improvements
+Plug 'kshenoy/vim-signature'
+" syntax checker
+if version >= 800
+Plug 'w0rp/ale'
+else
+Plug 'scrooloose/syntastic'
 endif
 
 " =========================================================
@@ -144,6 +129,8 @@ Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
 " insert closing bracket, paren, etc
 Plug 'jiangmiao/auto-pairs'
+" insert closing html tag on >
+Plug 'alvan/vim-closetag'
 " align blocks of things
 Plug 'junegunn/vim-easy-align'
 
@@ -183,11 +170,6 @@ Plug 'mileszs/ack.vim'
 Plug 'airblade/vim-rooter'
 " tmux integration
 Plug 'benmills/vimux'
-" snippets
-if version >= 704 && s:python_ver >= 260
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-endif
 " scratch buffer
 Plug 'mtth/scratch.vim'
 " close all but this buffer
@@ -204,8 +186,44 @@ Plug 'gabesoft/vim-ags'
 Plug 'neitanod/vim-ondemandhighlight'
 
 " =========================================================
+" Auto complete
+" =========================================================
+" Snippets
+if version >= 704 && s:python_ver >= 260
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+endif
+
+" =========================================================
+" Filetype support
+" =========================================================
+" Language support
+Plug 'sheerun/vim-polyglot'
+
+" =========================================================
 " Disabled
 " =========================================================
+" XML edit
+" Plug 'sukima/xmledit'
+" Go
+" Plug 'fatih/vim-go'
+" Flow
+" Plug 'flowtype/vim-flow'
+" Prettier
+" Plug 'prettier/vim-prettier'
+" gpg decryption
+" if version >= 702
+" Plug 'jamessan/vim-gnupg'
+" endif
+" Autocomplete
+" if version >= 800
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'prabirshrestha/asyncomplete.vim'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" endif
+" quick html generation
+" Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Hex editor
 " Plug 'vim-scripts/hexman.vim'
 " Javascript completion (with youcompleteme)
@@ -260,11 +278,15 @@ Plug 'neitanod/vim-ondemandhighlight'
 " if version >= 702
 " Plug 'tomtom/tcomment_vim'
 " endif
+" Latex
+" Plug 'acornejo/vim-texhelpers', {'for': 'tex'}
 " C/C++/Javascript completion
 " if version > 703 || (version >= 703 && has('patch584'))
 " Plug 'Valloric/YouCompleteMe'
 " command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
 " endif
+" CSV
+" Plug 'chrisbra/csv.vim', {'for': 'csv'}
 
 if filereadable(expand("~/.vimrc.plugins.local"))
   source ~/.vimrc.plugins.local
