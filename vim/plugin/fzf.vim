@@ -1,4 +1,4 @@
-if !exists('g:plugs') || !has_key(g:plugs, 'fzf.vim')
+if !HasPlug('fzf.vim')
   finish
 endif
 

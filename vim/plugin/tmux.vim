@@ -30,7 +30,7 @@ else
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-if has_key(g:plugs, 'vimux')
+if HasPlug('vimux')
     " Prompt for vmux command
     nnoremap <expr> <leader>v exists("g:VimuxRunnerIndex") ? ":VimuxRunLastCommand<CR>" : ":VimuxPromptCommand<CR>"
 endif

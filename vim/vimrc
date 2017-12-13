@@ -92,11 +92,9 @@ endif
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat=%f:%l:%c:%m
-    let g:ackprg = 'rg --vimgrep'
 elseif executable('ag')
     set grepprg=ag\ --vimgrep
     set grepformat=%f:%l:%c:%m,%f:%l:%m
-    let g:ackprg = 'ag --vimgrep'
 elseif executable('ack')
     set grepprg=ack\ --nogroup\ --nocolor\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m

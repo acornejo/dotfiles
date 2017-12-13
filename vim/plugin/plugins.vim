@@ -1,3 +1,14 @@
+function! HasPlug(plug_name)
+    return exists('g:plugs') && has_key(g:plugs, a:plug_name) && isdirectory(glob(g:plug_home . '/' . a:plug_name))
+endfunction
+
+function! s:UnPlug(plug_name)
+  if exists('g:plugs') && has_key(g:plugs, a:plug_name)
+    call remove(g:plugs, a:plug_name)
+  endif
+endfunction
+command!  -nargs=1 UnPlug call s:UnPlug(<args>)
+
 if !empty($VIM_NOPLUGINS) || exists('g:loaded_plugins')
     finish
 endif
@@ -8,10 +19,10 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
 
-if !filereadable(expand("$HOME/.vim/autoload/plug.vim"))
-    echo "Install plug.vim to handle vim plugins."
-    call system(expand("curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"))
-    exit
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 "************************************
@@ -38,15 +49,7 @@ let s:python_ver = 0
 silent! python import sys, vim;
             \ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
 
-" Stolen from thoughtbot's dotfiles
-function! s:UnPlug(plug_name)
-  if has_key(g:plugs, a:plug_name)
-    call remove(g:plugs, a:plug_name)
-  endif
-endfunction
-command!  -nargs=1 UnPlug call s:UnPlug(<args>)
-
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.vim_plugged')
 
 " =========================================================
 " Colorschemes
@@ -124,8 +127,6 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
 " git browser
 Plug 'junegunn/gv.vim'
-" ack/ag integration
-Plug 'mileszs/ack.vim'
 " find and switch to project root
 Plug 'airblade/vim-rooter'
 " tmux integration
@@ -250,14 +251,12 @@ endif
 
 call plug#end()
 
-if has_key(g:plugs, 'vim-easy-align')
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
+if HasPlug('vim-easy-align')
     xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object ()"
     nmap ga <Plug>(EasyAlign)
 endif
 
-if has_key(g:plugs, 'vim-textobj-user')
+if HasPlug('vim-textobj-user')
     call textobj#user#plugin('camelcase', {
     \  'camel': {
     \     'pattern': '_\{0,1\}[A-Za-z][a-z0-9]\+',

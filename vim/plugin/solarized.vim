@@ -1,4 +1,4 @@
-if !exists('g:plugs') || !has_key(g:plugs, 'vim-colors-solarized')
+if !HasPlug('vim-colors-solarized')
     finish
 endif
 
