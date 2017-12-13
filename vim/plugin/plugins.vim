@@ -17,67 +17,21 @@ endif
 "************************************
 " Plugin settings
 "************************************
-let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " Hide .* files
-let g:netrw_browsex_viewer='open'     " Open files with viewer
-let g:netrw_fast_browse=2            " Use fast browsing
-let g:netrw_liststyle=1              " Display file details in browser
-let g:netrw_hide=1                   " show not-hidden files
-let g:python_failquietly=1           " Dont complain if there is no python
-let g:buftabs_marker_start=""        " marker around active buftab
-let g:buftabs_marker_end=""          " marker around active buftab
-let g:buftabs_separator=":"          " marker around active buftab
-let g:buftabs_marker_modified="+"    " Marker for modified buftabs
-let g:buftabs_only_basename=1        " Show short name in buftabs
-let g:buftabs_in_statusline=1        " Show buftabs in status line
-let g:buftabs_inactive_highlight_group="StatusLine" " Color for inactive tabs
-let g:buftabs_active_highlight_group="Title"   " Color for active tabs
-let g:yankring_history_file = ".vim_yankring"
-let g:yankring_min_element_length = 2
-let g:yankring_manage_numbered_reg = 1
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_always_populate_location_list = 1
 let g:UltiSnipsListSnippets="<c-k>"
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-let g:closetag_filenames = '*.html,*.xhtml,*.jsx'
-let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-let g:sparkupExecuteMapping="<c-i>"
-let g:airline_powerline_fonts = 0
-" let g:airline#extensions#tabline#enabled = 1   " Enable bufline
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:syntastic_html_tidy_ignore_errors=['trimming empty', 'lacks "alt" attribute', 'lacks "src" attribute']
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_mode_map = {"mode": "passive" }
-let g:syntastic_cpp_config_file = '.vim_syntax'
+let g:closetag_filenames = '*.xml,*.html,*.xhtml,*.jsx'
+let g:closetag_xhtml_filenames = '*.xml,*.xhtml,*.jsx'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'javascript', 'cpp']
-let g:signify_vcs_list = [ 'git' ]
 let g:rsi_no_meta = 1
-let g:EasyClipShareYanks = 1
-let g:EasyClipEnableBlackHoleRedirect = 0
-let g:tcommentMapLeader2 = ''  " Disable leader key maps
-let g:notes_unicode_enabled = 0
-let g:GPGPreferArmor = 1
-let g:GPGPreferSign = 1
 let g:scratch_no_mappings = 1
 let g:scratch_persistence_file = expand("$HOME/.vim_scratch")
 let g:scratch_horizontal = 0
 let g:scratch_height = 80
 let g:scratch_top = 0
-let g:AutoPairsMapBS = 0
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_types = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-" for matching curlys for target arguments
-let g:targets_argOpening = '[({[]'
+let g:AutoPairsMapBS = 0             " Don't delete in pairs
+let g:targets_argOpening = '[({[]'   " for matching curlys for target arguments
 let g:targets_argClosing = '[]})]'
 
 let s:python_ver = 0
@@ -109,8 +63,10 @@ Plug 'tomasr/molokai'
 Plug 'airblade/vim-gitgutter'
 " nice status line
 Plug 'itchyny/lightline.vim'
-" Mark display/jump improvements
+" mark display/jump improvements
 Plug 'kshenoy/vim-signature'
+" file browsing replacement
+Plug 'justinmk/vim-dirvish'
 " syntax checker
 if version >= 800
 Plug 'w0rp/ale'
@@ -131,8 +87,12 @@ Plug 'kana/vim-textobj-user'
 Plug 'jiangmiao/auto-pairs'
 " insert closing html tag on >
 Plug 'alvan/vim-closetag'
+" match html tags
+Plug 'gregsexton/MatchTag'
 " align blocks of things
 Plug 'junegunn/vim-easy-align'
+" close all but this buffer
+Plug 'duff/vim-bufonly'
 
 " =========================================================
 " TPOPE goodness
@@ -172,14 +132,6 @@ Plug 'airblade/vim-rooter'
 Plug 'benmills/vimux'
 " scratch buffer
 Plug 'mtth/scratch.vim'
-" close all but this buffer
-Plug 'duff/vim-bufonly'
-" netrw replacement
-Plug 'justinmk/vim-dirvish'
-if version >= 703 && s:python_ver >= 260
-" highlight closing tag
-Plug 'Valloric/MatchTagAlways'
-endif
 " search and replace
 Plug 'gabesoft/vim-ags'
 " word highlight
@@ -284,6 +236,10 @@ Plug 'sheerun/vim-polyglot'
 " if version > 703 || (version >= 703 && has('patch584'))
 " Plug 'Valloric/YouCompleteMe'
 " command! YcmEnable call plug#load('YouCompleteMe') | call youcompleteme#Enable()
+" endif
+" highlight closing tag
+" if version >= 703 && s:python_ver >= 260
+" Plug 'Valloric/MatchTagAlways'
 " endif
 " CSV
 " Plug 'chrisbra/csv.vim', {'for': 'csv'}
