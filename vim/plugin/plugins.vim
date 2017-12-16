@@ -39,15 +39,12 @@ let g:rsi_no_meta = 1
 let g:scratch_no_mappings = 1
 let g:scratch_persistence_file = expand("$HOME/.vim_scratch")
 let g:scratch_horizontal = 0
-let g:scratch_height = 80
+let g:scratch_height = 1.0
 let g:scratch_top = 0
 let g:AutoPairsMapBS = 0             " Don't delete in pairs
 let g:targets_argOpening = '[({[]'   " for matching curlys for target arguments
 let g:targets_argClosing = '[]})]'
-
-let s:python_ver = 0
-silent! python import sys, vim;
-            \ vim.command("let s:python_ver="+"".join(map(str,sys.version_info[0:3])))
+let g:rooter_manual_only = empty($NOCD) ? 0 : 1
 
 call plug#begin('~/.vim_plugged')
 
@@ -158,8 +155,4 @@ if HasPlug('vim-textobj-user')
     \     'select': ['ac', 'ic']
     \  }
     \})
-endif
-
-if !empty($NOCD)
-  let g:rooter_manual_only = 1
 endif
