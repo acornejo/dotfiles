@@ -52,7 +52,7 @@ call plug#begin('~/.vim_plugged')
 " Colorschemes
 " =========================================================
 " solarized
-Plug 'altercation/vim-colors-solarized'
+Plug 'lifepillar/vim-solarized8'
 " molokai
 Plug 'tomasr/molokai'
 

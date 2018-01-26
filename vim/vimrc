@@ -70,22 +70,22 @@ try
 catch
 endtry
 
-" change settings depending on mode
+" set gui options
 if has('gui_running')
     set guioptions-=m " remove menubar
     set guioptions-=T " remove toolbar
     set guioptions-=r " remove scrollbar
     set guioptions-=L " remove right scrollbar
     set mousemodel=popup
-else
-    if &term == 'xterm' || &term == 'screen-bce'
-        set term=xterm
-        set t_Co=256
-    endif
-    " disable background color erase
-    if &term =~ '256color'
-        set t_ut=
-    endif
+endif
+
+" change colors settings
+set t_Co=256 " enable 256 colors
+if &term =~ '256color'
+    set t_ut= " disable background color erase
+endif
+if has('termguicolors')
+  set termguicolors " enable true color
 endif
 
 " set grep program
