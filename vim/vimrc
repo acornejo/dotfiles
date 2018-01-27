@@ -3,7 +3,7 @@ filetype plugin indent on
 set nocompatible            " no compatibility mode
 set laststatus=2            " always display status line
 set winaltkeys=no           " disable alt/meta for gui menus
-set title titlestring=%t    " set your xterm title
+set title titlestring=%t    " set your terminal title
 set history=1024            " remember command line history
 set showmatch               " show matching bracket when first inserted
 set wildmode=longest,list,full " tab completion
@@ -82,6 +82,7 @@ endif
 " change colors settings
 set t_Co=256 " enable 256 colors
 if &term =~ '256color'
+    set term=xterm
     set t_ut= " disable background color erase
 endif
 if has('termguicolors')
