@@ -98,7 +98,7 @@ export LESS="-RSc"
 # set up options for fzf
 export FZF_DEFAULT_OPTS='--bind alt-p:page-up,alt-n:page-down'
 export FZF_CTRL_R_OPTS='-e'
-if hash fg 2>/dev/null; then
+if [ "$(type -t fd)" = "file" ]; then
   export FZF_DEFAULT_COMMAND='fd'
   export FZF_CTRL_T_COMMAND='fd'
   _fzf_compgen_path() {
@@ -107,10 +107,10 @@ if hash fg 2>/dev/null; then
   _fzf_compgen_dir() {
         fd --type d --hidden --follow --exclude ".git" . "$1"
   }
-elif hash rg 2>/dev/null; then
+elif [ "$(type -t rg)" = "file" ]; then
   export FZF_DEFAULT_COMMAND='rg --files'
   export FZF_CTRL_T_COMMAND='rg --files'
-elif hash ag 2>/dev/null; then
+elif [ "$(type -t ag)" = "file" ]; then
   export FZF_DEFAULT_COMMAND='ag -l'
   export FZF_CTRL_T_COMMAND='ag -l -g ""'
 fi
