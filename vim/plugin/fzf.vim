@@ -52,9 +52,11 @@ function! s:ag_prompt()
   endif
 endfunction
 
+let g:fzf_project_dir = empty($PROJECT_DIR) ? '~/src' : $PROJECT_DIR
+
 function! s:dir_handler(dir)
-  execute 'lcd ~/src/'.a:dir
-  execute 'FZF' . '~/src/'.a:dir
+  execute 'lcd ' . g:fzf_project_dir . '/' . a:dir
+  execute 'FZF' . g:fzf_project_dir . '/' . a:dir
   if has("nvim")
       call feedkeys('i')
   endif
@@ -82,7 +84,7 @@ command! FZFYank call fzf#run({
 \ })
 
 command! FZFProjects call fzf#run({
-\ 'source': "ls -1p ~/src | awk -F/ '/\\/$/ {print $1}'",
+\ 'source': "ls -1p " . g:fzf_project_dir . " | awk -F/ '/\\/$/ {print $1}'",
 \ 'sink': function('<sid>dir_handler'),
 \ 'options': '-m',
 \ 'down': '50%'
