@@ -28,10 +28,6 @@ endif
 "************************************
 " Plugin settings
 "************************************
-let g:UltiSnipsListSnippets="<c-k>"
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:closetag_filenames = '*.xml,*.html,*.xhtml,*.jsx'
 let g:closetag_xhtml_filenames = '*.xml,*.xhtml,*.jsx'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'javascript', 'cpp']
@@ -47,14 +43,6 @@ let g:targets_argClosing = '[]})]'
 let g:rooter_manual_only = empty($NOCD) ? 0 : 1
 
 call plug#begin('~/.vim_plugged')
-
-" =========================================================
-" Colorschemes
-" =========================================================
-" solarized
-Plug 'lifepillar/vim-solarized8'
-" molokai
-Plug 'tomasr/molokai'
 
 " =========================================================
 " UI improvements
@@ -93,6 +81,8 @@ Plug 'gregsexton/MatchTag'
 Plug 'junegunn/vim-easy-align'
 " close all but this buffer
 Plug 'duff/vim-bufonly'
+" close current buffer but not window
+Plug 'moll/vim-bbye'
 
 " =========================================================
 " TPOPE goodness

@@ -85,9 +85,6 @@ if &term =~ '256color'
     set term=xterm
     set t_ut= " disable background color erase
 endif
-if has('termguicolors')
-  set termguicolors " enable true color
-endif
 
 " set grep program
 if executable('rg')
