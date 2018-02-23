@@ -102,8 +102,6 @@ endif
 let mapleader = " "
 " Split line
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>$
-" close buffer not window
-nnoremap <leader>Z :bp<bar>bd #<CR>
 " Switch off highlighting
 nnoremap <silent> <backspace> :noh<CR>
 " Save a few keystrokes

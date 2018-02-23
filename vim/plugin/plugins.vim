@@ -82,7 +82,7 @@ Plug 'junegunn/vim-easy-align'
 " close all but this buffer
 Plug 'duff/vim-bufonly'
 " close current buffer but not window
-Plug 'moll/vim-bbye'
+Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 
 " =========================================================
 " TPOPE goodness
@@ -145,4 +145,8 @@ if HasPlug('vim-textobj-user')
     \     'select': ['ac', 'ic']
     \  }
     \})
+endif
+
+if HasPlug('vim-sayonara')
+  nnoremap <silent> <leader>Z :Sayonara!<cr>
 endif
