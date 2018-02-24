@@ -4,14 +4,3 @@ bind h if-shell "$is_vim" "send-keys C-w h" "select-pane -L"
 bind j if-shell "$is_vim" "send-keys C-w j" "select-pane -D"
 bind k if-shell "$is_vim" "send-keys C-w k" "select-pane -U"
 bind l if-shell "$is_vim" "send-keys C-w l" "select-pane -R"
-
-# use ccopy/cpaste for clipboard
-bind -t vi-copy y copy-pipe "ccopy -t > #{pane_tty}"
-bind -t vi-copy Enter copy-pipe "ccopy -t > #{pane_tty}"
-bind ] run "cpaste | tmux load-buffer - && tmux paste-buffer"
-
-# url picker
-bind -n M-u capture-pane \; split-window -l 10 'tmux show-buffer | urlpick | ccopy'
-
-# file picker
-bind -n M-i capture-pane \; split-window -l 10 'tmux show-buffer | filepick | ccopy'

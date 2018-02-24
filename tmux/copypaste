@@ -1,0 +1,12 @@
+# setup vim-like bindings for copying
+bind -t vi-copy v     begin-selection
+bind -t vi-copy y     copy-selection
+bind -t vi-copy C-v   rectangle-toggle
+bind -t vi-copy C-c   clear-selection
+bind -t vi-copy Space page-down
+bind -t vi-copy C-a   start-of-line
+bind -t vi-copy C-e   end-of-line
+
+# use ccopy/cpaste for clipboard
+bind -t vi-copy y copy-pipe "ccopy -t > #{pane_tty}"
+bind ] run "cpaste | tmux load-buffer - && tmux paste-buffer"

@@ -10,9 +10,6 @@ set -g display-time 4000
 # enable focus events for terminal
 set -g focus-events on
 
-# use readline bindings in :command mode
-set -g status-keys emacs
-
 # start windows and panes at 1
 set -g base-index 1
 set -g pane-base-index 1
@@ -44,7 +41,3 @@ set -g default-terminal "screen-256color"
 
 # switch session instead of exiting when closing last window
 set -g detach-on-destroy off
-
-# enable mouse to select panes
-# setw -g mode-mouse on
-# set -g mouse-select-pane on

@@ -2,7 +2,10 @@
 set-option -g   prefix C-space
 bind-key C-space    send-prefix
 
-# vim mode keys
+# use readline bindings in :command mode
+set -g status-keys emacs
+
+# use vim bindings in copy & choice mode
 setw -g mode-keys vi
 
 # session management
@@ -31,12 +34,3 @@ bind -r C-L resize-pane -R 5
 # vim-like window reoordering
 bind -r C-p swap-window -t -1
 bind -r C-n swap-window -t +1
-
-# vim-like copy & paste
-# bind -t vi-copy v begin-selection
-# bind -t vi-copy C-c clear-selection
-# bind -t vi-copy Space page-down
-# bind -t vi-copy C-v rectangle-toggle
-# bind -t vi-copy C-a start-of-line
-# bind -t vi-copy C-e end-of-line
-# bind -t vi-copy y copy-selection
