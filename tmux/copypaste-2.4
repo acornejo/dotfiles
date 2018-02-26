@@ -8,5 +8,5 @@ bind -T copy-mode-vi C-a   send-keys -X start-of-line
 bind -T copy-mode-vi C-e   send-keys -X end-of-line
 
 # use ccopy/cpaste for clipboard
-bind -t copy-mode-vi y send-keys -X copy-pipe-and-cancel "ccopy -t > #{pane_tty}"
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "ccopy -t > #{pane_tty}"
 bind ] run "cpaste | tmux load-buffer - && tmux paste-buffer"
