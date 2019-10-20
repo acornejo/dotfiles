@@ -3,8 +3,8 @@ SESSION_NAME=${1:-0}
 TMUX=$(which tmux)
 
 # START: Google-hacks - to keeping my session authenticated.
-if hash prodcerstatus 2>/dev/null; then
-  prodcertstatus || prodaccess -s
+if hash prodcertstatus 2>/dev/null; then
+  prodcertstatus --check_ssh || prodaccess -s
 fi
 if hash tmx 2>/dev/null; then
   TMUX=$(which tmx)
