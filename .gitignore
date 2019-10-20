@@ -1,3 +1,4 @@
 .netrwhist
 bin/rg
 bin/fd
+bin/nvim
