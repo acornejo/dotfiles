@@ -49,20 +49,20 @@ fi
 
 trap onexit 1 2 3 15 ERR
 
-echo "Install basic packages? [git, tmux, vim, curl, wget, zsh]"
+echo "Install basic packages? [git, tmux, vim, curl, wget]"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
                 install_brew
-                brew install tmux reattach-to-user-namespace htop wget bash bash-completion w3m the_silver_searcher zsh
+                brew install tmux reattach-to-user-namespace htop wget bash bash-completion w3m
                 test -f /usr/local/bin/bash && echo /usr/local/bin/bash | sudo tee -a /etc/shells && chsh -s /usr/local/bin/bash
                 sudo ln -sf /usr/local/bin/tmux /usr/bin
                 sudo ln -sf /usr/local/bin/reattach-to-user-namespace /usr/bin
                 install_cask
-                brew cask install macvim slate
+                brew cask install macvim
             else
-                sudo apt-get install tmux vim htop git curl wget bash bash-completion w3m silversearcher-ag zsh
+                sudo apt-get install tmux vim htop git curl wget bash bash-completion w3m
                 sudo apt-get install --no-install-recommends
             fi
             break;;
@@ -71,30 +71,14 @@ select yn in "Yes" "No"; do
     esac
 done
 
-echo "Install extra packages? [chrome, dropbox, gimp, vlc, latex]"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes )
-            if [ "$UNAME" == "Darwin" ]; then
-                install_cask
-                brew cask install google-chrome google-hangouts dropbox gimp vlc basictex
-                echo Inkscape must be installed manually.
-            else
-                sudo apt-get install google-chrome latex-beamer inkscape gimp vlc texlive-latex-extra
-                echo Dropbox and google-talk plugin must be installed manually.
-            fi
-            break;;
-        No )
-            break;;
-    esac
-done
-
-echo "Install fd and ripgrep from github?"
+echo "Install neovim, fd and ripgrep from github?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
             github_install sharkdp/fd fd
             github_install burntsushi/ripgrep rg
+            curl -s -o ~/.bin/nvim -LO https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+            chmod 755 ~/.bin/nvim
             break;;
         No )
             break;;
