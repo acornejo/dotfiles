@@ -42,13 +42,13 @@ function! s:ag_prompt()
   call inputsave()
   let pattern = substitute(@/, '\\<', '', '')
   let pattern = substitute(pattern, '\\>', '', '')
-  let pattern = input('Ag: ',pattern)
+  let pattern = input('Rg: ',pattern)
   call inputrestore()
   if empty(pattern)
     echo 'aborted search.'
   else
     let @/ = pattern
-    execute 'Ag' pattern
+    execute 'Rg' pattern
   endif
 endfunction
 
@@ -95,7 +95,7 @@ nnoremap <silent> <Leader>T :FZFTag<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>m :Marks<CR>
 nnoremap <silent> <Leader>a :call <sid>ag_prompt()<CR>
-nnoremap <silent> <Leader>A :Ag <C-R><C-W><CR>
+nnoremap <silent> <Leader>A :Rg <C-R><C-W><CR>
 nnoremap <silent> <Leader>y :FZFYank<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <Leader>r :History<CR>
