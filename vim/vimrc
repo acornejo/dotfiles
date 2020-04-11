@@ -92,7 +92,7 @@ endif
 
 " define nice filler chars for neovim
 if has('nvim')
-  set fillchars=vert:\|,fold:-
+  set fillchars=vert:\│,fold:-
 endif
 
 " set grep program
