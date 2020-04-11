@@ -43,7 +43,20 @@ set secure                  " disable unsafe commands in per-directory .vimrc
 set nomodeline              " disable modelines (exploits exist)
 
 " use system clipboard
-if has('unnamedplus')
+if has('nvim')
+    let g:clipboard = {
+            \   'name': 'myClipboard',
+            \   'copy': {
+            \      '+': 'ccopy',
+            \      '*': 'ccopy',
+            \    },
+            \   'paste': {
+            \      '+': 'cpaste',
+            \      '*': 'cpaste',
+            \   },
+            \   'cache_enabled': 1,
+            \ }
+elseif has('unnamedplus')
     set clipboard=unnamedplus
 else
     set clipboard=unnamed

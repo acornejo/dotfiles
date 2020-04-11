@@ -22,5 +22,11 @@ elif [[ -n "$DISPLAY" ]] && hash xsel 2>/dev/null; then
 else
     esc="\033]52;c;$(echo "$buf" | head -c 74994 | base64 | tr -d '\r\n')\a"
     test -n "$TMUX" && esc="\033Ptmux;\033$esc\033\\"
-    printf "$esc"
+    TTY=$(tty < /proc/$PPID/fd/0 2>/dev/null)
+    if [ -n "$TTY" ]; then
+        printf "$esc" > "$TTY"
+    else
+        printf "$esc"
+    fi
+
 fi
