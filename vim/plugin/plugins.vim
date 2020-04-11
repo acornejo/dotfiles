@@ -42,7 +42,7 @@ let g:targets_argOpening = '[({[]'   " for matching curlys for target arguments
 let g:targets_argClosing = '[]})]'
 let g:rooter_manual_only = empty($NOCD) ? 0 : 1
 
-call plug#begin('~/.vim_plugged')
+silent! if plug#begin('~/.vim_plugged')
 
 " =========================================================
 " UI improvements
@@ -60,6 +60,11 @@ if version >= 800
 Plug 'w0rp/ale'
 else
 Plug 'scrooloose/syntastic'
+endif
+" highlight yanked text
+if exists('##TextYankPost')
+  Plug 'machakann/vim-highlightedyank'
+  let g:highlightedyank_highlight_duration = 500
 endif
 
 " =========================================================
@@ -132,6 +137,7 @@ if filereadable(expand("~/.vimrc.plugins.local"))
 endif
 
 call plug#end()
+endif
 
 if HasPlug('vim-easy-align')
     xmap ga <Plug>(EasyAlign)

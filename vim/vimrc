@@ -85,6 +85,15 @@ if &term =~ '256color'
     set term=xterm
     set t_ut= " disable background color erase
 endif
+" enable true color
+if has('termguicolors')
+  set termguicolors
+endif
+
+" define nice filler chars for neovim
+if has('nvim')
+  set fillchars=vert:\|,fold:-
+endif
 
 " set grep program
 if executable('rg')
