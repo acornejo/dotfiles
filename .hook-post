@@ -49,20 +49,17 @@ fi
 
 trap onexit 1 2 3 15 ERR
 
-echo "Install basic packages? [git, tmux, vim, curl, wget]"
+echo "Install basic packages? [git, curl, wget]"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
             if [ "$UNAME" == "Darwin" ]; then
                 install_brew
-                brew install tmux reattach-to-user-namespace htop wget bash bash-completion w3m
+                brew install reattach-to-user-namespace htop wget bash bash-completion w3m
                 test -f /usr/local/bin/bash && echo /usr/local/bin/bash | sudo tee -a /etc/shells && chsh -s /usr/local/bin/bash
-                sudo ln -sf /usr/local/bin/tmux /usr/bin
                 sudo ln -sf /usr/local/bin/reattach-to-user-namespace /usr/bin
-                install_cask
-                brew cask install macvim
             else
-                sudo apt-get install tmux vim htop git curl wget bash bash-completion w3m
+                sudo apt-get install htop git curl wget bash bash-completion w3m
                 sudo apt-get install --no-install-recommends
             fi
             break;;
@@ -71,7 +68,7 @@ select yn in "Yes" "No"; do
     esac
 done
 
-echo "Install neovim, fd and ripgrep from github?"
+echo "Install tmux, neovim, fd and ripgrep from github?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes )
@@ -79,6 +76,8 @@ select yn in "Yes" "No"; do
             github_install burntsushi/ripgrep rg
             curl -s -o ~/.bin/nvim -LO https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
             chmod 755 ~/.bin/nvim
+            curl -s -o ~/.bin/tmux -LO https://github.com/tmux/tmux/releases/download/3.0a/tmux-3.0a-x86_64.AppImage
+            chmod 755 ~/.bin/tmux
             break;;
         No )
             break;;
