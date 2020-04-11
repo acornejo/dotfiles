@@ -31,7 +31,7 @@ augroup custom-cmds
     " Enable spell for text files
     autocmd BufNewFile,BufRead *.txt,*.html,*.tex,*.md,README,COMMIT_EDIT_MSG if line2byte(line("$") + 1) < 10000 | setlocal spell spelllang=en | endif
     " Set comment string for c++
-    autocmd FileType cpp setlocal commentstring=//\ %s
+    autocmd FileType cpp setlocal commentstring=//\ %s matchpairs+=<:>
     " close unused netrw buffers
     autocmd FileType netrw setl bufhidden=wipe
     autocmd FileType netrw nnoremap <buffer> Q :Rexplore<CR>
