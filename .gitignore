@@ -2,3 +2,4 @@
 bin/rg
 bin/fd
 bin/nvim
+bin/tmux
