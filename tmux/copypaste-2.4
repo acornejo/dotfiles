@@ -10,3 +10,5 @@ bind -T copy-mode-vi C-e   send-keys -X end-of-line
 # use ccopy/cpaste for clipboard
 bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "ccopy -t > #{pane_tty}"
 bind ] run "cpaste | tmux load-buffer - && tmux paste-buffer"
+# allow copy with mouse drag action.
+bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "ccopy -t > #{pane_tty}"
