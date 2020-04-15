@@ -3,7 +3,7 @@ set -g message-style 'bg=black fg=white,bold'
 
 # panes
 set -g pane-active-border-style 'fg=blue,bold'
-set -g pane-border-style 'fg=black'
+set -g pane-border-style 'fg=colour237'
 if-shell "tmux -V | awk '{exit !($2 >= 2.3)}'" 'set -g pane-border-status top'
 if-shell "tmux -V | awk '{exit !($2 >= 2.3)}'" 'set -g pane-border-format " #{pane_title} "'
 
