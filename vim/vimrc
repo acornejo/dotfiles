@@ -41,6 +41,23 @@ set nostartofline           " don’t reset cursor to start of line when moving
 set exrc                    " enable per-directory .vimrc files
 set secure                  " disable unsafe commands in per-directory .vimrc
 set nomodeline              " disable modelines (exploits exist)
+set lazyredraw              " don't update screen during macro playback
+set synmaxcol=200           " don't bother syntax highlighting long lines
+
+" remove comment leader when joining comments
+if v:version > 703 || v:version == 703 && has('patch541')
+  set formatoptions+=j
+endif
+
+" live preview of search and replace
+if exists('&inccommand')
+  set inccommand=split
+endif
+
+" allow cursor to move where there is no text in visual block mode
+if has('virtualedit')
+  set virtualedit=block
+endif
 
 " use system clipboard
 if has('nvim')
@@ -92,15 +109,16 @@ if has('gui_running')
     set mousemodel=popup
 endif
 
-" change colors settings
-set t_Co=256 " enable 256 colors
-if &term =~ '256color'
-    set term=xterm
-    set t_ut= " disable background color erase
-endif
 " enable true color
 if has('termguicolors')
   set termguicolors
+else
+    " change colors settings
+    set t_Co=256 " enable 256 colors
+    if &term =~ '256color'
+        set term=xterm
+        set t_ut= " disable background color erase
+    endif
 endif
 
 " define nice filler chars for neovim
