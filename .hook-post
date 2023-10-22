@@ -1,37 +1,39 @@
 #!/bin/bash
 
-if hash git 2>/dev/null; then
-    git config --global include.path "~/.gitconfig.common"
-    echo "Configure git?"
-    select yn in "Yes" "No"; do
-        case $yn in
-            Yes )
-                git config --global include.path "~/.gitconfig.common"
-                echo -n "Full name: "
-                read name
-                echo -n "Email: "
-                read email
-                git config --global user.name "$name"
-                git config --global user.email $email
-                break;;
-            No )
-                break;;
-        esac
-    done
-fi
+if [[ -t 1 ]]; then
+    if hash git 2>/dev/null; then
+        git config --global include.path "~/.gitconfig.common"
+        echo "Configure git?"
+        select yn in "Yes" "No"; do
+            case $yn in
+                Yes )
+                    git config --global include.path "~/.gitconfig.common"
+                    echo -n "Full name: "
+                    read name
+                    echo -n "Email: "
+                    read email
+                    git config --global user.name "$name"
+                    git config --global user.email $email
+                    break;;
+                No )
+                    break;;
+            esac
+        done
+    fi
 
-if hash ssh 2>/dev/null; then
-    echo "Import ssh keys and config?"
-    select yn in "Yes" "No"; do
-        case $yn in
-            Yes )
-                echo -n "Server name: "
-                read server
-                mkdir -p ~/.ssh
-                scp $server:".ssh/id_* .ssh/config" ~/.ssh
-                break;;
-            No )
-                break;;
-        esac
-    done
+    if hash ssh 2>/dev/null; then
+        echo "Import ssh keys and config?"
+        select yn in "Yes" "No"; do
+            case $yn in
+                Yes )
+                    echo -n "Server name: "
+                    read server
+                    mkdir -p ~/.ssh
+                    scp $server:".ssh/id_* .ssh/config" ~/.ssh
+                    break;;
+                No )
+                    break;;
+            esac
+        done
+    fi
 fi
