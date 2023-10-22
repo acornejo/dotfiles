@@ -2,19 +2,19 @@
 
 Clone this repository somewhere, i.e.:
 
-    git clone git@github.com/acornejo/dotfiles.git $HOME/.dotfiles
+    git clone https://github.com/acornejo/dotfiles.git $HOME/.dotfiles
 
-Next, run the included `dot-restore` to create all appropriate links:
+Next, run the included `install.sh` to create all appropriate links:
 
-    $HOME/.dotfiles/bin/dot-restore
+    $HOME/.dotfiles/install.sh
 
 Enjoy!
 
 # Uninstalling
 
-First, clean-up the links using the included `dot-clean` script:
+First, clean-up the links using the uninstall command:
 
-    $HOME/.dotfiles/bin/dot-clean
+    $HOME/.dotfiles/install.sh -u
 
 Next, delete the repository
 
