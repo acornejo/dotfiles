@@ -56,7 +56,7 @@ if [ -f "$HOME/.bc" ]; then
 fi
 
 # set vim as default editor
-if [ "$TERM" = "vscode" ]; then
+if [ "$TERM_PROGRAM" = "vscode" ]; then
     export EDITOR="code-server"
 elif hash nvim 2>/dev/null; then
     export EDITOR="nvim"
