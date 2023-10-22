@@ -1,0 +1,17 @@
+{
+    "vim.camelCaseMotion.enable": true,
+    "vim.easymotion": true,
+    "vim.handleKeys": {
+
+        "<C-d>": true,
+        "<C-s>": false,
+        "<C-z>": false,
+        "<C-y>": false,
+        "<esc>": true
+    },
+    "vim.sneak": true,
+    "vim.startInInsertMode": true,
+    "vim.targets.enable": true,
+    "window.menuBarVisibility": "classic",
+    "editor.minimap.enabled": false
+}
