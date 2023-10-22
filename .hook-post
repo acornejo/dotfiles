@@ -1,116 +1,37 @@
 #!/bin/bash
 
-onexit() {
-    echo "Skip package install"
-    exit 1
-}
-
-install_brew() {
-    if ! hash brew 2>/dev/null; then
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    fi
-}
-
-install_cask() {
-    install_brew
-    brew tap phinze/cask
-    brew install brew-cask
-}
-
-github_pickrelease() {
-    local REPO=$1
-    local RELEASES="$(curl -L -s https://github.com/$REPO/releases/latest | grep releases/download | cut -d\" -f2)"
-
-    if [ "$UNAME" == 'Darwin' ]; then
-        local RELEASE=$(echo "$RELEASES" | grep -i darwin | tail -n1)
-    else
-        local RELEASE=$(echo "$RELEASES" | grep -i linux | tail -n1)
-    fi
-    echo "https://github.com${RELEASE}"
-}
-
-github_install() {
-    local REPO=$1
-    local BINARY=$2
-    local ARCHIVE=$(mktemp)
-    local FOLDER=$(mktemp -d)
-    curl -L -s "$(github_pickrelease $REPO)" -o "$ARCHIVE"
-    mkdir -p "$FOLDER"
-    cd "$FOLDER"
-    tar xzvf "$ARCHIVE"
-    find "$FOLDER" -name "$BINARY" -exec cp {} ~/.bin/${BINARY} \;
-    rm -fr "$FOLDER"
-    rm -f "$ARCHIVE"
-}
-
 if hash git 2>/dev/null; then
     git config --global include.path "~/.gitconfig.common"
+    echo "Configure git?"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes )
+                git config --global include.path "~/.gitconfig.common"
+                echo -n "Full name: "
+                read name
+                echo -n "Email: "
+                read email
+                git config --global user.name "$name"
+                git config --global user.email $email
+                break;;
+            No )
+                break;;
+        esac
+    done
 fi
 
-trap onexit 1 2 3 15 ERR
-
-echo "Install basic packages? [git, curl, wget]"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes )
-            if [ "$UNAME" == "Darwin" ]; then
-                install_brew
-                brew install reattach-to-user-namespace htop wget bash bash-completion w3m
-                test -f /usr/local/bin/bash && echo /usr/local/bin/bash | sudo tee -a /etc/shells && chsh -s /usr/local/bin/bash
-                sudo ln -sf /usr/local/bin/reattach-to-user-namespace /usr/bin
-            else
-                sudo apt-get install htop git curl wget bash bash-completion w3m
-                sudo apt-get install --no-install-recommends
-            fi
-            break;;
-        No )
-            break;;
-    esac
-done
-
-echo "Install tmux, neovim, fd and ripgrep from github?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes )
-            github_install sharkdp/fd fd
-            github_install burntsushi/ripgrep rg
-            curl -s -o ~/.bin/nvim -LO https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
-            chmod 755 ~/.bin/nvim
-            curl -s -o ~/.bin/tmux -LO https://github.com/tmux/tmux/releases/download/3.0a/tmux-3.0a-x86_64.AppImage
-            chmod 755 ~/.bin/tmux
-            break;;
-        No )
-            break;;
-    esac
-done
-
-echo "Configure git?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes )
-            git config --global include.path "~/.gitconfig.common"
-            echo -n "Full name: "
-            read name
-            echo -n "Email: "
-            read email
-            git config --global user.name "$name"
-            git config --global user.email $email
-            break;;
-        No )
-            break;;
-    esac
-done
-
-echo "Import ssh keys and config?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes )
-            echo -n "Server name: "
-            read server
-            mkdir -p ~/.ssh
-            scp $server:".ssh/id_* .ssh/config" ~/.ssh
-            break;;
-        No )
-            break;;
-    esac
-done
+if hash ssh 2>/dev/null; then
+    echo "Import ssh keys and config?"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes )
+                echo -n "Server name: "
+                read server
+                mkdir -p ~/.ssh
+                scp $server:".ssh/id_* .ssh/config" ~/.ssh
+                break;;
+            No )
+                break;;
+        esac
+    done
+fi

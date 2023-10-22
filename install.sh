@@ -45,10 +45,28 @@ link_file() {
     fi
 }
 
+undo() {
+    echo "Deleting dotfiles.."
+    FILES=$(find $HOME -maxdepth 4 -type l)
+    for FILE in $FILES; do
+        LINK=$(readlink $FILE)
+    	if [[ ${LINK} = ${BASE_DIR}* ]]; then
+            rm -f $FILE
+        fi
+    done
+}
+
 UNAME=$(uname)
 HOSTNAME=$(hostname -s)
-
 BASE_DIR=$(script_dir)
-link_file "$BASE_DIR" "$HOME" "." "$(ls -1 $BASE_DIR | grep -v '^host-\|^uname-')"
-link_file "$BASE_DIR/host-${HOSTNAME}" "$HOME" "."
-link_file "$BASE_DIR/uname-${UNAME}" "$HOME" "."
+
+case $1 in
+    -u|-uninstall|uninstall)
+	undo
+	;;
+    *)
+        link_file "$BASE_DIR" "$HOME" "." "$(ls -1 $BASE_DIR | grep -v '^host-\|^uname-')"
+        link_file "$BASE_DIR/host-${HOSTNAME}" "$HOME" "."
+        link_file "$BASE_DIR/uname-${UNAME}" "$HOME" "."
+	;;
+esac
